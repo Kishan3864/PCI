@@ -47,8 +47,8 @@ export default async function SettingsPage({
         <CardHeader>
           <CardTitle className="text-base">Monitored pages</CardTitle>
           <CardDescription>
-            {sitePages.length} of {limits.maxPagesPerSite} pages ({org.plan} plan). Point ScriptProof
-            at your checkout and any page where payment data is entered.
+            {sitePages.length} of {limits.maxPagesPerSite} pages ({org.plan} plan). Point
+            ScriptProof at your checkout and any page where payment data is entered.
           </CardDescription>
         </CardHeader>
         <CardContent>

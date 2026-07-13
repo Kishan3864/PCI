@@ -23,11 +23,7 @@ export const metadata: Metadata = { title: 'Script inventory' };
 
 const statusVariant = { pending: 'warning', authorized: 'success', blocked: 'critical' } as const;
 
-export default async function InventoryPage({
-  params,
-}: {
-  params: Promise<{ siteId: string }>;
-}) {
+export default async function InventoryPage({ params }: { params: Promise<{ siteId: string }> }) {
   const { siteId } = await params;
   const { site } = await requireSite(siteId);
 
@@ -131,7 +127,11 @@ export default async function InventoryPage({
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
                         {script.status !== 'authorized' ? (
-                          <JustifyDialog scriptId={script.id} scriptName={name} action="authorized" />
+                          <JustifyDialog
+                            scriptId={script.id}
+                            scriptName={name}
+                            action="authorized"
+                          />
                         ) : null}
                         {script.status !== 'blocked' ? (
                           <JustifyDialog scriptId={script.id} scriptName={name} action="blocked" />

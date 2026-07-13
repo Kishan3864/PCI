@@ -24,6 +24,8 @@ describe('isPageDue', () => {
 
   it('tolerates a slightly-early scheduler tick (5 min)', () => {
     expect(isPageDue(new Date(now.getTime() - 24 * HOUR + 4 * 60 * 1000), 'daily', now)).toBe(true);
-    expect(isPageDue(new Date(now.getTime() - 24 * HOUR + 6 * 60 * 1000), 'daily', now)).toBe(false);
+    expect(isPageDue(new Date(now.getTime() - 24 * HOUR + 6 * 60 * 1000), 'daily', now)).toBe(
+      false,
+    );
   });
 });

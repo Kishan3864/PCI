@@ -26,8 +26,8 @@ const SCRIPTS: Record<string, Record<FixtureVariant, string>> = {
     modified: "window.checkout = { version: '1.0.1', init: function () {}, extra: true };",
   },
   '/js/analytics.js': {
-    baseline: "window.analytics = { track: function () {} };",
-    modified: "window.analytics = { track: function () {} };",
+    baseline: 'window.analytics = { track: function () {} };',
+    modified: 'window.analytics = { track: function () {} };',
   },
   '/js/injected.js': {
     baseline: '',
@@ -51,8 +51,7 @@ function homeHtml(): string {
 }
 
 function checkoutHtml(current: FixtureVariant): string {
-  const injected =
-    current === 'modified' ? '\n    <script src="/js/injected.js"></script>' : '';
+  const injected = current === 'modified' ? '\n    <script src="/js/injected.js"></script>' : '';
   return `<!doctype html>
 <html lang="en">
   <head><meta charset="utf-8"><title>Checkout — Fixture Shop</title></head>

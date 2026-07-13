@@ -3,7 +3,9 @@ import { analyzeCspWeakening, parseCsp } from '../src/csp';
 
 describe('parseCsp', () => {
   it('parses directives and tokens, lowercasing both', () => {
-    const parsed = parseCsp("Default-Src 'SELF'; script-src https://cdn.example.com 'unsafe-inline'");
+    const parsed = parseCsp(
+      "Default-Src 'SELF'; script-src https://cdn.example.com 'unsafe-inline'",
+    );
     expect(parsed.get('default-src')).toEqual(["'self'"]);
     expect(parsed.get('script-src')).toEqual(['https://cdn.example.com', "'unsafe-inline'"]);
   });
@@ -22,12 +24,18 @@ describe('parseCsp', () => {
 describe('analyzeCspWeakening', () => {
   it('returns null for identical policies and pure reorderings', () => {
     expect(
-      analyzeCspWeakening("default-src 'self'; script-src 'self'", "script-src 'self'; default-src 'self'"),
+      analyzeCspWeakening(
+        "default-src 'self'; script-src 'self'",
+        "script-src 'self'; default-src 'self'",
+      ),
     ).toBeNull();
   });
 
   it('detects removed directives', () => {
-    const result = analyzeCspWeakening("default-src 'self'; frame-ancestors 'none'", "default-src 'self'");
+    const result = analyzeCspWeakening(
+      "default-src 'self'; frame-ancestors 'none'",
+      "default-src 'self'",
+    );
     expect(result?.removedDirectives).toEqual(['frame-ancestors']);
   });
 
@@ -44,13 +52,19 @@ describe('analyzeCspWeakening', () => {
 
   it('does not flag unsafe tokens that were already present', () => {
     expect(
-      analyzeCspWeakening("script-src 'unsafe-inline'", "script-src 'unsafe-inline' https://x.example"),
+      analyzeCspWeakening(
+        "script-src 'unsafe-inline'",
+        "script-src 'unsafe-inline' https://x.example",
+      ),
     ).toBeNull();
   });
 
   it('does not flag added directives or added safe sources', () => {
     expect(
-      analyzeCspWeakening("default-src 'self'", "default-src 'self' https://cdn.example.com; img-src *"),
+      analyzeCspWeakening(
+        "default-src 'self'",
+        "default-src 'self' https://cdn.example.com; img-src *",
+      ),
     ).toBeNull();
   });
 });

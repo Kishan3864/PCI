@@ -8,6 +8,7 @@ export default defineConfig({
   schema: './src/schema.ts',
   out: './drizzle',
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? 'postgres://scriptproof:scriptproof@localhost:5433/scriptproof',
+    url:
+      process.env.DATABASE_URL ?? 'postgres://scriptproof:scriptproof@localhost:5433/scriptproof',
   },
 });

@@ -11,8 +11,8 @@ export default function CheckEmailPage() {
         <MailCheck className="h-10 w-10 text-navy-600" />
         <h1 className="text-xl font-semibold text-navy-900">Check your inbox</h1>
         <p className="text-sm leading-6 text-slate-600">
-          We sent you a confirmation link. Click it to activate your account — you will be signed
-          in automatically.
+          We sent you a confirmation link. Click it to activate your account — you will be signed in
+          automatically.
         </p>
         <p className="text-xs text-slate-400">
           Running locally? Emails land in Mailhog at{' '}

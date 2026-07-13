@@ -30,7 +30,13 @@ export function AddPageForm({ siteId, domain, allow6h }: AddPageFormProps) {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="page-label">Label</Label>
-          <Input id="page-label" name="label" placeholder="Checkout" defaultValue="Checkout" required />
+          <Input
+            id="page-label"
+            name="label"
+            placeholder="Checkout"
+            defaultValue="Checkout"
+            required
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="page-frequency">Scan frequency</Label>

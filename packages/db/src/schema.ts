@@ -17,8 +17,10 @@ const id = () =>
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID());
 
-const createdAt = () => timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow();
-const updatedAt = () => timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow();
+const createdAt = () =>
+  timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow();
+const updatedAt = () =>
+  timestamp('updated_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow();
 const ts = (name: string) => timestamp(name, { withTimezone: true, mode: 'date' });
 
 // ── Enums ────────────────────────────────────────────────────────────────────
@@ -38,7 +40,12 @@ export const changeTypeEnum = pgEnum('change_type', [
 export const changeSeverityEnum = pgEnum('change_severity', ['info', 'warning', 'critical']);
 export const alertChannelEnum = pgEnum('alert_channel', ['email', 'slack']);
 export const alertStatusEnum = pgEnum('alert_status', ['sent', 'failed', 'skipped_dedupe']);
-export const freeScanStatusEnum = pgEnum('free_scan_status', ['queued', 'running', 'done', 'error']);
+export const freeScanStatusEnum = pgEnum('free_scan_status', [
+  'queued',
+  'running',
+  'done',
+  'error',
+]);
 
 // ── Better Auth tables (model names mapped in apps/web auth config) ─────────
 
@@ -332,7 +339,12 @@ export const cspReports = pgTable(
   },
   (t) => [
     index('csp_reports_site_idx').on(t.siteId),
-    uniqueIndex('csp_reports_dedupe_uq').on(t.siteId, t.blockedUri, t.violatedDirective, t.documentUri),
+    uniqueIndex('csp_reports_dedupe_uq').on(
+      t.siteId,
+      t.blockedUri,
+      t.violatedDirective,
+      t.documentUri,
+    ),
   ],
 );
 

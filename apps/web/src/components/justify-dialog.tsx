@@ -40,9 +40,7 @@ export function JustifyDialog({ scriptId, scriptName, action }: JustifyDialogPro
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {verb} script
-          </DialogTitle>
+          <DialogTitle>{verb} script</DialogTitle>
           <DialogDescription className="break-all">{scriptName}</DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-4">

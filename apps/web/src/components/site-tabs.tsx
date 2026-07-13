@@ -15,9 +15,7 @@ export function SiteTabs({ siteId, verified }: { siteId: string; verified: boole
   const pathname = usePathname();
   const base = `/app/sites/${siteId}`;
 
-  const items = verified
-    ? tabs
-    : ([{ slug: 'verify', label: 'Verification' }, ...tabs] as const);
+  const items = verified ? tabs : ([{ slug: 'verify', label: 'Verification' }, ...tabs] as const);
 
   return (
     <nav className="flex gap-1 border-b border-slate-200">

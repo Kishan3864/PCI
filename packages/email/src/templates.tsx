@@ -62,11 +62,19 @@ function Shell({ children }: { children: ReactNode }) {
           <tbody>
             <tr>
               <td align="center" style={{ padding: '32px 16px' }}>
-                <table role="presentation" width={560} cellPadding={0} cellSpacing={0} style={{ maxWidth: 560, width: '100%' }}>
+                <table
+                  role="presentation"
+                  width={560}
+                  cellPadding={0}
+                  cellSpacing={0}
+                  style={{ maxWidth: 560, width: '100%' }}
+                >
                   <tbody>
                     <tr>
                       <td style={{ paddingBottom: 16 }}>
-                        <span style={{ fontSize: 18, fontWeight: 700, color: colors.navy }}>ScriptProof</span>
+                        <span style={{ fontSize: 18, fontWeight: 700, color: colors.navy }}>
+                          ScriptProof
+                        </span>
                       </td>
                     </tr>
                     <tr>
@@ -74,7 +82,16 @@ function Shell({ children }: { children: ReactNode }) {
                     </tr>
                     <tr>
                       <td style={{ padding: '20px 8px 0' }}>
-                        <p style={{ fontSize: 11, lineHeight: '16px', color: colors.muted, margin: 0 }}>{DISCLAIMER}</p>
+                        <p
+                          style={{
+                            fontSize: 11,
+                            lineHeight: '16px',
+                            color: colors.muted,
+                            margin: 0,
+                          }}
+                        >
+                          {DISCLAIMER}
+                        </p>
                       </td>
                     </tr>
                   </tbody>
@@ -173,7 +190,12 @@ function CriticalAlert(props: CriticalAlertProps) {
         </span>
       </p>
       <h1 style={{ fontSize: 20, color: colors.navy, margin: '0 0 12px' }}>{label}</h1>
-      <table role="presentation" cellPadding={0} cellSpacing={0} style={{ fontSize: 13, lineHeight: '22px' }}>
+      <table
+        role="presentation"
+        cellPadding={0}
+        cellSpacing={0}
+        style={{ fontSize: 13, lineHeight: '22px' }}
+      >
         <tbody>
           <tr>
             <td style={{ color: colors.muted, paddingRight: 12, verticalAlign: 'top' }}>Page</td>
@@ -183,7 +205,9 @@ function CriticalAlert(props: CriticalAlertProps) {
           </tr>
           {props.scriptUrl ? (
             <tr>
-              <td style={{ color: colors.muted, paddingRight: 12, verticalAlign: 'top' }}>Script</td>
+              <td style={{ color: colors.muted, paddingRight: 12, verticalAlign: 'top' }}>
+                Script
+              </td>
               <td>
                 <span style={codeStyle}>{props.scriptUrl}</span>
               </td>
@@ -191,7 +215,9 @@ function CriticalAlert(props: CriticalAlertProps) {
           ) : null}
           {props.beforeHash ? (
             <tr>
-              <td style={{ color: colors.muted, paddingRight: 12, verticalAlign: 'top' }}>Before</td>
+              <td style={{ color: colors.muted, paddingRight: 12, verticalAlign: 'top' }}>
+                Before
+              </td>
               <td>
                 <span style={codeStyle}>{props.beforeHash}</span>
               </td>
@@ -258,12 +284,25 @@ function DailyDigest({ orgName, items, dashboardUrl }: DailyDigestProps) {
         {items.length} non-critical change{items.length === 1 ? '' : 's'} detected for {orgName} in
         the last 24 hours.
       </p>
-      <table role="presentation" width="100%" cellPadding={0} cellSpacing={0} style={{ fontSize: 13 }}>
+      <table
+        role="presentation"
+        width="100%"
+        cellPadding={0}
+        cellSpacing={0}
+        style={{ fontSize: 13 }}
+      >
         <tbody>
           {items.map((item, i) => (
             <tr key={i}>
               <td style={{ borderTop: `1px solid ${colors.border}`, padding: '10px 0' }}>
-                <span style={{ color: severityColor(item.severity), fontWeight: 700, fontSize: 11, textTransform: 'uppercase' }}>
+                <span
+                  style={{
+                    color: severityColor(item.severity),
+                    fontWeight: 700,
+                    fontSize: 11,
+                    textTransform: 'uppercase',
+                  }}
+                >
                   {item.severity}
                 </span>{' '}
                 <strong>{CHANGE_TYPE_LABELS[item.changeType] ?? item.changeType}</strong>

@@ -1,11 +1,7 @@
 export type ScriptStatus = 'pending' | 'authorized' | 'blocked';
 
 export type ChangeType =
-  | 'new_script'
-  | 'script_modified'
-  | 'script_removed'
-  | 'header_changed'
-  | 'sri_removed';
+  'new_script' | 'script_modified' | 'script_removed' | 'header_changed' | 'sri_removed';
 
 export type ChangeSeverity = 'info' | 'warning' | 'critical';
 

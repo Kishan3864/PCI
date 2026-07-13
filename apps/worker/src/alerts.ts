@@ -156,7 +156,7 @@ export async function handleDailyDigest(): Promise<void> {
           ? c.detail.srcUrl
           : typeof c.detail.header === 'string'
             ? String(c.detail.header)
-            : (c.detail.urlKey as string | undefined) ?? c.page.url,
+            : ((c.detail.urlKey as string | undefined) ?? c.page.url),
       detectedAt: c.detectedAt.toUTCString(),
     }));
 
@@ -168,9 +168,15 @@ export async function handleDailyDigest(): Promise<void> {
 
     try {
       await mailer.send({ to: recipients, ...rendered });
-      await db.insert(schema.alerts).values(
-        orgChanges.map((c) => ({ changeId: c.id, channel: 'email' as const, status: 'sent' as const })),
-      );
+      await db
+        .insert(schema.alerts)
+        .values(
+          orgChanges.map((c) => ({
+            changeId: c.id,
+            channel: 'email' as const,
+            status: 'sent' as const,
+          })),
+        );
       console.log(`[alerts] digest sent to org ${orgId} (${orgChanges.length} changes)`);
     } catch (error) {
       console.error(`[alerts] digest failed for org ${orgId}:`, error);

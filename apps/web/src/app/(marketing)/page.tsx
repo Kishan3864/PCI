@@ -74,9 +74,9 @@ export default function LandingPage() {
         <p className="mt-4 leading-7 text-slate-600">
           Since PCI DSS v4.0, requirements 6.4.3 and 11.6.1 ask merchants to maintain an authorized
           inventory of all payment page scripts and to detect tampering with page content and HTTP
-          headers at least weekly. That applies to small shops too — skimming attacks
-          overwhelmingly target exactly the scripts these requirements cover. ScriptProof gives you
-          the monitoring and the paper trail without hiring a security team.
+          headers at least weekly. That applies to small shops too — skimming attacks overwhelmingly
+          target exactly the scripts these requirements cover. ScriptProof gives you the monitoring
+          and the paper trail without hiring a security team.
         </p>
       </section>
     </>

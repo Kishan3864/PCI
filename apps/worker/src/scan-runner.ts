@@ -201,7 +201,9 @@ async function scanOnePage(
             })),
           )
           .returning({ id: schema.changes.id, severity: schema.changes.severity });
-        criticalChangeIds.push(...inserted.filter((c) => c.severity === 'critical').map((c) => c.id));
+        criticalChangeIds.push(
+          ...inserted.filter((c) => c.severity === 'critical').map((c) => c.id),
+        );
       }
 
       await tx

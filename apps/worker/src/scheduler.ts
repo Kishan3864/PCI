@@ -8,11 +8,7 @@ const INTERVALS_MS = { daily: 24 * 60 * 60 * 1000, '6h': 6 * 60 * 60 * 1000 } as
 /** Lets a scheduler tick that lands slightly early still count as due. */
 const TOLERANCE_MS = 5 * 60 * 1000;
 
-export function isPageDue(
-  lastScanAt: Date | null,
-  frequency: 'daily' | '6h',
-  now: Date,
-): boolean {
+export function isPageDue(lastScanAt: Date | null, frequency: 'daily' | '6h', now: Date): boolean {
   if (!lastScanAt) return true;
   return now.getTime() - lastScanAt.getTime() >= INTERVALS_MS[frequency] - TOLERANCE_MS;
 }

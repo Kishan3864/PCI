@@ -79,10 +79,14 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
                     .sort(([a], [b]) => a.localeCompare(b))
                     .map(([name, value]) => (
                       <div key={name} className="flex flex-wrap gap-2 text-xs">
-                        <dt className={`w-72 shrink-0 font-mono ${tracked.has(name) ? 'font-semibold text-navy-800' : 'text-slate-500'}`}>
+                        <dt
+                          className={`w-72 shrink-0 font-mono ${tracked.has(name) ? 'font-semibold text-navy-800' : 'text-slate-500'}`}
+                        >
                           {name}
                         </dt>
-                        <dd className="min-w-0 flex-1 break-all font-mono text-slate-700">{value}</dd>
+                        <dd className="min-w-0 flex-1 break-all font-mono text-slate-700">
+                          {value}
+                        </dd>
                       </div>
                     ))}
                 </dl>

@@ -69,7 +69,8 @@ class SmtpMailer implements Mailer {
 
 export function createMailer(config: MailerConfig): Mailer {
   if (config.provider === 'resend') {
-    if (!config.resendApiKey) throw new Error('RESEND_API_KEY is required when EMAIL_PROVIDER=resend');
+    if (!config.resendApiKey)
+      throw new Error('RESEND_API_KEY is required when EMAIL_PROVIDER=resend');
     return new ResendMailer(config.resendApiKey, config.from);
   }
   return new SmtpMailer(config.smtpHost ?? 'localhost', config.smtpPort ?? 1025, config.from);

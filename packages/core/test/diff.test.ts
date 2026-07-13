@@ -46,7 +46,10 @@ describe('baseline scans', () => {
     const result = diffScan(
       input({
         isBaseline: true,
-        observed: [obs(), obs({ urlKey: 'inline:bbb', srcUrl: null, isInline: true, sha256: 'bbb' })],
+        observed: [
+          obs(),
+          obs({ urlKey: 'inline:bbb', srcUrl: null, isInline: true, sha256: 'bbb' }),
+        ],
         prevHeaders: null,
       }),
     );
@@ -176,9 +179,7 @@ describe('script_removed', () => {
   });
 
   it('does not re-fire past the threshold', () => {
-    const result = diffScan(
-      input({ known: [known({ missingStreak: REMOVAL_STREAK_THRESHOLD })] }),
-    );
+    const result = diffScan(input({ known: [known({ missingStreak: REMOVAL_STREAK_THRESHOLD })] }));
     expect(result.changes).toEqual([]);
     expect(result.updates[0]).toMatchObject({ missingStreak: REMOVAL_STREAK_THRESHOLD + 1 });
   });
@@ -191,9 +192,7 @@ describe('script_removed', () => {
   });
 
   it('ignores scripts anchored to other pages', () => {
-    const result = diffScan(
-      input({ known: [known({ expectedOnPage: false, missingStreak: 2 })] }),
-    );
+    const result = diffScan(input({ known: [known({ expectedOnPage: false, missingStreak: 2 })] }));
     expect(result.changes).toEqual([]);
     expect(result.updates).toEqual([]);
   });
@@ -289,9 +288,7 @@ describe('header_changed', () => {
   });
 
   it('emits no header changes when there is no previous header snapshot', () => {
-    const result = diffScan(
-      input({ prevHeaders: null, headers: { 'x-frame-options': 'DENY' } }),
-    );
+    const result = diffScan(input({ prevHeaders: null, headers: { 'x-frame-options': 'DENY' } }));
     expect(result.changes).toEqual([]);
   });
 });

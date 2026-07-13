@@ -26,13 +26,13 @@ Mailhog UI (local email): http://localhost:8025
 
 ## Repository layout
 
-| Path             | What                                                              |
-| ---------------- | ----------------------------------------------------------------- |
-| `apps/web`       | Next.js 15 app — marketing, dashboard, auth, server actions       |
-| `apps/worker`    | Node 22 worker — pg-boss queue, Playwright crawler, alerts, PDFs  |
-| `packages/db`    | Drizzle ORM schema, migrations, seed                              |
-| `packages/core`  | Pure logic: diff engine, CSP analysis, hashing, plan gates        |
-| `packages/email` | Mailer abstraction (Resend / SMTP) + React Email templates        |
+| Path             | What                                                             |
+| ---------------- | ---------------------------------------------------------------- |
+| `apps/web`       | Next.js 15 app — marketing, dashboard, auth, server actions      |
+| `apps/worker`    | Node 22 worker — pg-boss queue, Playwright crawler, alerts, PDFs |
+| `packages/db`    | Drizzle ORM schema, migrations, seed                             |
+| `packages/core`  | Pure logic: diff engine, CSP analysis, hashing, plan gates       |
+| `packages/email` | Mailer abstraction (Resend / SMTP) + React Email templates       |
 
 ## Scripts
 
