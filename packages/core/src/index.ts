@@ -1,4 +1,5 @@
 export * from './types';
+export * from './bot';
 export * from './hash';
 export * from './scripts';
 export * from './csp';
