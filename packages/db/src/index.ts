@@ -1,8 +1,12 @@
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import * as schema from './schema';
+import * as tables from './schema';
+import * as tableRelations from './relations';
+
+const schema = { ...tables, ...tableRelations };
 
 export * from './schema';
+export * from './relations';
 export { schema };
 export { loadRootEnv } from './env';
 
