@@ -1,6 +1,6 @@
 'use client';
 
-import { signUpSchema } from '@scriptproof/core';
+import { signUpSchema } from '@scriptproof/core/schemas';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

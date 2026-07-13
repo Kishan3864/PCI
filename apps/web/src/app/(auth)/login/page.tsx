@@ -1,6 +1,6 @@
 'use client';
 
-import { signInSchema } from '@scriptproof/core';
+import { signInSchema } from '@scriptproof/core/schemas';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
