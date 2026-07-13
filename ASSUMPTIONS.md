@@ -48,3 +48,6 @@ Decisions made where the brief is silent. Newest at the bottom.
     contains "checkout", "payment", "pay" or "cart" (case-insensitive).
 11. **Daily digest** is one global cron at 08:00 UTC that groups the last 24h of
     unalerted warning/info changes per org and sends one email per org member.
+12. **Email templates:** `@react-email/components` is deprecated/unsupported on npm as of
+    2026-07. Templates are plain React TSX (table-based email HTML, inline styles)
+    rendered with the still-maintained `@react-email/render`.
