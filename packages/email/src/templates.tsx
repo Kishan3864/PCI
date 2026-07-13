@@ -1,3 +1,5 @@
+/** @jsxRuntime automatic */
+/** @jsxImportSource react */
 import { render } from '@react-email/render';
 import type { CSSProperties, ReactNode } from 'react';
 

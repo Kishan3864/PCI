@@ -32,6 +32,57 @@ const SCRIPT_FETCH_DELAY_MS = 250;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** Records script tags injected after load, before any page script runs. */
+const INIT_OBSERVER_SCRIPT = `
+(() => {
+  window.__spScripts = [];
+  const record = (node) => {
+    if (!node || node.tagName !== 'SCRIPT') return;
+    const attrs = {};
+    for (const attr of node.attributes) attrs[attr.name] = attr.value;
+    window.__spScripts.push({
+      src: node.getAttribute('src'),
+      text: node.src ? null : node.textContent,
+      integrity: node.getAttribute('integrity'),
+      attrsJson: JSON.stringify(attrs),
+    });
+  };
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) mutation.addedNodes.forEach(record);
+  }).observe(document.documentElement || document, { childList: true, subtree: true });
+})();
+`;
+
+/** Collects the union of document.scripts and runtime-injected scripts. */
+const COLLECT_SCRIPTS_SCRIPT = `
+(() => {
+  const collected = new Map();
+  const add = (tag) => {
+    const key = tag.src ? 'src:' + tag.src : 'inline:' + (tag.text || '');
+    if (!collected.has(key)) collected.set(key, tag);
+  };
+  for (const s of Array.from(document.scripts)) {
+    const attrs = {};
+    for (const attr of s.attributes) attrs[attr.name] = attr.value;
+    add({
+      src: s.getAttribute('src'),
+      text: s.src ? null : s.textContent,
+      integrity: s.getAttribute('integrity'),
+      attrs,
+    });
+  }
+  for (const s of (window.__spScripts || [])) {
+    add({
+      src: s.src,
+      text: s.text,
+      integrity: s.integrity,
+      attrs: JSON.parse(s.attrsJson),
+    });
+  }
+  return Array.from(collected.values());
+})();
+`;
+
 /** Cache of external script contents, shared across the pages of one site scan. */
 export type ScriptContentCache = Map<string, { sha256: string; byteSize: number } | null>;
 
@@ -81,24 +132,9 @@ export async function crawlPage(
   try {
     const page = await context.newPage();
 
-    await page.addInitScript(() => {
-      const w = window as unknown as { __spScripts: Array<Record<string, string | null>> };
-      w.__spScripts = [];
-      const record = (node: Node) => {
-        if (!(node instanceof HTMLScriptElement)) return;
-        const attrs: Record<string, string> = {};
-        for (const attr of node.attributes) attrs[attr.name] = attr.value;
-        w.__spScripts.push({
-          src: node.getAttribute('src'),
-          text: node.src ? null : node.textContent,
-          integrity: node.getAttribute('integrity'),
-          attrsJson: JSON.stringify(attrs),
-        });
-      };
-      new MutationObserver((mutations) => {
-        for (const mutation of mutations) mutation.addedNodes.forEach(record);
-      }).observe(document.documentElement ?? document, { childList: true, subtree: true });
-    });
+    // Raw strings (not closures): tsx/esbuild transforms inject helpers like
+    // `__name` that do not exist inside the browser context.
+    await page.addInitScript(INIT_OBSERVER_SCRIPT);
 
     const response = await page.goto(pageUrl, {
       waitUntil: 'networkidle',
@@ -107,43 +143,7 @@ export async function crawlPage(
     if (!response) throw new Error('No response received for page');
     await page.waitForTimeout(3000);
 
-    const rawTags = await page.evaluate((): RawScriptTag[] => {
-      const collected = new Map<string, RawScriptTag>();
-      const add = (tag: {
-        src: string | null;
-        text: string | null;
-        integrity: string | null;
-        attrs: Record<string, string>;
-      }) => {
-        const key = tag.src ? `src:${tag.src}` : `inline:${tag.text ?? ''}`;
-        if (!collected.has(key)) collected.set(key, tag);
-      };
-
-      for (const s of Array.from(document.scripts)) {
-        const attrs: Record<string, string> = {};
-        for (const attr of s.attributes) attrs[attr.name] = attr.value;
-        add({
-          src: s.getAttribute('src'),
-          text: s.src ? null : s.textContent,
-          integrity: s.getAttribute('integrity'),
-          attrs,
-        });
-      }
-
-      const w = window as unknown as {
-        __spScripts?: Array<{ src: string | null; text: string | null; integrity: string | null; attrsJson: string }>;
-      };
-      for (const s of w.__spScripts ?? []) {
-        add({
-          src: s.src,
-          text: s.text,
-          integrity: s.integrity,
-          attrs: JSON.parse(s.attrsJson) as Record<string, string>,
-        });
-      }
-
-      return Array.from(collected.values());
-    });
+    const rawTags = (await page.evaluate(COLLECT_SCRIPTS_SCRIPT)) as RawScriptTag[];
 
     const observed: ObservedScript[] = [];
     for (const tag of rawTags) {
