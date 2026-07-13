@@ -1,0 +1,26 @@
+{
+  "name": "scriptproof",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "e2e": "pnpm --filter web e2e",
+    "db:generate": "pnpm --filter @scriptproof/db generate",
+    "db:migrate": "pnpm --filter @scriptproof/db migrate",
+    "db:seed": "pnpm --filter @scriptproof/db seed",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "turbo": "^2.5.0"
+  }
+}
