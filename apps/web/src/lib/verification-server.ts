@@ -2,10 +2,10 @@ import 'server-only';
 import dns from 'node:dns/promises';
 import {
   extractVerificationMetaContents,
-  isForbiddenHost,
   siteOrigin,
   txtRecordsContainToken,
 } from '@scriptproof/core';
+import { safeFetch } from '@scriptproof/core/net-guard';
 import { isTestMode } from './env';
 
 export const BOT_USER_AGENT = `ScriptProofBot/1.0 (+${process.env.BOT_INFO_URL ?? 'https://scriptproof.local/bot'})`;
@@ -34,17 +34,23 @@ export async function checkDnsVerification(domain: string, token: string): Promi
   }
 }
 
-/** Meta-tag verification: fetches the site root and looks for the token. */
+/**
+ * Meta-tag verification: fetches the site root and looks for the token.
+ * safeFetch enforces the SSRF guard — the target host must resolve to a public
+ * IP and every redirect hop is re-validated (a public domain whose DNS or 3xx
+ * points at 127.0.0.1 / 169.254.169.254 is refused in production).
+ */
 export async function checkMetaVerification(domain: string, token: string): Promise<boolean> {
   const testMode = isTestMode();
-  if (!testMode && isForbiddenHost(domain)) return false;
-
   try {
-    const res = await fetch(siteOrigin(domain, { testMode }), {
-      headers: { 'user-agent': BOT_USER_AGENT },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(15_000),
-    });
+    const res = await safeFetch(
+      siteOrigin(domain, { testMode }),
+      {
+        headers: { 'user-agent': BOT_USER_AGENT },
+        signal: AbortSignal.timeout(15_000),
+      },
+      { testMode },
+    );
     if (!res.ok) return false;
     const html = await res.text();
     return extractVerificationMetaContents(html).includes(token);

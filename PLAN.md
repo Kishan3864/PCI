@@ -46,26 +46,26 @@ meta tag; mockable in test mode) → pages CRUD → first scan = baseline (all s
 
 ## Phase 1 — Core loop
 
-- [ ] 1.1 Monorepo scaffold: pnpm-workspace, turbo, tsconfig, ESLint 9 flat + Prettier, .gitignore, .env.example, docker-compose (Postgres 16 + Mailhog), git init
-- [ ] 1.2 packages/db: full Drizzle schema (all tables §4), client, drizzle-kit config, migrations
-- [ ] 1.3 packages/core: script identity + hashing, diff engine (5.2), CSP analysis, plan gates, zod schemas
-- [ ] 1.4 packages/core: unit tests for diff engine, CSP, hashing, plan gates (Vitest)
-- [ ] 1.5 packages/email: mailer abstraction (Resend | SMTP), React Email templates
-- [ ] 1.6 apps/web: Next.js scaffold, Tailwind, base UI components, marketing landing (minimal Phase-1 version) + /bot page
-- [ ] 1.7 apps/web: Better Auth (email+password, email verification), org bootstrap, protected /app layout
-- [ ] 1.8 apps/web: sites — add site, verification flow (DNS TXT / meta tag, test-mode mock), site list/dashboard
-- [ ] 1.9 apps/web: pages CRUD (label, frequency, active) with plan-gate stubs
-- [ ] 1.10 apps/worker: pg-boss setup, scan scheduler cron, scan.site job
-- [ ] 1.11 apps/worker: Playwright crawler (5.1) + fixture server (test mode)
-- [ ] 1.12 apps/worker: diff runner (applies packages/core diff), baseline flow
-- [ ] 1.13 apps/worker: alert dispatch (critical immediate email, dedupe 24h) + daily digest cron
-- [ ] 1.14 apps/web: inventory UI (authorize/block + justification modal), changes timeline (acknowledge), headers tab, site settings (pages, verification status), "Scan now"
-- [ ] 1.15 packages/db: seed script (demo org/user, fixture site, baseline scan)
-- [ ] 1.16 e2e: Playwright happy path (signup → add site → verify mocked → scan fixture → inventory)
-- [ ] 1.17 Quality gates green: pnpm lint, pnpm typecheck, pnpm test
-- [ ] 1.18 Multi-agent review pass (diff engine, schema, auth, spec compliance) + fixes
-- [ ] 1.19 PHASE1_REVIEW.md + README run instructions
-- [ ] ✅ CHECKPOINT 1
+- [x] 1.1 Monorepo scaffold: pnpm-workspace, turbo, tsconfig, ESLint 9 flat + Prettier, .gitignore, .env.example, docker-compose (Postgres 16 + Mailhog), git init
+- [x] 1.2 packages/db: full Drizzle schema (all tables §4), client, drizzle-kit config, migrations
+- [x] 1.3 packages/core: script identity + hashing, diff engine (5.2), CSP analysis, plan gates, zod schemas
+- [x] 1.4 packages/core: unit tests for diff engine, CSP, hashing, plan gates (Vitest)
+- [x] 1.5 packages/email: mailer abstraction (Resend | SMTP), React Email templates
+- [x] 1.6 apps/web: Next.js scaffold, Tailwind, base UI components, marketing landing (minimal Phase-1 version) + /bot page
+- [x] 1.7 apps/web: Better Auth (email+password, email verification), org bootstrap, protected /app layout
+- [x] 1.8 apps/web: sites — add site, verification flow (DNS TXT / meta tag, test-mode mock), site list/dashboard
+- [x] 1.9 apps/web: pages CRUD (label, frequency, active) with plan-gate stubs
+- [x] 1.10 apps/worker: pg-boss setup, scan scheduler cron, scan.site job
+- [x] 1.11 apps/worker: Playwright crawler (5.1) + fixture server (test mode)
+- [x] 1.12 apps/worker: diff runner (applies packages/core diff), baseline flow
+- [x] 1.13 apps/worker: alert dispatch (critical immediate email, dedupe 24h) + daily digest cron
+- [x] 1.14 apps/web: inventory UI (authorize/block + justification modal), changes timeline (acknowledge), headers tab, site settings (pages, verification status), "Scan now"
+- [x] 1.15 packages/db: seed script (demo org/user, fixture site, baseline scan)
+- [x] 1.16 e2e: Playwright happy path (signup → add site → verify mocked → scan fixture → inventory)
+- [x] 1.17 Quality gates green: pnpm lint, pnpm typecheck, pnpm test
+- [x] 1.18 Multi-agent review pass (diff engine, schema, auth, spec compliance) + fixes
+- [x] 1.19 PHASE1_REVIEW.md + README run instructions
+- [x] ✅ CHECKPOINT 1
 
 ## Phase 2 — Money layer
 

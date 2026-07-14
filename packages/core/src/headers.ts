@@ -37,8 +37,10 @@ export function diffTrackedHeaders(
   const changes: ProposedChange[] = [];
 
   for (const header of TRACKED_HEADERS) {
-    const before = prevHeaders[header] ?? null;
-    const after = headers[header] ?? null;
+    // A blank/whitespace value is the same as an absent header — a CSP emptied
+    // to "" is a removal (critical), not a modification.
+    const before = normalizeHeaderValue(prevHeaders[header]);
+    const after = normalizeHeaderValue(headers[header]);
     if (before === after) continue;
 
     const isCsp = header === 'content-security-policy';
@@ -64,4 +66,10 @@ export function diffTrackedHeaders(
   }
 
   return changes;
+}
+
+function normalizeHeaderValue(value: string | undefined): string | null {
+  if (value === undefined) return null;
+  const trimmed = value.trim();
+  return trimmed === '' ? null : trimmed;
 }

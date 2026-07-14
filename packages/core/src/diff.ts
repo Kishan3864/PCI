@@ -13,7 +13,10 @@ export const REMOVAL_STREAK_THRESHOLD = 3;
 export function diffScan(input: DiffInput): DiffResult {
   const observed = dedupeObserved(input.observed);
 
-  // First scan of a page = baseline: inventory rows only, no alerts.
+  // First scan of a page = baseline: inventory rows only, no alerts. Scripts
+  // already in the site inventory (seen on another page) are only touched for
+  // presence bookkeeping — their recorded hash/SRI are preserved so a tamper
+  // that happened before this new page was added is not silently absorbed.
   if (input.isBaseline) {
     const knownKeys = new Set(input.known.map((k) => k.urlKey));
     return {
@@ -21,7 +24,7 @@ export function diffScan(input: DiffInput): DiffResult {
       toCreate: observed.filter((o) => !knownKeys.has(o.urlKey)),
       updates: observed.flatMap((o) => {
         const known = input.known.find((k) => k.urlKey === o.urlKey);
-        return known ? [seenUpdate(known.id, o)] : [];
+        return known ? [seenBookkeeping(known.id)] : [];
       }),
     };
   }
@@ -58,7 +61,10 @@ export function diffScan(input: DiffInput): DiffResult {
 
     updates.push(seenUpdate(known.id, obs));
 
-    if (known.latestSha256 !== null && known.latestSha256 !== obs.sha256) {
+    // Unfetchable scripts carry a placeholder hash — never a real content
+    // change. Skip modified detection so a transient network blip can't raise a
+    // false critical alert or overwrite the last known good hash.
+    if (!obs.unfetchable && known.latestSha256 !== null && known.latestSha256 !== obs.sha256) {
       changes.push({
         type: 'script_modified',
         severity: known.status === 'authorized' ? 'critical' : 'warning',
@@ -110,7 +116,19 @@ export function diffScan(input: DiffInput): DiffResult {
   return { changes, toCreate, updates };
 }
 
+/** Full "seen" update; preserves the last known good hash when unfetchable. */
 function seenUpdate(scriptId: string, obs: DiffResult['toCreate'][number]): ScriptUpdate {
+  if (obs.unfetchable) {
+    // Present in the DOM (so reset the missing streak and record SRI), but the
+    // body could not be fetched — leave the recorded hash/size untouched.
+    return {
+      scriptId,
+      seen: true,
+      missingStreak: 0,
+      latestSriPresent: obs.sriPresent,
+      srcUrl: obs.srcUrl,
+    };
+  }
   return {
     scriptId,
     seen: true,
@@ -120,4 +138,9 @@ function seenUpdate(scriptId: string, obs: DiffResult['toCreate'][number]): Scri
     latestSriPresent: obs.sriPresent,
     srcUrl: obs.srcUrl,
   };
+}
+
+/** Presence-only update: marks the script seen without altering its recorded state. */
+function seenBookkeeping(scriptId: string): ScriptUpdate {
+  return { scriptId, seen: true, missingStreak: 0 };
 }

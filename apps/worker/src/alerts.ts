@@ -13,6 +13,13 @@ import type { AlertDispatchJob } from './queues';
 const mailer = createMailerFromEnv();
 
 const DEDUPE_WINDOW_MS = 24 * 60 * 60 * 1000;
+/**
+ * Digest lookback is wider than one day so a missed or failed daily run is
+ * recovered by the next one instead of silently dropping those changes. Already
+ * digested changes carry an alert row and are filtered out, so the overlap
+ * never double-sends.
+ */
+const DIGEST_LOOKBACK_MS = 3 * 24 * 60 * 60 * 1000;
 
 async function orgMemberEmails(orgId: string): Promise<string[]> {
   const members = await db.query.orgMembers.findMany({
@@ -39,24 +46,25 @@ async function loadChangeContext(changeId: string): Promise<ChangeContext | null
 }
 
 /**
- * True when an identical change (same script — or same header for header
- * changes — and same type on this page) already had an alert sent in the
- * last 24 hours (spec 5.3 dedupe).
+ * True when an identical change already had an alert sent in the last 24 hours
+ * (spec 5.3 dedupe). Script changes dedupe by scriptId across the whole site —
+ * the same tampered script detected on two pages must not double-alert. Header
+ * changes (no script) dedupe by page + header name.
  */
 async function isDuplicateAlert(ctx: ChangeContext): Promise<boolean> {
   const since = new Date(ctx.change.detectedAt.getTime() - DEDUPE_WINDOW_MS);
-  const siblings = await db.query.changes.findMany({
-    where: and(
-      eq(schema.changes.pageId, ctx.change.pageId),
-      eq(schema.changes.type, ctx.change.type),
-      gte(schema.changes.detectedAt, since),
-    ),
-  });
+  const filters = [eq(schema.changes.type, ctx.change.type), gte(schema.changes.detectedAt, since)];
+  if (ctx.change.scriptId) {
+    filters.push(eq(schema.changes.scriptId, ctx.change.scriptId));
+  } else {
+    filters.push(eq(schema.changes.pageId, ctx.change.pageId));
+  }
+  const siblings = await db.query.changes.findMany({ where: and(...filters) });
 
   const header = ctx.change.detail.header;
   const candidates = siblings.filter((sibling) => {
     if (sibling.id === ctx.change.id) return false;
-    if (ctx.change.scriptId) return sibling.scriptId === ctx.change.scriptId;
+    if (ctx.change.scriptId) return true; // already scoped to this script site-wide
     if (typeof header === 'string') return sibling.detail.header === header;
     return true;
   });
@@ -122,7 +130,7 @@ export async function handleAlertDispatch(job: AlertDispatchJob): Promise<void> 
 
 /** Daily digest of warning/info changes that never triggered an alert. */
 export async function handleDailyDigest(): Promise<void> {
-  const since = new Date(Date.now() - DEDUPE_WINDOW_MS);
+  const since = new Date(Date.now() - DIGEST_LOOKBACK_MS);
   const recent = await db.query.changes.findMany({
     where: and(
       gte(schema.changes.detectedAt, since),
@@ -141,6 +149,7 @@ export async function handleDailyDigest(): Promise<void> {
     byOrg.set(orgId, list);
   }
 
+  let failures = 0;
   for (const [orgId, orgChanges] of byOrg) {
     const org = await db.query.orgs.findFirst({ where: eq(schema.orgs.id, orgId) });
     const recipients = await orgMemberEmails(orgId);
@@ -168,18 +177,23 @@ export async function handleDailyDigest(): Promise<void> {
 
     try {
       await mailer.send({ to: recipients, ...rendered });
-      await db
-        .insert(schema.alerts)
-        .values(
-          orgChanges.map((c) => ({
-            changeId: c.id,
-            channel: 'email' as const,
-            status: 'sent' as const,
-          })),
-        );
+      await db.insert(schema.alerts).values(
+        orgChanges.map((c) => ({
+          changeId: c.id,
+          channel: 'email' as const,
+          status: 'sent' as const,
+        })),
+      );
       console.log(`[alerts] digest sent to org ${orgId} (${orgChanges.length} changes)`);
     } catch (error) {
+      failures += 1;
       console.error(`[alerts] digest failed for org ${orgId}:`, error);
     }
+  }
+
+  // Rethrow so pg-boss retries this job. Orgs that already sent have alert rows
+  // and are filtered out of the retry, so the retry only re-attempts failures.
+  if (failures > 0) {
+    throw new Error(`daily digest failed for ${failures} org(s); will retry`);
   }
 }

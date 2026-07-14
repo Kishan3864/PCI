@@ -51,3 +51,26 @@ Decisions made where the brief is silent. Newest at the bottom.
 12. **Email templates:** `@react-email/components` is deprecated/unsupported on npm as of
     2026-07. Templates are plain React TSX (table-based email HTML, inline styles)
     rendered with the still-maintained `@react-email/render`.
+13. **SSRF defense (added in the Phase-1 review pass):** every outbound request to a
+    customer-controlled URL (domain verification, crawler page load, external script
+    fetch) goes through `@scriptproof/core/net-guard`. In production it resolves the
+    target host and refuses any that maps to a loopback/RFC1918/link-local/CGNAT address,
+    and it re-validates every redirect hop (redirects followed manually, http/https only).
+    Test mode bypasses the guard so `localhost` fixtures work. **Residual risk:** Node
+    re-resolves DNS at connect time, so a DNS-rebinding attacker could pass the check and
+    then connect to a private IP. Fully closing this needs connection-level IP pinning
+    (custom dispatcher), deferred beyond Phase 1.
+14. **Multiple CSP response headers** are merged by Playwright's `response.headers()` into
+    one comma-joined string, which can distort weakening analysis when a site sends more
+    than one `Content-Security-Policy` header. This is rare in practice; a proper fix needs
+    per-duplicate header access (`response.headersArray()`) and CSP-intersection logic,
+    deferred. The full header set is still snapshotted correctly for the Evidence Pack.
+15. **Baseline scans never rewrite recorded script state** (Phase-1 review fix): when a page
+    is baselined but a script is already in the site inventory (seen on another page), the
+    baseline only updates presence bookkeeping — it does not overwrite the recorded
+    hash/SRI. This prevents a tamper that predates a newly-added page from being silently
+    absorbed and masked on all future scans.
+16. **Unfetchable external scripts** (network error, non-2xx, oversized, or blocked by the
+    SSRF guard) carry an `unfetchable` flag. The diff engine never treats them as a content
+    change and never overwrites the last known good hash, so a transient fetch failure
+    cannot raise a false critical `script_modified` alert.

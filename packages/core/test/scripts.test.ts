@@ -49,6 +49,7 @@ describe('dedupeObserved', () => {
     sha256: 'aaa',
     byteSize: 1,
     sriPresent: true,
+    unfetchable: false,
     attrs: {},
   };
 

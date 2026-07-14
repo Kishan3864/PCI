@@ -7,7 +7,8 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./schemas": "./src/schemas.ts"
+    "./schemas": "./src/schemas.ts",
+    "./net-guard": "./src/net-guard.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

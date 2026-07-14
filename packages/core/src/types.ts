@@ -19,6 +19,12 @@ export interface ObservedScript {
   sha256: string;
   byteSize: number;
   sriPresent: boolean;
+  /**
+   * True when the external script could not be fetched this scan (network error,
+   * non-2xx, oversized). Its `sha256` is a placeholder, so the diff engine must
+   * not treat it as a content change or overwrite the last known good hash.
+   */
+  unfetchable: boolean;
   attrs: Record<string, string>;
 }
 

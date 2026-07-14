@@ -15,14 +15,25 @@ generates a monthly PDF Evidence Pack you can attach to your SAQ.
 
 ```bash
 pnpm install
-docker compose up -d          # Postgres 16 + Mailhog
+pnpm --filter worker exec playwright install chromium   # crawler browser (one-time)
+docker compose up -d          # Postgres 16 (host port 5433) + Mailhog
 cp .env.example .env          # fill in BETTER_AUTH_SECRET (openssl rand -base64 32)
 pnpm db:migrate
 pnpm db:seed
-pnpm dev                      # web on :3000, worker + fixture pages
+pnpm dev                      # web on :3000, worker + fixture shop on :4820
 ```
 
 Mailhog UI (local email): http://localhost:8025
+
+Demo login: `demo@scriptproof.local` / `demo-password-123`. The seeded site
+`localhost:4820` is a fake checkout served by the worker — open its Inventory tab,
+press **Scan now**, and the baseline appears. Simulate a skimmer injection with:
+
+```bash
+curl -X POST http://localhost:4820/__fixture/variant -d '{"variant":"modified"}'
+```
+
+then rescan and check the Changes tab (and Mailhog for the critical alert).
 
 ## Repository layout
 

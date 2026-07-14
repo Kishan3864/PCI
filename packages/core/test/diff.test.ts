@@ -10,6 +10,7 @@ function obs(overrides: Partial<ObservedScript> = {}): ObservedScript {
     sha256: 'aaa',
     byteSize: 100,
     sriPresent: false,
+    unfetchable: false,
     attrs: {},
     ...overrides,
   };
@@ -71,6 +72,59 @@ describe('baseline scans', () => {
     expect(result.updates).toEqual([
       expect.objectContaining({ scriptId: 'script-1', seen: true, missingStreak: 0 }),
     ]);
+  });
+
+  it('does not overwrite a known script hash/SRI during a new-page baseline', () => {
+    // Regression: a tampered authorized script (recorded H1, now serving H2) must
+    // not have its recorded hash silently rewritten when a new page is baselined.
+    const result = diffScan(
+      input({
+        isBaseline: true,
+        observed: [obs({ sha256: 'H2', sriPresent: false })],
+        known: [known({ latestSha256: 'H1', latestSriPresent: true, expectedOnPage: false })],
+        prevHeaders: null,
+      }),
+    );
+    const update = result.updates[0];
+    expect(update).toMatchObject({ scriptId: 'script-1', seen: true, missingStreak: 0 });
+    expect(update?.latestSha256).toBeUndefined();
+    expect(update?.latestSriPresent).toBeUndefined();
+    expect(result.changes).toEqual([]);
+  });
+});
+
+describe('unfetchable scripts', () => {
+  it('does not raise script_modified when a known script is unfetchable', () => {
+    const result = diffScan(
+      input({
+        observed: [obs({ sha256: 'unfetchable', unfetchable: true })],
+        known: [known({ status: 'authorized', latestSha256: 'aaa' })],
+      }),
+    );
+    expect(result.changes).toEqual([]);
+  });
+
+  it('preserves the last known good hash for an unfetchable known script', () => {
+    const result = diffScan(
+      input({
+        observed: [obs({ sha256: 'unfetchable', byteSize: 0, unfetchable: true })],
+        known: [known({ latestSha256: 'aaa' })],
+      }),
+    );
+    const update = result.updates[0];
+    expect(update).toMatchObject({ scriptId: 'script-1', seen: true, missingStreak: 0 });
+    expect(update?.latestSha256).toBeUndefined();
+    expect(update?.latestByteSize).toBeUndefined();
+  });
+
+  it('still reports SRI removal for an unfetchable script (integrity is a DOM attribute)', () => {
+    const result = diffScan(
+      input({
+        observed: [obs({ sha256: 'unfetchable', unfetchable: true, sriPresent: false })],
+        known: [known({ latestSriPresent: true })],
+      }),
+    );
+    expect(result.changes).toEqual([expect.objectContaining({ type: 'sri_removed' })]);
   });
 });
 
@@ -290,5 +344,21 @@ describe('header_changed', () => {
   it('emits no header changes when there is no previous header snapshot', () => {
     const result = diffScan(input({ prevHeaders: null, headers: { 'x-frame-options': 'DENY' } }));
     expect(result.changes).toEqual([]);
+  });
+
+  it('treats a CSP emptied to blank as removed (critical), not modified', () => {
+    const result = diffScan(
+      input({
+        prevHeaders: { 'content-security-policy': "default-src 'self'" },
+        headers: { 'content-security-policy': '   ' },
+      }),
+    );
+    expect(result.changes).toEqual([
+      expect.objectContaining({
+        type: 'header_changed',
+        severity: 'critical',
+        detail: expect.objectContaining({ kind: 'removed' }),
+      }),
+    ]);
   });
 });

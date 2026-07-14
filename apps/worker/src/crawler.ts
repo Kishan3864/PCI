@@ -9,8 +9,9 @@ import {
   sha256Hex,
   type ObservedScript,
 } from '@scriptproof/core';
+import { isHostConnectable, safeFetch, type FetchGuardPolicy } from '@scriptproof/core/net-guard';
 import type { Browser } from 'playwright';
-import { botInfoUrl } from './env';
+import { botInfoUrl, isTestMode } from './env';
 
 /** Script tags as seen in the DOM (static + injected at runtime). */
 interface RawScriptTag {
@@ -59,7 +60,14 @@ const COLLECT_SCRIPTS_SCRIPT = `
   const collected = new Map();
   const add = (tag) => {
     const key = tag.src ? 'src:' + tag.src : 'inline:' + (tag.text || '');
-    if (!collected.has(key)) collected.set(key, tag);
+    const existing = collected.get(key);
+    if (!existing) {
+      collected.set(key, tag);
+    } else if (!tag.integrity) {
+      // A duplicate tag for the same src without integrity defeats SRI for that
+      // resource, so clear it — one unprotected tag means the script is unprotected.
+      existing.integrity = null;
+    }
   };
   for (const s of Array.from(document.scripts)) {
     const attrs = {};
@@ -89,16 +97,22 @@ export type ScriptContentCache = Map<string, { sha256: string; byteSize: number 
 async function fetchExternalScript(
   url: string,
   cache: ScriptContentCache,
+  policy: FetchGuardPolicy,
 ): Promise<{ sha256: string; byteSize: number } | null> {
   if (cache.has(url)) return cache.get(url) ?? null;
 
   let result: { sha256: string; byteSize: number } | null = null;
   try {
-    const res = await fetch(url, {
-      headers: { 'user-agent': botUserAgent(botInfoUrl()) },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(CRAWL_TIMEOUT_MS),
-    });
+    // safeFetch blocks script srcs that resolve to internal hosts
+    // (http://169.254.169.254/…, http://127.0.0.1:6379/…) — SSRF guard.
+    const res = await safeFetch(
+      url,
+      {
+        headers: { 'user-agent': botUserAgent(botInfoUrl()) },
+        signal: AbortSignal.timeout(CRAWL_TIMEOUT_MS),
+      },
+      policy,
+    );
     if (res.ok) {
       const buf = Buffer.from(await res.arrayBuffer());
       if (buf.byteLength <= MAX_SCRIPT_BYTES) {
@@ -106,7 +120,7 @@ async function fetchExternalScript(
       }
     }
   } catch {
-    result = null; // unreachable script: recorded with a sentinel hash below
+    result = null; // unreachable/blocked script: flagged unfetchable below
   }
   cache.set(url, result);
   await sleep(SCRIPT_FETCH_DELAY_MS);
@@ -130,6 +144,14 @@ export async function crawlPage(
     serviceWorkers: 'block',
   });
   try {
+    const policy: FetchGuardPolicy = { testMode: isTestMode() };
+
+    // SSRF guard for the page load itself: refuse a (verified) domain that
+    // resolves to a private/loopback address in production.
+    if (!(await isHostConnectable(new URL(pageUrl).host, policy))) {
+      throw new Error(`page host is not a public address: ${new URL(pageUrl).host}`);
+    }
+
     const page = await context.newPage();
 
     // Raw strings (not closures): tsx/esbuild transforms inject helpers like
@@ -152,15 +174,17 @@ export async function crawlPage(
         if (!absolute || (!absolute.startsWith('http://') && !absolute.startsWith('https://'))) {
           continue; // data:/blob:/javascript: srcs have no stable fetchable identity
         }
-        const content = await fetchExternalScript(absolute, cache);
+        const content = await fetchExternalScript(absolute, cache, policy);
         observed.push({
           urlKey: scriptUrlKey(absolute),
           srcUrl: absolute,
           isInline: false,
-          // Unfetchable scripts get a sentinel so repeat failures don't churn hashes.
+          // Sentinel hash when unfetchable; the `unfetchable` flag tells the diff
+          // engine to ignore it rather than treat it as a content change.
           sha256: content?.sha256 ?? 'unfetchable',
           byteSize: content?.byteSize ?? 0,
           sriPresent: tag.integrity !== null && tag.integrity.trim() !== '',
+          unfetchable: content === null,
           attrs: tag.attrs,
         });
       } else {
@@ -174,6 +198,7 @@ export async function crawlPage(
           sha256: hash,
           byteSize: Buffer.byteLength(text, 'utf8'),
           sriPresent: false,
+          unfetchable: false,
           attrs: tag.attrs,
         });
       }

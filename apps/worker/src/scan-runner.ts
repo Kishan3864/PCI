@@ -67,6 +67,10 @@ async function scanOnePage(
     .returning();
   if (!scan) throw new Error('failed to insert scan row');
 
+  // Hoisted so the alert-enqueue step (deliberately outside the scan try/catch)
+  // can read it after the scan has committed.
+  const criticalChangeIds: string[] = [];
+
   try {
     const outcome = await crawlPage(browser, page.url, cache);
 
@@ -106,7 +110,6 @@ async function scanOnePage(
     });
 
     const now = new Date();
-    const criticalChangeIds: string[] = [];
 
     await db.transaction(async (tx) => {
       await tx
@@ -136,8 +139,10 @@ async function scanOnePage(
               firstSeenAt: now,
               lastSeenAt: now,
               lastSeenPageId: page.id,
-              latestSha256: o.sha256,
-              latestByteSize: o.byteSize,
+              // Unknown content when unfetchable — record null, not the sentinel,
+              // so the next successful scan is not seen as a modification.
+              latestSha256: o.unfetchable ? null : o.sha256,
+              latestByteSize: o.unfetchable ? null : o.byteSize,
               latestSriPresent: o.sriPresent,
             })),
           )
@@ -212,12 +217,6 @@ async function scanOnePage(
         .where(eq(schema.pages.id, page.id));
     });
 
-    // Critical → immediate alert. Warning/info wait for the daily digest.
-    for (const changeId of criticalChangeIds) {
-      const payload: AlertDispatchJob = { changeId };
-      await boss.send(ALERT_DISPATCH, { ...payload });
-    }
-
     console.log(
       `[scan] ${page.url}: ${outcome.observed.length} scripts, ` +
         `${result.toCreate.length} new, ${result.changes.length} changes`,
@@ -229,5 +228,19 @@ async function scanOnePage(
       .set({ status: 'error', finishedAt: new Date(), error: message.slice(0, 2000) })
       .where(eq(schema.scans.id, scan.id));
     console.error(`[scan] ${page.url} failed:`, message);
+    return;
+  }
+
+  // Alert enqueue lives outside the scan try/catch: the scan already committed
+  // as `success`, so a queue hiccup here must not flip it to `error`. Each send
+  // is isolated so one failure cannot drop the rest. Failures are recoverable —
+  // the change rows persist and are visible in the dashboard regardless.
+  for (const changeId of criticalChangeIds) {
+    try {
+      const payload: AlertDispatchJob = { changeId };
+      await boss.send(ALERT_DISPATCH, { ...payload });
+    } catch (error) {
+      console.error(`[scan] failed to enqueue critical alert for change ${changeId}:`, error);
+    }
   }
 }
