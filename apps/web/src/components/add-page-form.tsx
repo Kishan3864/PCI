@@ -1,5 +1,6 @@
 'use client';
 
+import { CheckCircle2, Plus } from 'lucide-react';
 import { useActionState, useEffect, useRef } from 'react';
 import { addPage } from '@/actions/pages';
 import { Button } from '@/components/ui/button';
@@ -44,7 +45,7 @@ export function AddPageForm({ siteId, domain, allow6h }: AddPageFormProps) {
             id="page-frequency"
             name="scanFrequency"
             defaultValue="daily"
-            className="flex h-9 w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy-400"
+            className="flex h-9 w-full rounded-md border border-slate-200 bg-white/80 px-3 py-1 text-sm shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
           >
             <option value="daily">Daily</option>
             <option value="6h" disabled={!allow6h}>
@@ -54,11 +55,17 @@ export function AddPageForm({ siteId, domain, allow6h }: AddPageFormProps) {
         </div>
       </div>
       {state ? (
-        <p className={`text-sm ${state.ok ? 'text-emerald-600' : 'text-red-600'}`}>
+        <p
+          className={`flex items-center gap-1.5 text-sm ${
+            state.ok ? 'text-emerald-600' : 'text-red-600'
+          }`}
+        >
+          {state.ok ? <CheckCircle2 className="h-4 w-4" /> : null}
           {state.message}
         </p>
       ) : null}
       <Button type="submit" disabled={pending}>
+        <Plus className="h-4 w-4" />
         {pending ? 'Adding…' : 'Add page'}
       </Button>
     </form>

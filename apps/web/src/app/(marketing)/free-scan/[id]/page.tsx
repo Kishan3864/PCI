@@ -1,7 +1,18 @@
 import type { FreeScanReport } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
 import { eq } from 'drizzle-orm';
-import { CheckCircle2, Loader2, Lock, XCircle } from 'lucide-react';
+import {
+  ArrowRight,
+  CheckCircle2,
+  FileText,
+  Globe,
+  Lock,
+  Radar,
+  ScanLine,
+  ShieldCheck,
+  Sparkles,
+  XCircle,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -10,6 +21,7 @@ import { PollRefresh } from '@/components/poll-refresh';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Aurora, GradientText, GridGlow, Reveal, SpotlightCard } from '@/components/visual';
 import { db } from '@/lib/db';
 
 export const metadata: Metadata = { title: 'Scan results' };
@@ -21,15 +33,37 @@ export default async function FreeScanResultPage({ params }: { params: Promise<{
 
   if (row.status === 'queued' || row.status === 'running') {
     return (
-      <div className="mx-auto max-w-xl px-6 py-24 text-center">
-        <PollRefresh />
-        <Loader2 className="mx-auto h-10 w-10 animate-spin text-navy-600" />
-        <h1 className="mt-4 text-2xl font-bold text-navy-900">Scanning your page…</h1>
-        <p className="mt-2 break-all font-mono text-sm text-slate-500">{row.url}</p>
-        <p className="mt-4 text-sm text-slate-500">
-          This usually takes under a minute. The page will update automatically.
-        </p>
-      </div>
+      <section className="relative isolate overflow-hidden">
+        <Aurora />
+        <GridGlow />
+        <div className="mx-auto max-w-xl px-6 py-28 text-center">
+          <PollRefresh />
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm backdrop-blur">
+              <ScanLine className="h-3.5 w-3.5" /> Live scan in progress
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="relative mx-auto mt-8 flex h-20 w-20 items-center justify-center">
+              <span className="absolute inset-0 rounded-full bg-emerald-400/20 animate-pulse-ring" />
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_16px_36px_-12px_rgba(16,185,129,0.8)]">
+                <Radar className="h-7 w-7 animate-radar" />
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={160}>
+            <h1 className="mt-8 text-3xl font-bold tracking-tight text-navy-900">
+              Scanning <GradientText animated>your page</GradientText>…
+            </h1>
+          </Reveal>
+          <Reveal delay={240}>
+            <p className="mt-3 break-all font-mono text-sm text-slate-500">{row.url}</p>
+            <p className="mx-auto mt-5 max-w-sm text-sm leading-6 text-slate-600">
+              This usually takes under a minute. The page will update automatically.
+            </p>
+          </Reveal>
+        </div>
+      </section>
     );
   }
 
@@ -39,124 +73,208 @@ export default async function FreeScanResultPage({ params }: { params: Promise<{
         ? row.resultJson.error
         : 'We could not scan that page.';
     return (
-      <div className="mx-auto max-w-xl px-6 py-24 text-center">
-        <XCircle className="mx-auto h-10 w-10 text-red-600" />
-        <h1 className="mt-4 text-2xl font-bold text-navy-900">Scan failed</h1>
-        <p className="mt-2 text-slate-600">{message}</p>
-        <Button className="mt-6" asChild>
-          <Link href="/free-scan">Try another URL</Link>
-        </Button>
-      </div>
+      <section className="relative isolate overflow-hidden">
+        <Aurora muted />
+        <div className="mx-auto max-w-xl px-6 py-28">
+          <Reveal>
+            <Card className="overflow-hidden text-center">
+              <CardContent className="p-10">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-600 ring-1 ring-inset ring-red-600/15">
+                  <XCircle className="h-7 w-7" />
+                </div>
+                <h1 className="mt-6 text-2xl font-bold text-navy-900">Scan failed</h1>
+                <p className="mt-2 text-slate-600">{message}</p>
+                <Button className="mt-8" asChild>
+                  <Link href="/free-scan">
+                    Try another URL <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </Reveal>
+        </div>
+      </section>
     );
   }
 
   const report = row.resultJson as unknown as FreeScanReport;
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <p className="text-sm font-medium text-emerald-700">Scan complete</p>
-      <h1 className="mt-1 text-3xl font-bold tracking-tight text-navy-900">Scan results</h1>
-      <p className="mt-2 break-all font-mono text-sm text-slate-500">{report.url}</p>
+    <>
+      {/* ── Results hero ─────────────────────────────────────────────── */}
+      <section className="relative isolate overflow-hidden">
+        <Aurora />
+        <GridGlow />
+        <div className="mx-auto max-w-3xl px-6 py-16">
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5" /> Scan complete
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-5 text-4xl font-bold tracking-tight text-navy-900">
+              <GradientText>Scan results</GradientText>
+            </h1>
+            <p className="mt-3 break-all font-mono text-sm text-slate-500">{report.url}</p>
+          </Reveal>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <Stat n={report.scriptCount} label="Scripts" />
-        <Stat n={report.externalDomains.length} label="External domains" />
-        <Stat
-          n={report.scriptsWithoutSri}
-          label="Without SRI"
-          tone={report.scriptsWithoutSri > 0 ? 'warn' : 'ok'}
-        />
-        <Stat
-          n={`${report.headersPresent}/${report.headersTotal}`}
-          label="Security headers"
-          tone={report.headersPresent < report.headersTotal ? 'warn' : 'ok'}
-        />
+          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <Reveal delay={120}>
+              <Stat n={report.scriptCount} label="Scripts" />
+            </Reveal>
+            <Reveal delay={200}>
+              <Stat n={report.externalDomains.length} label="External domains" />
+            </Reveal>
+            <Reveal delay={280}>
+              <Stat
+                n={report.scriptsWithoutSri}
+                label="Without SRI"
+                tone={report.scriptsWithoutSri > 0 ? 'warn' : 'ok'}
+              />
+            </Reveal>
+            <Reveal delay={360}>
+              <Stat
+                n={`${report.headersPresent}/${report.headersTotal}`}
+                label="Security headers"
+                tone={report.headersPresent < report.headersTotal ? 'warn' : 'ok'}
+              />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Result detail ────────────────────────────────────────────── */}
+      <div className="mx-auto max-w-3xl px-6 pb-20">
+        <Reveal>
+          <SpotlightCard className="card-lift rounded-2xl">
+            <Card className="border-transparent bg-transparent shadow-none backdrop-blur-none">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+                    <ShieldCheck className="h-4 w-4" />
+                  </span>
+                  Security headers
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm">
+                  {report.securityHeaders.map((h) => (
+                    <li
+                      key={h.header}
+                      className="flex items-center gap-2 rounded-lg border border-slate-200/70 bg-white/60 px-3 py-2"
+                    >
+                      {h.present ? (
+                        <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                      ) : (
+                        <XCircle className="h-4 w-4 shrink-0 text-red-500" />
+                      )}
+                      <span className="font-mono text-xs text-navy-900">{h.header}</span>
+                      {!h.present ? (
+                        <Badge variant="warning" className="ml-auto">
+                          missing
+                        </Badge>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </SpotlightCard>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+                  <Globe className="h-4 w-4" />
+                </span>
+                External script domains
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {report.externalDomains.length === 0 ? (
+                <p className="text-sm text-slate-500">No external script domains found.</p>
+              ) : (
+                <ul className="flex flex-wrap gap-2">
+                  {report.externalDomains.map((d) => (
+                    <li
+                      key={d}
+                      className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 font-mono text-xs text-slate-600 shadow-sm backdrop-blur"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+        </Reveal>
+
+        {/* Blurred "changes over time" teaser — the paid capability. */}
+        <Reveal delay={80}>
+          <Card className="relative mt-6 overflow-hidden">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+                  <Radar className="h-4 w-4" />
+                </span>
+                Changes over time
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="pointer-events-none select-none space-y-2 blur-sm" aria-hidden>
+                <div className="flex justify-between text-sm">
+                  <span>New script on checkout — cdn.tracker.example/x.js</span>
+                  <span className="text-red-600">critical</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>checkout.js content changed</span>
+                  <span className="text-red-600">critical</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Content-Security-Policy weakened</span>
+                  <span className="text-amber-600">warning</span>
+                </div>
+              </div>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/70 text-center backdrop-blur-[2px]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.8)]">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <p className="max-w-xs text-sm font-medium text-navy-900">
+                  Monitoring changes over time requires an account
+                </p>
+                <Button size="sm" asChild>
+                  <Link href="/signup">
+                    Start free trial <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-base">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+                  <FileText className="h-4 w-4" />
+                </span>
+                Download a one-page PDF summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-sm text-slate-600">
+                Enter your email to download this scan as a PDF you can keep on file.
+              </p>
+              <FreeScanEmailGate scanId={row.id} />
+            </CardContent>
+          </Card>
+        </Reveal>
       </div>
-
-      <Card className="mt-8">
-        <CardHeader>
-          <CardTitle className="text-base">Security headers</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 text-sm">
-            {report.securityHeaders.map((h) => (
-              <li key={h.header} className="flex items-center gap-2">
-                {h.present ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                ) : (
-                  <XCircle className="h-4 w-4 text-red-500" />
-                )}
-                <span className="font-mono text-xs">{h.header}</span>
-                {!h.present ? <Badge variant="warning">missing</Badge> : null}
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="text-base">External script domains</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {report.externalDomains.length === 0 ? (
-            <p className="text-sm text-slate-500">No external script domains found.</p>
-          ) : (
-            <ul className="flex flex-wrap gap-2">
-              {report.externalDomains.map((d) => (
-                <li key={d} className="rounded-md bg-slate-100 px-2.5 py-1 font-mono text-xs">
-                  {d}
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Blurred "changes over time" teaser — the paid capability. */}
-      <Card className="relative mt-6 overflow-hidden">
-        <CardHeader>
-          <CardTitle className="text-base">Changes over time</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="pointer-events-none select-none space-y-2 blur-sm" aria-hidden>
-            <div className="flex justify-between text-sm">
-              <span>New script on checkout — cdn.tracker.example/x.js</span>
-              <span className="text-red-600">critical</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span>checkout.js content changed</span>
-              <span className="text-red-600">critical</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span>Content-Security-Policy weakened</span>
-              <span className="text-amber-600">warning</span>
-            </div>
-          </div>
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/60 text-center">
-            <Lock className="h-6 w-6 text-navy-600" />
-            <p className="max-w-xs text-sm font-medium text-navy-900">
-              Monitoring changes over time requires an account
-            </p>
-            <Button size="sm" asChild>
-              <Link href="/signup">Start free trial</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="text-base">Download a one-page PDF summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="mb-4 text-sm text-slate-600">
-            Enter your email to download this scan as a PDF you can keep on file.
-          </p>
-          <FreeScanEmailGate scanId={row.id} />
-        </CardContent>
-      </Card>
-    </div>
+    </>
   );
 }
 
@@ -172,8 +290,8 @@ function Stat({
   const color =
     tone === 'warn' ? 'text-amber-600' : tone === 'ok' ? 'text-emerald-600' : 'text-navy-900';
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 text-center">
-      <div className={`text-2xl font-bold ${color}`}>{n}</div>
+    <div className="card-lift h-full rounded-2xl border border-slate-200/80 bg-white/80 p-5 text-center shadow-sm backdrop-blur-sm">
+      <div className={`font-display text-3xl font-bold ${color}`}>{n}</div>
       <div className="mt-1 text-xs uppercase tracking-wide text-slate-500">{label}</div>
     </div>
   );

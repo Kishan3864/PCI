@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
+import { ArrowUpRight, Clock, Newspaper } from 'lucide-react';
 import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { Aurora, GradientText, GridGlow, Reveal, SpotlightCard } from '@/components/visual';
 import { BLOG_POSTS, formatPostDate } from '@/lib/blog';
 
 export const metadata: Metadata = {
@@ -10,34 +13,63 @@ export const metadata: Metadata = {
 
 export default function BlogIndexPage() {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-4xl font-bold tracking-tight text-navy-900">Blog</h1>
-      <p className="mt-4 text-lg text-slate-600">
-        Practical, no-fluff guides to the PCI DSS script requirements — written for store owners,
-        not auditors.
-      </p>
-
-      <div className="mt-10 space-y-8">
-        {BLOG_POSTS.map((post) => (
-          <article key={post.slug} className="border-b border-slate-100 pb-8 last:border-0">
-            <p className="text-xs uppercase tracking-wide text-slate-400">
-              {formatPostDate(post.date)} · {post.readingMinutes} min read
+    <>
+      {/* ── Hero ─────────────────────────────────────────────────────── */}
+      <section className="relative isolate overflow-hidden">
+        <Aurora />
+        <GridGlow />
+        <div className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm backdrop-blur">
+              <Newspaper className="h-3.5 w-3.5" />
+              The ScriptProof blog
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-navy-900 sm:text-5xl">
+              Plain-English <GradientText animated>PCI DSS</GradientText> guides
+            </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+              Practical, no-fluff guides to the PCI DSS script requirements — written for store
+              owners, not auditors.
             </p>
-            <h2 className="mt-2 text-xl font-semibold text-navy-900">
-              <Link href={`/blog/${post.slug}`} className="hover:underline">
-                {post.title}
-              </Link>
-            </h2>
-            <p className="mt-2 leading-7 text-slate-600">{post.description}</p>
-            <Link
-              href={`/blog/${post.slug}`}
-              className="mt-3 inline-block text-sm font-medium text-navy-700 hover:underline"
-            >
-              Read more →
-            </Link>
-          </article>
-        ))}
-      </div>
-    </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Article list ─────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-3xl px-6 pb-24">
+        <div className="space-y-6">
+          {BLOG_POSTS.map((post, i) => (
+            <Reveal key={post.slug} delay={i * 80}>
+              <SpotlightCard className="card-lift rounded-2xl border border-slate-200/80 bg-white/80 p-7 shadow-sm backdrop-blur-sm">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge variant="brand">{formatPostDate(post.date)}</Badge>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
+                    <Clock className="h-3.5 w-3.5" />
+                    {post.readingMinutes} min read
+                  </span>
+                </div>
+                <h2 className="mt-4 text-xl font-semibold text-navy-900">
+                  <Link href={`/blog/${post.slug}`} className="hover:text-emerald-700">
+                    {post.title}
+                  </Link>
+                </h2>
+                <p className="mt-2 leading-7 text-slate-600">{post.description}</p>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:gap-2.5 hover:text-emerald-800"
+                >
+                  Read more
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

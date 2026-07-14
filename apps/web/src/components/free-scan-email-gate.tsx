@@ -1,6 +1,6 @@
 'use client';
 
-import { Download } from 'lucide-react';
+import { CheckCircle2, Download } from 'lucide-react';
 import { useActionState } from 'react';
 import { emailFreeScanPdf } from '@/actions/free-scan';
 import { Button } from '@/components/ui/button';
@@ -11,11 +11,17 @@ export function FreeScanEmailGate({ scanId }: { scanId: string }) {
 
   if (state?.ok) {
     return (
-      <Button asChild>
-        <a href={`/free-scan/${scanId}/pdf`} download>
-          <Download className="h-4 w-4" /> Download PDF summary
-        </a>
-      </Button>
+      <div className="flex flex-col gap-3 rounded-xl border border-emerald-200/70 bg-emerald-50/60 p-4 sm:flex-row sm:items-center">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+          <CheckCircle2 className="h-5 w-5" />
+        </span>
+        <p className="flex-1 text-sm font-medium text-navy-900">Your summary is ready.</p>
+        <Button asChild>
+          <a href={`/free-scan/${scanId}/pdf`} download>
+            <Download className="h-4 w-4" /> Download PDF summary
+          </a>
+        </Button>
+      </div>
     );
   }
 

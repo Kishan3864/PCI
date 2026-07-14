@@ -1,5 +1,6 @@
 'use client';
 
+import { AlertCircle, ArrowRight } from 'lucide-react';
 import { useActionState } from 'react';
 import { createSite } from '@/actions/sites';
 import { Button } from '@/components/ui/button';
@@ -18,9 +19,15 @@ export function NewSiteForm() {
           The exact host serving your checkout — subdomains count as separate sites.
         </p>
       </div>
-      {state && !state.ok ? <p className="text-sm text-red-600">{state.message}</p> : null}
+      {state && !state.ok ? (
+        <p className="flex items-center gap-1.5 rounded-lg border border-red-200/70 bg-red-50/70 px-3 py-2 text-sm text-red-600">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {state.message}
+        </p>
+      ) : null}
       <Button type="submit" disabled={pending}>
         {pending ? 'Adding…' : 'Add site'}
+        {pending ? null : <ArrowRight className="h-4 w-4" />}
       </Button>
     </form>
   );

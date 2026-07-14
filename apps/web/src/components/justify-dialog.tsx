@@ -1,5 +1,6 @@
 'use client';
 
+import { Ban, ShieldCheck } from 'lucide-react';
 import { useActionState, useEffect, useState } from 'react';
 import { justifyScript } from '@/actions/scripts';
 import { Button } from '@/components/ui/button';
@@ -30,18 +31,34 @@ export function JustifyDialog({ scriptId, scriptName, action }: JustifyDialogPro
   }, [state]);
 
   const verb = action === 'authorized' ? 'Authorize' : 'Block';
+  const authorize = action === 'authorized';
+  const Icon = authorize ? ShieldCheck : Ban;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant={action === 'authorized' ? 'default' : 'outline'}>
+        <Button size="sm" variant={authorize ? 'default' : 'outline'}>
+          <Icon className="h-4 w-4" />
           {verb}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{verb} script</DialogTitle>
-          <DialogDescription className="break-all">{scriptName}</DialogDescription>
+          <div className="mb-1 flex items-center gap-3">
+            <div
+              className={`flex h-10 w-10 items-center justify-center rounded-xl ring-1 ring-inset ${
+                authorize
+                  ? 'bg-emerald-50 text-emerald-600 ring-emerald-600/15'
+                  : 'bg-rose-50 text-rose-600 ring-rose-600/15'
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+            </div>
+            <DialogTitle>{verb} script</DialogTitle>
+          </div>
+          <DialogDescription className="break-all font-mono text-xs">
+            {scriptName}
+          </DialogDescription>
         </DialogHeader>
         <form action={formAction} className="space-y-4">
           <input type="hidden" name="scriptId" value={scriptId} />
@@ -72,7 +89,11 @@ export function JustifyDialog({ scriptId, scriptName, action }: JustifyDialogPro
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={pending}>
+            <Button
+              type="submit"
+              variant={authorize ? 'default' : 'destructive'}
+              disabled={pending}
+            >
               {pending ? 'Saving…' : verb}
             </Button>
           </DialogFooter>

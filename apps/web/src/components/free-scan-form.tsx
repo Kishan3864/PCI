@@ -1,5 +1,6 @@
 'use client';
 
+import { AlertCircle, ArrowRight, Globe } from 'lucide-react';
 import { useActionState } from 'react';
 import { submitFreeScan } from '@/actions/free-scan';
 import { Button } from '@/components/ui/button';
@@ -10,20 +11,34 @@ export function FreeScanForm() {
 
   return (
     <form action={formAction} className="mx-auto max-w-xl">
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <Input
-          name="url"
-          type="url"
-          required
-          placeholder="https://yourstore.com/checkout"
-          className="h-11 flex-1"
-        />
-        <Button type="submit" size="lg" disabled={pending} className="h-11">
-          {pending ? 'Starting…' : 'Scan for free'}
-        </Button>
+      <div className="rounded-2xl border border-slate-200/80 bg-white/80 p-2 shadow-sm backdrop-blur-sm">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="relative flex-1">
+            <Globe className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Input
+              name="url"
+              type="url"
+              required
+              placeholder="https://yourstore.com/checkout"
+              className="h-12 w-full pl-10 text-base"
+            />
+          </div>
+          <Button type="submit" size="xl" disabled={pending} className="shrink-0">
+            {pending ? (
+              'Starting…'
+            ) : (
+              <>
+                Scan for free <ArrowRight className="h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </div>
       </div>
       {state && !state.ok ? (
-        <p className="mt-3 text-center text-sm text-red-600">{state.message}</p>
+        <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-sm font-medium text-rose-600">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {state.message}
+        </p>
       ) : null}
     </form>
   );

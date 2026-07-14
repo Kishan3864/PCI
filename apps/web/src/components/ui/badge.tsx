@@ -3,17 +3,18 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const badgeVariants = cva(
-  'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors',
+  'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ring-1 ring-inset transition-colors',
   {
     variants: {
       variant: {
-        default: 'bg-navy-100 text-navy-800',
-        secondary: 'bg-slate-100 text-slate-700',
-        success: 'bg-emerald-100 text-emerald-800',
-        critical: 'bg-red-100 text-red-800',
-        warning: 'bg-amber-100 text-amber-800',
-        info: 'bg-sky-100 text-sky-800',
-        outline: 'border border-slate-300 text-slate-700',
+        default: 'bg-navy-50 text-navy-700 ring-navy-600/15',
+        brand: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+        secondary: 'bg-slate-100 text-slate-700 ring-slate-500/15',
+        success: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+        critical: 'bg-rose-50 text-rose-700 ring-rose-600/20',
+        warning: 'bg-amber-50 text-amber-700 ring-amber-600/20',
+        info: 'bg-sky-50 text-sky-700 ring-sky-600/20',
+        outline: 'text-slate-700 ring-slate-300',
       },
     },
     defaultVariants: {

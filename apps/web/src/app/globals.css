@@ -1,7 +1,21 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* ------------------------------------------------------------------ *
+ * ScriptProof design system — "Aurora Premium" (light) · Emerald
+ * A futuristic, airy, trust-forward look: glassmorphism, aurora mesh
+ * backgrounds, emerald glow, subtle grid, and smooth motion.
+ * Everything here is pure CSS (SSR-safe, zero runtime deps).
+ * ------------------------------------------------------------------ */
+
 @theme {
+  /* Type — self-hosted via next/font (see app/layout.tsx) */
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display:
+    var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Ink (deep navy) — kept for backwards compatibility across pages */
   --color-navy-50: #f0f4f9;
   --color-navy-100: #dce5f0;
   --color-navy-200: #b9cbe0;
@@ -13,10 +27,406 @@
   --color-navy-800: #132843;
   --color-navy-900: #0b2545;
   --color-navy-950: #061530;
+
+  /* Brand — emerald "Secure" (semantic alias of the emerald ramp) */
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-brand-950: #022c22;
+
+  /* Motion tokens → generate animate-* utilities */
+  --animate-aurora: sp-aurora 22s ease-in-out infinite;
+  --animate-aurora-slow: sp-aurora-2 30s ease-in-out infinite;
+  --animate-float: sp-float 6s ease-in-out infinite;
+  --animate-float-slow: sp-float 9s ease-in-out infinite;
+  --animate-scan: sp-scan 3.4s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  --animate-radar: sp-radar 4s linear infinite;
+  --animate-shimmer: sp-shimmer 2.4s linear infinite;
+  --animate-gradient: sp-gradient 6s ease infinite;
+  --animate-glow: sp-glow 3.2s ease-in-out infinite;
+  --animate-marquee: sp-marquee 32s linear infinite;
+  --animate-pulse-ring: sp-pulse-ring 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
+  --animate-spin-slow: sp-spin-slow 18s linear infinite;
+  --animate-blink: sp-blink 1.6s ease-in-out infinite;
 }
 
-body {
-  @apply bg-white text-slate-800 antialiased;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+/* ---- Design tokens (runtime CSS vars) --------------------------- */
+:root {
+  --sp-bg: #f6faf8;
+  --sp-ink: #0b2545;
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-ring: rgba(16, 185, 129, 0.14);
+  --glass-shadow: 0 10px 34px -12px rgba(6, 78, 59, 0.18);
+  --glow-emerald: 0 14px 44px -12px rgba(16, 185, 129, 0.5);
+  --grid-line: rgba(6, 95, 70, 0.06);
+}
+
+/* ---- Base --------------------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--sp-bg);
+    color: var(--sp-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: rgba(16, 185, 129, 0.24);
+    color: #052e21;
+  }
+
+  /* Custom scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 185, 129, 0.35) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.5), rgba(20, 184, 166, 0.5));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.8), rgba(20, 184, 166, 0.8));
+    background-clip: padding-box;
+  }
+}
+
+/* ---- Glassmorphism ------------------------------------------------ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+}
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ---- Gradient text ----------------------------------------------- */
+.text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-brand-600),
+    var(--color-teal-500) 46%,
+    var(--color-sky-500)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-gradient-animated {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-brand-600),
+    var(--color-teal-500) 30%,
+    var(--color-sky-500) 55%,
+    var(--color-brand-500) 80%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-gradient);
+}
+
+/* ---- Glow --------------------------------------------------------- */
+.glow-emerald {
+  box-shadow: var(--glow-emerald);
+}
+.glow-ring {
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.25),
+    0 18px 50px -18px rgba(16, 185, 129, 0.55);
+}
+
+/* ---- Subtle grid overlay ----------------------------------------- */
+.sp-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 46px 46px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
+}
+
+/* ---- Aurora blobs ------------------------------------------------- */
+.sp-aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.55;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ---- Card hover lift ---------------------------------------------- */
+.card-lift {
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    border-color 0.35s ease;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 26px 60px -28px rgba(6, 78, 59, 0.4);
+}
+
+/* ---- Cursor spotlight (SpotlightCard sets --mx/--my) -------------- */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(16, 185, 129, 0.16),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ---- Scroll reveal ------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  will-change: opacity, transform;
+}
+.reveal-in {
+  animation: sp-reveal-up 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+/* ---- Shimmer sweep (buttons, chips) ------------------------------ */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+.shimmer:hover::after {
+  transform: translateX(120%);
+}
+
+/* ---- Animated conic border (badges / pills) ---------------------- */
+.aurora-border {
+  position: relative;
+  background-clip: padding-box;
+}
+.aurora-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from 0deg,
+    var(--color-brand-500),
+    var(--color-teal-400),
+    var(--color-sky-400),
+    var(--color-brand-500)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: var(--animate-spin-slow);
+  pointer-events: none;
+}
+
+/* ---- Keyframes ---------------------------------------------------- */
+@keyframes sp-aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -5%, 0) scale(1.12);
+  }
+  66% {
+    transform: translate3d(-4%, 4%, 0) scale(0.94);
+  }
+}
+@keyframes sp-aurora-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-6%, -3%, 0) scale(1.15);
+  }
+}
+@keyframes sp-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes sp-scan {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
+@keyframes sp-radar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sp-shimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 250% 0;
+  }
+}
+@keyframes sp-gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes sp-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes sp-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+@keyframes sp-pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+@keyframes sp-reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes sp-spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sp-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ---- Accessibility: respect reduced motion ----------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
