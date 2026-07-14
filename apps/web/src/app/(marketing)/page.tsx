@@ -79,6 +79,50 @@ export default function LandingPage() {
           and the paper trail without hiring a security team.
         </p>
       </section>
+
+      <section className="border-t border-slate-100 bg-slate-50/60">
+        <div className="mx-auto max-w-3xl px-6 py-16">
+          <h2 className="text-center text-2xl font-bold text-navy-900">
+            Frequently asked questions
+          </h2>
+          <dl className="mt-8 space-y-6">
+            {faqs.map((faq) => (
+              <div key={faq.q}>
+                <dt className="font-semibold text-navy-900">{faq.q}</dt>
+                <dd className="mt-1 leading-7 text-slate-600">{faq.a}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="mt-10 text-center">
+            <Button size="lg" asChild>
+              <Link href="/pricing">See pricing</Link>
+            </Button>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
+
+const faqs = [
+  {
+    q: 'Does ScriptProof make me PCI compliant?',
+    a: 'No. ScriptProof is a monitoring and evidence tool. It supports your 6.4.3 and 11.6.1 controls and produces supporting evidence, but it is not a QSA service and does not certify compliance. Your validation requirements are set by your acquirer or a QSA.',
+  },
+  {
+    q: 'Do I need to install anything on my site?',
+    a: 'No. ScriptProof monitors your pages from the outside after you verify you own the domain. There is an optional lightweight snippet on Pro and Agency plans for catching scripts injected at runtime, but it is not required to start.',
+  },
+  {
+    q: 'Will it slow down my checkout?',
+    a: 'No. Monitoring happens on our servers, not in your customers’ browsers. The optional snippet is under 6 KB and fails silently — it never blocks or breaks your page.',
+  },
+  {
+    q: 'What happens when a script changes?',
+    a: 'A new or modified script on a payment page triggers an immediate email with the before and after fingerprints and a one-click review link. Lower-severity changes are grouped into a daily digest.',
+  },
+  {
+    q: 'Do you ever see card data?',
+    a: 'Never. ScriptProof only handles URLs, script metadata and content hashes, HTTP headers, and your account details. It does not request, process, or store cardholder data.',
+  },
+];

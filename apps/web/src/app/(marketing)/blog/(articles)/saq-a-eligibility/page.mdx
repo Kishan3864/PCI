@@ -1,0 +1,108 @@
+export const metadata = {
+  title: 'What the new SAQ A eligibility criteria mean for your checkout',
+  description:
+    'SAQ A got stricter in PCI DSS v4.0.1. Here is who still qualifies, what changed for iframe and redirect checkouts, and the script controls you now have to show.',
+};
+
+# What the new SAQ A eligibility criteria mean for your checkout
+
+_Published 16 June 2026 · 7 min read_
+
+For most small merchants, the **SAQ A** self-assessment questionnaire is the shortest, friendliest
+path to demonstrating PCI DSS. It exists for businesses that outsource almost all of their card
+handling to a compliant provider. If you qualify for SAQ A, you answer far fewer questions than
+merchants who touch card data directly.
+
+PCI DSS v4.0.1 kept SAQ A but tightened who can use it and added a small set of new expectations
+around the scripts on your payment page. This article walks through what changed and what it means
+for a typical iframe or redirect checkout.
+
+## A quick refresher: what SAQ A is for
+
+SAQ A is designed for **card-not-present** merchants — e-commerce and mail/telephone order — who
+have fully outsourced the handling of cardholder data. The classic examples are:
+
+- A **redirect** checkout, where the customer leaves your site to pay on the provider's page.
+- An **iframe** checkout, where the payment form is embedded from the provider inside your page.
+
+In both cases, the sensitive card entry happens inside code your provider controls, not yours. That
+is why SAQ A merchants historically answered so few questions: they were not the ones capturing the
+card number.
+
+## What changed in v4.0.1
+
+The big shift is that the payment industry recognized a hard truth: even when the card form itself
+is a provider's iframe, **your page still controls what other scripts load around it.** A skimmer
+placed on your page can watch the customer, overlay a fake form, or manipulate the iframe's
+surroundings. So SAQ A now expects merchants to show they are managing the scripts on the page that
+delivers the payment form.
+
+Two practical points follow from this.
+
+**First, eligibility is narrower and more explicit.** To use SAQ A your checkout still has to fully
+outsource card capture (redirect or iframe), your site must not receive card data, and you must
+confirm your page is not doing anything that would pull sensitive data back into your environment.
+If your setup blends a provider iframe with custom fields that touch card data, you may no longer
+fit SAQ A cleanly.
+
+**Second, SAQ A now includes script-management expectations.** The questionnaire references the
+same ideas as requirements 6.4.3 and 11.6.1: know the scripts on your payment page, be able to
+justify them, and be able to detect unauthorized changes. Even the "easy" questionnaire now asks
+you to show you are watching your page.
+
+## What this means for an iframe checkout
+
+If you use an embedded iframe (for example, a hosted payment field from your gateway), the card
+data lives inside the iframe and never enters your page's JavaScript. That is good and is what keeps
+you in SAQ A territory. But the page hosting the iframe is yours, and everything loaded alongside
+the iframe is your responsibility:
+
+- Analytics and marketing tags on the checkout page.
+- Chat widgets, pop-ups, and A/B testing tools.
+- Any theme or plugin script that runs on that page.
+
+Under v4.0.1 you should be able to list those scripts, say why each is there, and notice if a new
+one appears or an existing one changes. The iframe protects the card field; the script controls
+protect everything around it.
+
+## What this means for a redirect checkout
+
+A redirect checkout sends the customer entirely to the provider's domain to pay, so at first glance
+your page has less exposure. But the page that launches the redirect is still yours, and attackers
+have adapted: a skimmer can intercept the customer before the redirect, or swap the redirect
+destination. So the same logic applies — you are expected to manage the scripts on the page that
+initiates payment.
+
+## The controls you now have to be able to show
+
+Whether you are on iframe or redirect, being ready for SAQ A under v4.0.1 means being able to
+demonstrate three things about your payment page:
+
+1. **An inventory of scripts** with a written justification for each (the 6.4.3 idea).
+2. **A way to detect change or tampering** in those scripts and in the page's security headers,
+   checked at least weekly (the 11.6.1 idea).
+3. **Evidence** that you are actually doing the above over time — not just a one-time snapshot.
+
+None of this requires you to start handling card data or to move off SAQ A. It requires you to
+watch your own page and keep records.
+
+## How to get ready without over-engineering
+
+You do not need an enterprise security programme. A workable approach for a small merchant:
+
+- List the scripts on your checkout and write down why each is needed.
+- Set up something that re-checks the page on a schedule and flags new or changed scripts.
+- Keep the alerts and a periodic summary as your evidence.
+
+This is exactly the workflow ScriptProof automates: it verifies you own the domain, monitors your
+checkout on a schedule, maintains the authorized inventory, watches your security headers, and
+produces a monthly evidence document. It **supports** the SAQ A script-management expectations and
+generates supporting evidence — it does not decide your eligibility or certify compliance.
+
+## The bottom line
+
+SAQ A is still the simplest route for outsourced checkouts, and most small merchants who used it
+before will keep using it. What changed is that "outsourced" no longer means "nothing to do." Your
+payment page is yours, and v4.0.1 asks you to prove you are watching it. Confirm your exact
+eligibility and obligations with your acquirer or a QSA, then put a simple, repeatable monitoring
+process in place so the script questions on the questionnaire are easy to answer honestly.

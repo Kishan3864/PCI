@@ -1,0 +1,104 @@
+export const metadata = {
+  title: 'PCI DSS 6.4.3 explained for WooCommerce store owners',
+  description:
+    'What requirement 6.4.3 actually asks of a small store, in plain English — and how to build the script inventory it wants without a security team.',
+};
+
+# PCI DSS 6.4.3 explained for WooCommerce store owners
+
+_Published 2 June 2026 · 6 min read_
+
+If you run a WooCommerce store and take card payments, you have probably had an email from your
+payment provider or bank mentioning "PCI DSS v4.0" and a requirement numbered **6.4.3**. It sounds
+like something built for banks and enterprises. It is not. It applies to your checkout page too,
+and the good news is that once you strip away the jargon, it is asking for something quite
+reasonable.
+
+This article explains what 6.4.3 actually wants, why it exists, and how a small store can satisfy
+it without hiring a security team.
+
+## What 6.4.3 actually says
+
+In plain terms, requirement 6.4.3 asks you to do three things for **every script that runs on your
+payment page**:
+
+- **Keep an inventory.** Maintain a written list of all the scripts loaded on the page where
+  cardholder data is entered.
+- **Justify each one.** For every script, record a written reason why it needs to be there.
+- **Authorize each one.** Someone responsible has to sign off that the script is approved.
+
+There is a fourth part — assuring the integrity of each script — but the heart of 6.4.3 is the
+inventory, the justification, and the authorization. If you have ever kept a spreadsheet of "what
+is installed and why", you already understand the spirit of it.
+
+## Why this requirement exists
+
+The reason is a type of attack called **web skimming**, or Magecart. Attackers do not break into
+your database. Instead they slip a small piece of JavaScript onto your checkout page — often
+through a third-party script you already trust, like an analytics or chat widget that got
+compromised upstream. That script quietly copies each card number as the customer types it and
+sends it to the attacker. The customer completes their purchase and notices nothing. Neither do
+you, unless you are watching your scripts.
+
+Because the malicious code lives in the shopper's browser and never touches your server, classic
+server security does nothing to stop it. That is exactly why PCI DSS added 6.4.3: the only reliable
+defence is to **know every script that runs on your payment page and notice when that set
+changes.**
+
+## Why WooCommerce stores are especially exposed
+
+A typical WooCommerce checkout is a stack of plugins. Each plugin can add its own scripts, and many
+load more scripts from third-party domains — payment SDKs, analytics, marketing pixels, live chat,
+A/B testing tools. Every one of those is a door. When a plugin auto-updates, or a third-party CDN is
+compromised, a new or modified script can appear on your checkout without you touching anything.
+
+That is the real challenge 6.4.3 is pointing at. It is not that you have bad scripts today; it is
+that you have no easy way to notice when the set of scripts changes tomorrow.
+
+## Building your script inventory, step by step
+
+Here is a practical way to satisfy 6.4.3 as a small store.
+
+1. **Open your live checkout page** and list every script it loads. In your browser, open developer
+   tools, go to the network tab, filter by "JS", and reload. Write down each script's URL. Do not
+   forget inline scripts embedded directly in the page.
+2. **Group them by owner.** Which are yours (theme, custom code)? Which belong to a plugin? Which
+   come from a third party (Stripe, PayPal, Google, a chat widget)?
+3. **Write a one-line justification for each.** For example: "Stripe.js — required to securely
+   collect and tokenize card details." If you cannot write a good reason, that script probably
+   should not be on your checkout.
+4. **Authorize the list.** Have whoever is responsible for the store confirm the inventory is
+   correct and approved. Record who did it and when.
+5. **Record a fingerprint.** For each external script, note a hash of its current contents. This is
+   what lets you detect later that a script's code changed even though its URL stayed the same.
+
+Do this once and you have met the letter of 6.4.3 for today. The hard part is keeping it true.
+
+## The part people underestimate: keeping it current
+
+An inventory is only useful if it reflects reality. Scripts change. Plugins update. Third parties
+push new versions. To stay aligned with 6.4.3 you need to re-check your payment page regularly and
+compare what is loaded now against your authorized inventory. When something new appears, or an
+authorized script's fingerprint changes, that is a signal to investigate before it becomes an
+incident.
+
+Doing this by hand every week is tedious and easy to forget — which is the gap most small stores
+fall into. This is the specific job ScriptProof was built to automate: it crawls your verified
+payment pages on a schedule, fingerprints every script, keeps the authorized inventory, and alerts
+you the moment the set changes. It also produces a monthly evidence document you can keep on file.
+
+## A note on what "compliance" means here
+
+Maintaining a script inventory is one control among many in PCI DSS. Meeting 6.4.3 does not by
+itself make you "PCI compliant" — your overall validation still depends on your payment setup and
+what your acquirer requires. Tools like ScriptProof **support** the 6.4.3 control and generate
+supporting evidence; they do not replace a Qualified Security Assessor or certify compliance.
+Always confirm your specific obligations with your acquirer or a QSA.
+
+## The takeaway
+
+Requirement 6.4.3 is asking a fair question: _do you know what runs on the page where your customers
+type their card numbers, and would you notice if that changed?_ For a WooCommerce store the answer
+is usually "not really" — not because you are careless, but because there was never an easy way to
+track it. Build the inventory once, then put something in place to keep it honest. That is the whole
+of 6.4.3, and it is well within reach for a small store.

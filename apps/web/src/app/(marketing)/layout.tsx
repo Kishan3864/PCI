@@ -11,7 +11,13 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           <Link href="/" className="text-lg font-bold text-navy-900">
             ScriptProof
           </Link>
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-1 sm:gap-3">
+            <Button variant="ghost" asChild className="hidden sm:inline-flex">
+              <Link href="/pricing">Pricing</Link>
+            </Button>
+            <Button variant="ghost" asChild className="hidden sm:inline-flex">
+              <Link href="/blog">Blog</Link>
+            </Button>
             <Button variant="ghost" asChild>
               <Link href="/login">Log in</Link>
             </Button>

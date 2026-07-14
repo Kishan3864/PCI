@@ -1,0 +1,126 @@
+export const metadata = {
+  title: '11.6.1 tamper detection: a practical setup guide',
+  description:
+    'A step-by-step way to meet the weekly change-and-tamper detection requirement on your payment page — what to watch, how often, and what evidence to keep.',
+};
+
+# 11.6.1 tamper detection: a practical setup guide
+
+_Published 30 June 2026 · 8 min read_
+
+Requirement **11.6.1** is the natural partner of 6.4.3. Where 6.4.3 asks you to know and authorize
+the scripts on your payment page, 11.6.1 asks you to **detect when those scripts — or the page's
+security headers — change or are tampered with, and to check for that change at least weekly.**
+
+This guide lays out a concrete, repeatable setup that a small team can actually run. It covers what
+to monitor, how often, how to tell a real problem from routine noise, and what evidence to keep.
+
+## What 11.6.1 is really asking
+
+Read simply, 11.6.1 has four parts:
+
+- **Watch the payment page's HTTP headers and script contents.**
+- **Detect unauthorized changes** to them — new scripts, modified scripts, weakened security
+  headers.
+- **Do this at least once every seven days** (more often is better).
+- **Alert someone** so the change can be reviewed.
+
+The requirement is about _detection_, not prevention. You are not expected to make change
+impossible; you are expected to notice it quickly and respond.
+
+## What to monitor
+
+There are two things worth watching on a payment page.
+
+**1. The scripts.** For each script on the page, record a fingerprint (a hash of its contents). A
+change in the fingerprint means the code changed, even if the URL did not. Also watch for scripts
+appearing that were not in your authorized inventory, and for authorized scripts disappearing.
+
+**2. The security headers.** A handful of HTTP response headers materially affect how safe your
+page is. The ones worth tracking are:
+
+- **Content-Security-Policy (CSP)** — controls what is allowed to load and run. This is the most
+  important one.
+- **Strict-Transport-Security (HSTS)** — forces HTTPS.
+- **X-Frame-Options** — prevents your page being framed by attackers.
+- **X-Content-Type-Options** — stops content-type sniffing.
+- **Referrer-Policy** — limits what you leak in the referrer header.
+
+A dangerous change is not only a header disappearing. A CSP that quietly gains `'unsafe-inline'`, or
+loses a directive, is weaker than it was — and that weakening is exactly what an attacker would do
+to make room for a skimmer. Good tamper detection flags a _weakened_ policy, not just a removed one.
+
+## How to establish a baseline
+
+You cannot detect change without something to compare against. So the first scan of your page is a
+**baseline**: it records the current set of scripts, their fingerprints, and the current headers,
+without raising alarms. You then review that baseline and authorize what belongs. Everything after
+that is compared against it.
+
+This is why order matters: verify you own the domain, take a clean baseline, review and authorize
+it, and only then does ongoing monitoring become meaningful.
+
+## How often to check
+
+The requirement's floor is weekly. In practice, weekly is the bare minimum and leaves a large window
+in which a skimmer can operate. A skimmer that lands the day after a weekly check has almost seven
+days to harvest cards before anyone looks. For a page that takes payments, **daily is a much safer
+default, and every few hours is better still** for higher-volume stores. Pick a cadence you can
+sustain and that matches your risk.
+
+## Telling real problems from noise
+
+The failure mode of naive monitoring is alert fatigue. If every deploy, cache-buster, or analytics
+tweak pages you at 2am, you will start ignoring the alerts — and miss the real one. A few principles
+keep the signal clean:
+
+- **Severity should match context.** A brand-new script appearing on the checkout page deserves a
+  louder alert than the same script on your "About us" page. A change to a script you already
+  authorized is more serious than a change to one still pending review.
+- **Ignore identity that does not matter.** A cache-busting query string like `app.js?v=124` is not
+  a new script; it is the same script with a new version tag. Track scripts by a stable identity and
+  rely on the fingerprint to catch real content changes.
+- **Deduplicate.** The same change detected twice in a short window should not alert twice.
+- **Route by importance.** Critical changes (a new or modified script on the payment page) warrant
+  an immediate email. Lower-severity changes can go into a daily digest.
+
+Get this balance right and the alerts stay meaningful, which is the only way monitoring survives
+contact with a busy team.
+
+## What evidence to keep
+
+11.6.1 is not only about detecting change — you also need to be able to _show_ that you were
+detecting change. Keep:
+
+- A **log of scans** with timestamps, proving the checks ran at least weekly.
+- A **change history**: what changed, when, how severe, and whether it was acknowledged.
+- A record of the **current headers** and how they have changed over time.
+- The **script inventory** with authorizations, tying back to 6.4.3.
+
+Bundled together, this is the evidence an acquirer or assessor will want to see. Producing it by
+hand is painful; producing it automatically is the point of a monitoring tool.
+
+## A setup you can actually run
+
+Putting it together, a practical 11.6.1 setup looks like this:
+
+1. Verify domain ownership so you only ever monitor pages you control.
+2. Take a baseline scan of each payment page and authorize what belongs.
+3. Re-scan on a schedule — daily or better — fingerprinting scripts and capturing headers.
+4. Compare each scan to the last: flag new scripts, modified scripts, removed authorized scripts,
+   dropped SRI, and weakened headers.
+5. Alert immediately on critical changes; digest the rest.
+6. Keep the scans, changes, and headers as evidence, and summarize them periodically.
+
+This is precisely the loop ScriptProof runs for you: scheduled crawls, script fingerprinting, header
+monitoring with CSP-weakening detection, severity-aware alerts, and a monthly evidence document.
+As always, it **supports** your 11.6.1 control and produces supporting evidence — it does not certify
+compliance, and your specific obligations should be confirmed with your acquirer or a QSA.
+
+## The takeaway
+
+11.6.1 is not asking for anything exotic: fingerprint your payment page's scripts and headers,
+compare regularly, alert on unauthorized change, and keep the records. The two things that trip
+people up are cadence (weekly is a floor, not a goal) and noise (tune severity so alerts stay
+believable). Set the baseline, pick a sustainable schedule, and keep the evidence — and the
+requirement becomes a routine you barely notice rather than a scramble at assessment time.

@@ -7,6 +7,15 @@ export function SiteFooter() {
       <div className="mx-auto max-w-5xl px-6 py-8">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600">
           <span className="font-semibold text-navy-900">ScriptProof</span>
+          <Link href="/pricing" className="hover:text-navy-700">
+            Pricing
+          </Link>
+          <Link href="/blog" className="hover:text-navy-700">
+            Blog
+          </Link>
+          <Link href="/free-scan" className="hover:text-navy-700">
+            Free scan
+          </Link>
           <Link href="/bot" className="hover:text-navy-700">
             About our crawler
           </Link>
