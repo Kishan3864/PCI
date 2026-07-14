@@ -3,6 +3,8 @@ import PgBoss from 'pg-boss';
 import { requireEnv } from './env';
 
 export const SCAN_SITE_QUEUE = 'scan.site';
+export const FREE_SCAN_QUEUE = 'free.scan';
+export const EVIDENCE_GENERATE_QUEUE = 'evidence.generate';
 
 export interface ScanSiteJob {
   siteId: string;
@@ -19,6 +21,8 @@ async function startBoss(): Promise<PgBoss> {
   boss.on('error', (err) => console.error('[pg-boss:web]', err));
   await boss.start();
   await boss.createQueue(SCAN_SITE_QUEUE);
+  await boss.createQueue(FREE_SCAN_QUEUE);
+  await boss.createQueue(EVIDENCE_GENERATE_QUEUE);
   return boss;
 }
 
@@ -31,4 +35,18 @@ export function getBoss(): Promise<PgBoss> {
 export async function enqueueSiteScan(job: ScanSiteJob): Promise<void> {
   const boss = await getBoss();
   await boss.send(SCAN_SITE_QUEUE, { ...job }, { singletonKey: job.siteId, singletonSeconds: 30 });
+}
+
+export async function enqueueFreeScan(freeScanId: string): Promise<void> {
+  const boss = await getBoss();
+  await boss.send(FREE_SCAN_QUEUE, { freeScanId });
+}
+
+export async function enqueueEvidence(job: {
+  siteId: string;
+  periodStart: string;
+  periodEnd: string;
+}): Promise<void> {
+  const boss = await getBoss();
+  await boss.send(EVIDENCE_GENERATE_QUEUE, { ...job });
 }

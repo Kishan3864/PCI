@@ -8,6 +8,8 @@ const tabs = [
   { slug: 'inventory', label: 'Inventory' },
   { slug: 'changes', label: 'Changes' },
   { slug: 'headers', label: 'Headers' },
+  { slug: 'csp', label: 'CSP Insights' },
+  { slug: 'evidence', label: 'Evidence Packs' },
   { slug: 'settings', label: 'Settings' },
 ] as const;
 
@@ -18,7 +20,7 @@ export function SiteTabs({ siteId, verified }: { siteId: string; verified: boole
   const items = verified ? tabs : ([{ slug: 'verify', label: 'Verification' }, ...tabs] as const);
 
   return (
-    <nav className="flex gap-1 border-b border-slate-200">
+    <nav className="flex flex-wrap gap-1 border-b border-slate-200">
       {items.map((tab) => {
         const href = `${base}/${tab.slug}`;
         const active = pathname === href || (tab.slug === 'inventory' && pathname === base);

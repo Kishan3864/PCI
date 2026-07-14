@@ -60,6 +60,15 @@ export const scanNowSchema = z.object({
   pageId: z.string().min(1).optional(),
 });
 
+export const freeScanSubmitSchema = z.object({
+  url: z.url().max(2000),
+});
+
+export const freeScanEmailSchema = z.object({
+  scanId: z.string().min(1),
+  email: z.email().max(254),
+});
+
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type CreateSiteInput = z.infer<typeof createSiteSchema>;
 export type CreatePageInput = z.infer<typeof createPageSchema>;

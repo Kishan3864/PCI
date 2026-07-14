@@ -18,9 +18,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             <span className="text-sm text-slate-500">{org.name}</span>
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <span className="rounded-full bg-navy-50 px-2.5 py-0.5 text-xs font-medium capitalize text-navy-700">
+            <Link
+              href="/app/settings/billing"
+              className="rounded-full bg-navy-50 px-2.5 py-0.5 text-xs font-medium capitalize text-navy-700 hover:bg-navy-100"
+            >
               {org.plan} plan
-            </span>
+            </Link>
             <span className="hidden text-slate-500 sm:inline">{session.user.email}</span>
             <SignOutButton />
           </div>

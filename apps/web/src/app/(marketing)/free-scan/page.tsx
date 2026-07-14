@@ -1,25 +1,30 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { FreeScanForm } from '@/components/free-scan-form';
 
-export const metadata: Metadata = { title: 'Free scan' };
+export const metadata: Metadata = {
+  title: 'Free payment-page script scan',
+  description:
+    'Scan any checkout page for free: see every script, external domain, SRI coverage and missing security headers. No account needed.',
+};
 
-// Placeholder: the full one-off scanner ships in Phase 2 (see PLAN.md §2.4).
 export default function FreeScanPage() {
   return (
-    <div className="mx-auto max-w-2xl px-6 py-20 text-center">
-      <h1 className="text-3xl font-bold text-navy-900">Free payment page scan</h1>
-      <p className="mt-4 leading-7 text-slate-600">
-        The free one-off scanner is almost ready. It will show you every script on your checkout
-        page, which external domains they load from, and which security headers you are missing — no
-        account needed.
+    <div className="mx-auto max-w-2xl px-6 py-20">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold tracking-tight text-navy-900">Free payment-page scan</h1>
+        <p className="mx-auto mt-4 max-w-xl text-lg text-slate-600">
+          Enter a checkout or payment page URL. We'll show you every script it loads, which external
+          domains they come from, SRI coverage, and which security headers are missing — no account
+          needed.
+        </p>
+      </div>
+      <div className="mt-10">
+        <FreeScanForm />
+      </div>
+      <p className="mt-6 text-center text-xs text-slate-400">
+        We only fetch the page you enter and store the report. We never collect card data. Limited
+        to 3 scans per day.
       </p>
-      <p className="mt-2 leading-7 text-slate-600">
-        Until then, the full monitoring product is available on a 14-day free trial.
-      </p>
-      <Button size="lg" className="mt-8" asChild>
-        <Link href="/signup">Start free trial</Link>
-      </Button>
     </div>
   );
 }
