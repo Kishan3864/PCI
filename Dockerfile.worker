@@ -1,0 +1,17 @@
+# ── ScriptProof worker (pg-boss + Playwright Chromium) ───────────────────────
+# Build:  docker build -f Dockerfile.worker -t scriptproof-worker .
+# The Playwright base image ships Chromium and all its system dependencies at
+# the pinned version, so the crawler and PDF generation work out of the box.
+FROM mcr.microsoft.com/playwright:v1.61.1-noble AS base
+RUN corepack enable
+WORKDIR /app
+
+COPY . .
+RUN pnpm install --frozen-lockfile
+
+ENV NODE_ENV=production
+# Evidence Pack / free-scan PDFs land here — mount a volume at this path.
+ENV STORAGE_DIR=/app/storage
+VOLUME ["/app/storage"]
+
+CMD ["pnpm", "--filter", "worker", "start"]

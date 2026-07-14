@@ -69,14 +69,14 @@ meta tag; mockable in test mode) → pages CRUD → first scan = baseline (all s
 
 ## Phase 2 — Money layer
 
-- [ ] 2.1 BillingProvider interface + Dodo Payments impl (createCheckoutLink, verifyWebhook, mapEvent), webhook route, subscriptions table sync
-- [ ] 2.2 Plan gates enforced server-side on all mutations (sites/pages/frequency/features)
-- [ ] 2.3 Evidence Pack: HTML report → Playwright PDF (A4, print CSS, navy/white), monthly cron + on-demand, storage + evidence_reports rows, dashboard download
-- [ ] 2.4 Free scanner /free-scan: queued job, live status, results page, blurred CTA section, email-gated PDF, 3 scans/IP/day (DB rate limit)
-- [ ] 2.5 Marketing: full landing, /pricing, /blog (MDX, 3 seeded articles 800+ words), /legal, footer disclaimers everywhere
-- [ ] 2.6 CSP ingest endpoint (csp-report + Reporting-API) + CSP Insights tab + copy-paste Report-Only header
-- [ ] 2.7 PHASE2_REVIEW.md + README Railway deploy guide (Dockerfiles, railway.json, Dodo webhook setup)
-- [ ] ✅ CHECKPOINT 2
+- [x] 2.1 BillingProvider interface + Dodo Payments impl (createCheckoutLink, verifyWebhook, mapEvent), webhook route, subscriptions table sync
+- [x] 2.2 Plan gates enforced server-side on all mutations (sites/pages/frequency/features)
+- [x] 2.3 Evidence Pack: HTML report → Playwright PDF (A4, print CSS, navy/white), monthly cron + on-demand, storage + evidence_reports rows, dashboard download
+- [x] 2.4 Free scanner /free-scan: queued job, live status, results page, blurred CTA section, email-gated PDF, 3 scans/IP/day (DB rate limit)
+- [x] 2.5 Marketing: full landing, /pricing, /blog (MDX, 3 seeded articles 800+ words), /legal, footer disclaimers everywhere
+- [x] 2.6 CSP ingest endpoint (csp-report + Reporting-API) + CSP Insights tab + copy-paste Report-Only header
+- [x] 2.7 PHASE2_REVIEW.md + README Railway deploy guide (Dockerfiles, railway.json, Dodo webhook setup)
+- [x] ✅ CHECKPOINT 2
 
 ## Phase 3 — Growth layer
 

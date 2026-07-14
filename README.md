@@ -52,4 +52,47 @@ then rescan and check the Changes tab (and Mailhog for the critical alert).
 - `pnpm db:migrate` / `pnpm db:seed`
 - `pnpm e2e` — Playwright end-to-end happy path
 
-See `PLAN.md` (roadmap), `ASSUMPTIONS.md` (decisions), `CHANGELOG.md`.
+## Deploying to Railway
+
+Three services from this one repo: **web**, **worker**, and **Postgres**.
+
+1. **Postgres** — add a Railway Postgres plugin. Copy its connection string.
+2. **web service** — deploy from the repo using `Dockerfile.web` (see `railway.web.json`).
+3. **worker service** — deploy from the repo using `Dockerfile.worker` (ships Playwright
+   Chromium). Attach a **volume** mounted at `/app/storage` so Evidence Pack / free-scan
+   PDFs persist. See `railway.worker.json`.
+4. Run migrations once against the Railway database: `pnpm db:migrate`
+   (with `DATABASE_URL` pointed at Railway), or add it as a one-off/release command.
+
+### Environment variables (both services)
+
+Set these on **web and worker** (see `.env.example` for the full annotated list):
+
+| Var                                        | Notes                                      |
+| ------------------------------------------ | ------------------------------------------ |
+| `DATABASE_URL`                             | Railway Postgres connection string         |
+| `NEXT_PUBLIC_APP_URL` / `BETTER_AUTH_URL`  | Public URL of the web service              |
+| `BETTER_AUTH_SECRET`                       | `openssl rand -base64 32`                  |
+| `EMAIL_PROVIDER=resend` + `RESEND_API_KEY` | Production email                           |
+| `EMAIL_FROM`                               | Verified sender                            |
+| `BOT_INFO_URL`                             | `https://<your-domain>/bot`                |
+| `STORAGE_DIR=/app/storage`                 | Worker only (matches the mounted volume)   |
+| `BILLING_PROVIDER=dodo` + Dodo keys        | See below (omit keys → local mock billing) |
+
+Leave `SCRIPTPROOF_TEST_MODE` **unset** in production.
+
+### Dodo Payments webhook setup
+
+1. Create the three products (Starter / Pro / Agency) in the Dodo dashboard and set
+   `DODO_PRODUCT_STARTER` / `DODO_PRODUCT_PRO` / `DODO_PRODUCT_AGENCY` to their ids.
+2. Set `DODO_API_KEY` and `DODO_WEBHOOK_SECRET`.
+3. Add a webhook endpoint pointing at `https://<your-domain>/api/webhooks/billing`.
+   The handler verifies the HMAC signature, maps the event, and syncs the
+   `subscriptions` table and the org's plan. Subscribe to the subscription
+   lifecycle events (created/active/renewed/updated/cancelled).
+
+> Until a real provider key is set, billing runs in **mock mode**: choosing a plan
+> routes to an in-app simulated checkout so the whole flow is testable locally.
+
+See `PLAN.md` (roadmap), `ASSUMPTIONS.md` (decisions), `CHANGELOG.md`,
+`PHASE1_REVIEW.md`, `PHASE2_REVIEW.md`.

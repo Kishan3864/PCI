@@ -2,6 +2,23 @@
 
 All notable changes, newest first. Format: date — feature (commit type).
 
+## Phase 2 — Money layer (2026-07-14)
+
+- feat(billing): `BillingProvider` interface + Dodo Payments + Lemon Squeezy + local mock;
+  webhook route with HMAC verification (shared, unit-tested), subscriptions + org plan sync;
+  billing settings (plan cards, usage meters, cancel); server-side feature plan gates
+- feat(evidence): Evidence Pack PDF via Playwright HTML→PDF (cover + Sections A–D + disclaimer),
+  on-demand (Pro+) + monthly cron, volume storage, ownership-checked download; Agency white-label
+- feat(free-scan): rate-limited (3/IP/day) queued one-off scanner, live status, results with
+  blurred changes teaser, email-gated one-page PDF; SSRF-guarded arbitrary-URL crawl
+- feat(csp): ingest endpoint (legacy `csp-report` + Reporting-API), upsert+count into
+  `csp_reports`, CSP Insights tab, copy-paste Report-Only header
+- feat(marketing): full landing + FAQ, `/pricing` with comparison table, MDX `/blog` with 3
+  seeded 800+-word articles, disclaimer everywhere
+- chore(deploy): `Dockerfile.web`, `Dockerfile.worker` (Playwright base), `railway.*.json`,
+  README Railway + Dodo webhook guide
+- 100 core + 4 worker unit tests; all flows verified live
+
 ## Phase 1 — Core loop (2026-07-13)
 
 - fix(review): nine confirmed findings from the multi-agent review pass —

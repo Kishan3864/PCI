@@ -74,3 +74,20 @@ Decisions made where the brief is silent. Newest at the bottom.
     SSRF guard) carry an `unfetchable` flag. The diff engine never treats them as a content
     change and never overwrites the last known good hash, so a transient fetch failure
     cannot raise a false critical `script_modified` alert.
+17. **Billing provider (Phase 2):** implemented behind a `BillingProvider` interface with
+    Dodo (default), Lemon Squeezy, and a local **mock** provider. When the configured
+    provider's API key is absent, billing runs in mock mode: choosing a plan routes to an
+    in-app simulated checkout that applies the subscription, so the full flow is testable
+    without real keys. The exact Dodo checkout request/response and webhook field names
+    follow Dodo's documented model but should be confirmed against their current API docs;
+    they are isolated in `apps/web/src/lib/billing/dodo.ts`.
+18. **CSP report `siteKey`** in `/api/ingest/csp/:siteKey` is the site id. CSP reports are
+    low-sensitivity (aggregated blocked URIs), so a guessable id is acceptable; the endpoint
+    validates the site exists and always returns 204.
+19. **Free-scan PDF + email gate:** the free scan generates and stores a one-page PDF as part
+    of the job. The results page shows the report immediately; the PDF download is gated
+    behind capturing an email (the lead-magnet trade). Rate limit is 3 scans per IP per
+    rolling 24h, enforced from the `free_scans` table by `x-forwarded-for`.
+20. **On-demand Evidence Pack period** is the current calendar month to date; the monthly
+    cron generates the previous full calendar month. Subscription cancellation downgrades to
+    Starter immediately in-app (production treats the provider's cancel webhook as truth).
