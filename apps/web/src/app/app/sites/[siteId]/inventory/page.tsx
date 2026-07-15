@@ -40,17 +40,17 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
       <Reveal>
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
               <Fingerprint className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="font-display text-xl font-bold tracking-tight text-navy-900">
+              <h2 className="font-display text-xl font-bold tracking-tight text-white">
                 Script <GradientText>inventory</GradientText>
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-400">
                 {scripts.length} script{scripts.length === 1 ? '' : 's'} fingerprinted with SHA-256
                 {pendingCount > 0 ? (
-                  <span className="ml-2 inline-flex items-center gap-1 font-medium text-amber-700">
+                  <span className="ml-2 inline-flex items-center gap-1 font-medium text-amber-300">
                     · {pendingCount} awaiting review
                   </span>
                 ) : null}
@@ -74,10 +74,10 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
         <Reveal delay={80}>
           <Card>
             <CardContent className="flex flex-col items-center gap-4 py-16 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.8)]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
                 <ShieldCheck className="h-7 w-7" />
               </div>
-              <p className="font-semibold text-navy-900">No scripts recorded yet</p>
+              <p className="font-semibold text-white">No scripts recorded yet</p>
               <p className="max-w-md text-sm leading-6 text-slate-500">
                 {site.verifiedAt
                   ? 'Run a scan to build the baseline inventory. Every script found gets status "pending" until you review it.'
@@ -107,7 +107,7 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
                   return (
                     <TableRow key={script.id}>
                       <TableCell className="max-w-xs">
-                        <span className="block truncate font-mono text-xs" title={name}>
+                        <span className="block truncate font-mono text-xs text-slate-300" title={name}>
                           {script.isInline ? (
                             <>
                               <Badge variant="secondary" className="mr-1.5">
@@ -125,14 +125,14 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
                       </TableCell>
                       <TableCell>
                         {script.isInline ? (
-                          <span className="text-slate-400">n/a</span>
+                          <span className="text-slate-500">n/a</span>
                         ) : script.latestSriPresent ? (
                           <Badge variant="success">yes</Badge>
                         ) : (
-                          <span className="text-slate-400">no</span>
+                          <span className="text-slate-500">no</span>
                         )}
                       </TableCell>
-                      <TableCell className="font-mono text-xs">
+                      <TableCell className="font-mono text-xs text-slate-500">
                         {shortHash(script.latestSha256)}
                       </TableCell>
                       <TableCell className="whitespace-nowrap text-xs text-slate-500">
@@ -140,11 +140,14 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
                       </TableCell>
                       <TableCell className="max-w-[16rem]">
                         {script.justification ? (
-                          <span className="block truncate text-xs" title={script.justification}>
+                          <span
+                            className="block truncate text-xs text-slate-400"
+                            title={script.justification}
+                          >
                             {script.justification}
                           </span>
                         ) : (
-                          <span className="text-xs text-slate-400">—</span>
+                          <span className="text-xs text-slate-500">—</span>
                         )}
                       </TableCell>
                       <TableCell className="text-right">

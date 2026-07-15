@@ -45,7 +45,7 @@ export function AddPageForm({ siteId, domain, allow6h }: AddPageFormProps) {
             id="page-frequency"
             name="scanFrequency"
             defaultValue="daily"
-            className="flex h-9 w-full rounded-md border border-slate-200 bg-white/80 px-3 py-1 text-sm shadow-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
+            className="flex h-9 w-full rounded-[2px] border border-slate-400/20 bg-surface-800 px-3 py-1 text-sm text-slate-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
           >
             <option value="daily">Daily</option>
             <option value="6h" disabled={!allow6h}>
@@ -57,7 +57,7 @@ export function AddPageForm({ siteId, domain, allow6h }: AddPageFormProps) {
       {state ? (
         <p
           className={`flex items-center gap-1.5 text-sm ${
-            state.ok ? 'text-emerald-600' : 'text-red-600'
+            state.ok ? 'text-emerald-300' : 'text-rose-400'
           }`}
         >
           {state.ok ? <CheckCircle2 className="h-4 w-4" /> : null}

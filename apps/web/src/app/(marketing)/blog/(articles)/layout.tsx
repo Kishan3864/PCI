@@ -14,7 +14,7 @@ export default function ArticleLayout({ children }: { children: ReactNode }) {
           <Reveal>
             <Link
               href="/blog"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:gap-2.5 hover:text-emerald-800"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 transition-all hover:gap-2.5 hover:text-cyan-300"
             >
               <ArrowLeft className="h-4 w-4" />
               All articles
@@ -22,32 +22,32 @@ export default function ArticleLayout({ children }: { children: ReactNode }) {
           </Reveal>
 
           <Reveal delay={80}>
-            <article className="prose prose-slate mt-8 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-navy-900 prose-h1:text-4xl prose-h1:leading-tight prose-lead:text-slate-600 prose-p:text-slate-600 prose-p:leading-7 prose-a:font-medium prose-a:text-emerald-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-navy-900 prose-code:rounded prose-code:bg-emerald-50 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-emerald-700 prose-code:before:content-none prose-code:after:content-none prose-blockquote:border-emerald-300 prose-blockquote:text-slate-600 prose-li:marker:text-emerald-500">
+            <article className="prose prose-invert prose-slate mt-8 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-headings:text-white prose-h1:text-4xl prose-h1:leading-tight prose-lead:text-slate-400 prose-p:text-slate-400 prose-p:leading-7 prose-a:font-medium prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-code:rounded-[2px] prose-code:bg-cyan-400/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-cyan-300 prose-code:before:content-none prose-code:after:content-none prose-blockquote:border-cyan-400/40 prose-blockquote:text-slate-400 prose-li:text-slate-400 prose-li:marker:text-cyan-400">
               {children}
             </article>
           </Reveal>
 
           <Reveal delay={160}>
-            <div className="relative mt-14 overflow-hidden rounded-3xl border border-emerald-100/70 bg-white/80 p-8 shadow-sm backdrop-blur-sm">
+            <div className="corner-frame relative mt-14 overflow-hidden rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-8">
               <div
                 aria-hidden
-                className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-emerald-400/20 blur-3xl"
+                className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-cyan-400/10 blur-3xl"
               />
               <div className="relative flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.8)]">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-display text-lg font-bold text-navy-900">
+                  <p className="font-display text-lg font-bold text-white">
                     Want this handled automatically?
                   </p>
-                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                  <p className="mt-1 text-sm leading-6 text-slate-400">
                     ScriptProof builds and monitors your payment-page script inventory and generates
                     the supporting evidence for you.
                   </p>
                   <Link
                     href="/signup"
-                    className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.8)] transition hover:brightness-105"
+                    className="mt-4 inline-flex items-center gap-1.5 rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 px-4 py-2 text-sm font-semibold text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)] transition hover:brightness-110"
                   >
                     Start a free trial
                     <ArrowRight className="h-4 w-4" />

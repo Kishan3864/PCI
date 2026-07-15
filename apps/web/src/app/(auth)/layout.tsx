@@ -11,12 +11,12 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <GridGlow />
       <Link href="/" className="mb-8 flex items-center gap-2.5">
         <BrandMark />
-        <span className="font-display text-xl font-bold tracking-tight text-navy-900">
+        <span className="font-display text-xl font-bold tracking-tight text-white">
           ScriptProof
         </span>
       </Link>
       <div className="w-full max-w-md">{children}</div>
-      <p className="mt-10 max-w-md text-center text-xs leading-5 text-slate-400">{DISCLAIMER}</p>
+      <p className="mt-10 max-w-md text-center text-xs leading-5 text-slate-500">{DISCLAIMER}</p>
     </div>
   );
 }

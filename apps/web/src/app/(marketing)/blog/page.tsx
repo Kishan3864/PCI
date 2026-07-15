@@ -20,18 +20,18 @@ export default function BlogIndexPage() {
         <GridGlow />
         <div className="mx-auto max-w-3xl px-6 py-20 lg:py-24">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-[2px] border border-cyan-400/30 bg-cyan-400/5 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-300">
               <Newspaper className="h-3.5 w-3.5" />
               The ScriptProof blog
             </span>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-navy-900 sm:text-5xl">
+            <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl">
               Plain-English <GradientText animated>PCI DSS</GradientText> guides
             </h1>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-400">
               Practical, no-fluff guides to the PCI DSS script requirements — written for store
               owners, not auditors.
             </p>
@@ -44,7 +44,7 @@ export default function BlogIndexPage() {
         <div className="space-y-6">
           {BLOG_POSTS.map((post, i) => (
             <Reveal key={post.slug} delay={i * 80}>
-              <SpotlightCard className="card-lift rounded-2xl border border-slate-200/80 bg-white/80 p-7 shadow-sm backdrop-blur-sm">
+              <SpotlightCard className="card-lift corner-frame rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-7">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="brand">{formatPostDate(post.date)}</Badge>
                   <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-500">
@@ -52,15 +52,15 @@ export default function BlogIndexPage() {
                     {post.readingMinutes} min read
                   </span>
                 </div>
-                <h2 className="mt-4 text-xl font-semibold text-navy-900">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-emerald-700">
+                <h2 className="mt-4 text-xl font-semibold text-white">
+                  <Link href={`/blog/${post.slug}`} className="transition-colors hover:text-cyan-300">
                     {post.title}
                   </Link>
                 </h2>
-                <p className="mt-2 leading-7 text-slate-600">{post.description}</p>
+                <p className="mt-2 leading-7 text-slate-400">{post.description}</p>
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:gap-2.5 hover:text-emerald-800"
+                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-400 transition-all hover:gap-2.5 hover:text-cyan-300"
                 >
                   Read more
                   <ArrowUpRight className="h-4 w-4" />

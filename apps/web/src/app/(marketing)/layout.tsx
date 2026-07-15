@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button';
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 border-b border-white/50 bg-white/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-cyan-400/10 bg-surface-900/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2.5">
             <BrandMark />
-            <span className="font-display text-lg font-bold tracking-tight text-navy-900">
+            <span className="font-display text-lg font-bold tracking-tight text-white">
               ScriptProof
             </span>
           </Link>

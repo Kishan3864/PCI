@@ -19,10 +19,10 @@ export default async function SiteLayout({
     <div className="space-y-6">
       <Reveal>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+          <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
             <Globe className="h-5 w-5" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-navy-900">{site.domain}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-white">{site.domain}</h1>
           {site.verifiedAt ? (
             <Badge variant="success">Verified</Badge>
           ) : (

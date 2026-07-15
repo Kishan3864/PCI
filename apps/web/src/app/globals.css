@@ -2,10 +2,11 @@
 @plugin '@tailwindcss/typography';
 
 /* ------------------------------------------------------------------ *
- * ScriptProof design system — "Aurora Premium" (light) · Emerald
- * A futuristic, airy, trust-forward look: glassmorphism, aurora mesh
- * backgrounds, emerald glow, subtle grid, and smooth motion.
- * Everything here is pure CSS (SSR-safe, zero runtime deps).
+ * ScriptProof design system — "Sentinel Dark"
+ * Enterprise security look (jscrambler/reflectiz-class): deep navy
+ * canvas, electric cyan/blue accents, SHARP corners (max 2px radius),
+ * technical grids, glowing signal accents, trust-forward graphics.
+ * Pure CSS (SSR-safe, zero runtime deps).
  * ------------------------------------------------------------------ */
 
 @theme {
@@ -15,7 +16,8 @@
   --font-display:
     var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* Ink (deep navy) — kept for backwards compatibility across pages */
+  /* Ink ramp (deep navy) — kept for compatibility; on dark canvas the
+     low numbers are light-ish panels, high numbers near-black */
   --color-navy-50: #f0f4f9;
   --color-navy-100: #dce5f0;
   --color-navy-200: #b9cbe0;
@@ -28,18 +30,29 @@
   --color-navy-900: #0b2545;
   --color-navy-950: #061530;
 
-  /* Brand — emerald "Secure" (semantic alias of the emerald ramp) */
-  --color-brand-50: #ecfdf5;
-  --color-brand-100: #d1fae5;
-  --color-brand-200: #a7f3d0;
-  --color-brand-300: #6ee7b7;
-  --color-brand-400: #34d399;
-  --color-brand-500: #10b981;
-  --color-brand-600: #059669;
-  --color-brand-700: #047857;
-  --color-brand-800: #065f46;
-  --color-brand-900: #064e3b;
-  --color-brand-950: #022c22;
+  /* Surface ramp — the dark canvas & panels */
+  --color-surface-950: #050a14;
+  --color-surface-900: #070d1a;
+  --color-surface-850: #0a1322;
+  --color-surface-800: #0d182c;
+  --color-surface-700: #122139;
+  --color-surface-600: #1a2c49;
+
+  /* Brand — electric cyan (primary signal color) */
+  --color-brand-50: #ecfeff;
+  --color-brand-100: #cffafe;
+  --color-brand-200: #a5f3fc;
+  --color-brand-300: #67e8f9;
+  --color-brand-400: #22d3ee;
+  --color-brand-500: #06b6d4;
+  --color-brand-600: #0891b2;
+  --color-brand-700: #0e7490;
+  --color-brand-800: #155e75;
+  --color-brand-900: #164e63;
+  --color-brand-950: #083344;
+
+  /* Sharp radius scale — nothing above 2px */
+  --radius-app: 2px;
 
   /* Motion tokens → generate animate-* utilities */
   --animate-aurora: sp-aurora 22s ease-in-out infinite;
@@ -55,19 +68,20 @@
   --animate-pulse-ring: sp-pulse-ring 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) infinite;
   --animate-spin-slow: sp-spin-slow 18s linear infinite;
   --animate-blink: sp-blink 1.6s ease-in-out infinite;
+  --animate-ticker: sp-ticker 2.8s steps(1) infinite;
 }
 
 /* ---- Design tokens (runtime CSS vars) --------------------------- */
 :root {
-  --sp-bg: #f6faf8;
-  --sp-ink: #0b2545;
-  --glass-bg: rgba(255, 255, 255, 0.62);
-  --glass-bg-strong: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(255, 255, 255, 0.75);
-  --glass-ring: rgba(16, 185, 129, 0.14);
-  --glass-shadow: 0 10px 34px -12px rgba(6, 78, 59, 0.18);
-  --glow-emerald: 0 14px 44px -12px rgba(16, 185, 129, 0.5);
-  --grid-line: rgba(6, 95, 70, 0.06);
+  --sp-bg: #070d1a;
+  --sp-ink: #e6edf7;
+  --panel-bg: rgba(13, 24, 44, 0.72);
+  --panel-bg-strong: rgba(13, 24, 44, 0.92);
+  --panel-border: rgba(103, 232, 249, 0.14);
+  --panel-border-soft: rgba(148, 163, 184, 0.14);
+  --panel-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.65);
+  --glow-cyan: 0 14px 44px -12px rgba(34, 211, 238, 0.45);
+  --grid-line: rgba(103, 232, 249, 0.055);
 }
 
 /* ---- Base --------------------------------------------------------- */
@@ -96,58 +110,58 @@
   }
 
   ::selection {
-    background: rgba(16, 185, 129, 0.24);
-    color: #052e21;
+    background: rgba(34, 211, 238, 0.3);
+    color: #eafcff;
   }
 
   /* Custom scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(16, 185, 129, 0.35) transparent;
+    scrollbar-color: rgba(34, 211, 238, 0.35) transparent;
   }
   *::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   *::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(16, 185, 129, 0.5), rgba(20, 184, 166, 0.5));
-    border-radius: 9999px;
+    background: linear-gradient(180deg, rgba(34, 211, 238, 0.45), rgba(59, 130, 246, 0.45));
+    border-radius: 0;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   *::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(16, 185, 129, 0.8), rgba(20, 184, 166, 0.8));
+    background: linear-gradient(180deg, rgba(34, 211, 238, 0.75), rgba(59, 130, 246, 0.75));
     background-clip: padding-box;
   }
 }
 
-/* ---- Glassmorphism ------------------------------------------------ */
+/* ---- Panels (dark "glass") ---------------------------------------- */
 .glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1px solid var(--glass-border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--panel-border-soft);
   box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+    var(--panel-shadow),
+    inset 0 1px 0 0 rgba(148, 163, 184, 0.08);
 }
 .glass-strong {
-  background: var(--glass-bg-strong);
-  backdrop-filter: blur(22px) saturate(160%);
-  -webkit-backdrop-filter: blur(22px) saturate(160%);
-  border: 1px solid var(--glass-border);
+  background: var(--panel-bg-strong);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--panel-border);
   box-shadow:
-    var(--glass-shadow),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+    var(--panel-shadow),
+    inset 0 1px 0 0 rgba(148, 163, 184, 0.1);
 }
 
 /* ---- Gradient text ----------------------------------------------- */
 .text-gradient {
   background-image: linear-gradient(
     100deg,
-    var(--color-brand-600),
-    var(--color-teal-500) 46%,
-    var(--color-sky-500)
+    var(--color-brand-300),
+    var(--color-brand-400) 46%,
+    var(--color-blue-400)
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -156,10 +170,10 @@
 .text-gradient-animated {
   background-image: linear-gradient(
     100deg,
-    var(--color-brand-600),
-    var(--color-teal-500) 30%,
-    var(--color-sky-500) 55%,
-    var(--color-brand-500) 80%
+    var(--color-brand-300),
+    var(--color-brand-400) 30%,
+    var(--color-blue-400) 55%,
+    var(--color-brand-300) 80%
   );
   background-size: 220% auto;
   -webkit-background-clip: text;
@@ -169,16 +183,20 @@
 }
 
 /* ---- Glow --------------------------------------------------------- */
+.glow-cyan {
+  box-shadow: var(--glow-cyan);
+}
+/* legacy alias (pre-rebrand class name) */
 .glow-emerald {
-  box-shadow: var(--glow-emerald);
+  box-shadow: var(--glow-cyan);
 }
 .glow-ring {
   box-shadow:
-    0 0 0 1px rgba(16, 185, 129, 0.25),
-    0 18px 50px -18px rgba(16, 185, 129, 0.55);
+    0 0 0 1px rgba(34, 211, 238, 0.35),
+    0 18px 50px -18px rgba(34, 211, 238, 0.5);
 }
 
-/* ---- Subtle grid overlay ----------------------------------------- */
+/* ---- Technical grid overlay --------------------------------------- */
 .sp-grid {
   background-image:
     linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
@@ -187,13 +205,20 @@
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
 }
+/* Fine dot matrix (reflectiz-style texture) */
+.sp-dots {
+  background-image: radial-gradient(rgba(103, 232, 249, 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, #000 25%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, #000 25%, transparent 75%);
+}
 
-/* ---- Aurora blobs ------------------------------------------------- */
+/* ---- Signal blobs (dark aurora) ------------------------------------ */
 .sp-aurora-blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(60px);
-  opacity: 0.55;
+  filter: blur(70px);
+  opacity: 0.28;
   will-change: transform;
   pointer-events: none;
 }
@@ -206,8 +231,9 @@
     border-color 0.35s ease;
 }
 .card-lift:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 26px 60px -28px rgba(6, 78, 59, 0.4);
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 0 24px 60px -28px rgba(34, 211, 238, 0.35);
 }
 
 /* ---- Cursor spotlight (SpotlightCard sets --mx/--my) -------------- */
@@ -222,7 +248,7 @@
   border-radius: inherit;
   background: radial-gradient(
     340px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(16, 185, 129, 0.16),
+    rgba(34, 211, 238, 0.12),
     transparent 62%
   );
   opacity: 0;
@@ -256,7 +282,7 @@
   background: linear-gradient(
     100deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.35) 50%,
     transparent 70%
   );
   transform: translateX(-120%);
@@ -267,7 +293,7 @@
   transform: translateX(120%);
 }
 
-/* ---- Animated conic border (badges / pills) ---------------------- */
+/* ---- Animated conic border (feature tiles / highlight panels) ----- */
 .aurora-border {
   position: relative;
   background-clip: padding-box;
@@ -280,10 +306,10 @@
   padding: 1px;
   background: conic-gradient(
     from 0deg,
-    var(--color-brand-500),
-    var(--color-teal-400),
-    var(--color-sky-400),
-    var(--color-brand-500)
+    var(--color-brand-400),
+    var(--color-blue-500),
+    var(--color-brand-600),
+    var(--color-brand-400)
   );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
@@ -292,6 +318,32 @@
   mask-composite: exclude;
   animation: var(--animate-spin-slow);
   pointer-events: none;
+}
+
+/* ---- Corner brackets (security "target" framing on panels) -------- */
+.corner-frame {
+  position: relative;
+}
+.corner-frame::before,
+.corner-frame::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid rgba(34, 211, 238, 0.6);
+  pointer-events: none;
+}
+.corner-frame::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+.corner-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
 }
 
 /* ---- Keyframes ---------------------------------------------------- */
@@ -412,6 +464,15 @@
   }
   50% {
     opacity: 0.35;
+  }
+}
+@keyframes sp-ticker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
   }
 }
 

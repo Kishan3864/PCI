@@ -11,10 +11,10 @@ export function FreeScanForm() {
 
   return (
     <form action={formAction} className="mx-auto max-w-xl">
-      <div className="rounded-2xl border border-slate-200/80 bg-white/80 p-2 shadow-sm backdrop-blur-sm">
+      <div className="glass-strong corner-frame rounded-[2px] p-2">
         <div className="flex flex-col gap-2 sm:flex-row">
           <div className="relative flex-1">
-            <Globe className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Globe className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
             <Input
               name="url"
               type="url"
@@ -35,7 +35,7 @@ export function FreeScanForm() {
         </div>
       </div>
       {state && !state.ok ? (
-        <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-sm font-medium text-rose-600">
+        <p className="mt-3 flex items-center justify-center gap-1.5 rounded-[2px] bg-rose-400/10 px-3 py-2 text-center text-sm font-medium text-rose-300 ring-1 ring-inset ring-rose-400/30">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {state.message}
         </p>

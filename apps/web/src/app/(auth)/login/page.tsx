@@ -56,15 +56,15 @@ export default function LoginPage() {
 
   return (
     <Reveal>
-      <Card className="glass-strong p-8">
+      <Card className="glass-strong rounded-[2px] p-8">
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-sm">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
             <LogIn className="h-5 w-5" />
           </div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-white">
             Welcome <GradientText>back</GradientText>
           </h1>
-          <p className="mt-1.5 text-sm text-slate-600">Log in to your ScriptProof account.</p>
+          <p className="mt-1.5 text-sm text-slate-400">Log in to your ScriptProof account.</p>
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-1.5">
@@ -82,7 +82,7 @@ export default function LoginPage() {
             />
           </div>
           {error ? (
-            <p className="rounded-lg border border-red-200 bg-red-50/80 px-3 py-2 text-sm text-red-600">
+            <p className="rounded-[2px] border border-rose-400/30 bg-rose-400/10 px-3 py-2 text-sm text-rose-200">
               {error}
             </p>
           ) : null}
@@ -97,7 +97,7 @@ export default function LoginPage() {
         </form>
         <p className="mt-6 text-center text-sm text-slate-500">
           New here?{' '}
-          <Link href="/signup" className="font-medium text-emerald-700 hover:underline">
+          <Link href="/signup" className="font-medium text-cyan-300 hover:text-cyan-200 hover:underline">
             Start your free trial
           </Link>
         </p>

@@ -20,7 +20,7 @@ export function NewSiteForm() {
         </p>
       </div>
       {state && !state.ok ? (
-        <p className="flex items-center gap-1.5 rounded-lg border border-red-200/70 bg-red-50/70 px-3 py-2 text-sm text-red-600">
+        <p className="flex items-center gap-1.5 rounded-[2px] border border-rose-400/30 bg-rose-400/10 px-3 py-2 text-sm text-rose-200">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {state.message}
         </p>

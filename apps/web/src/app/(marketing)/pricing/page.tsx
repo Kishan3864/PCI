@@ -86,18 +86,21 @@ export default function PricingPage() {
         <GridGlow />
         <div className="mx-auto max-w-5xl px-6 py-20 text-center lg:py-24">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-emerald-700 shadow-sm backdrop-blur">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">Pricing</p>
+          </Reveal>
+          <Reveal delay={60}>
+            <span className="mt-5 inline-flex items-center gap-2 rounded-[2px] border border-cyan-400/30 bg-cyan-400/5 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-300">
               <Sparkles className="h-3.5 w-3.5" />
               14-day free trial on every plan
             </span>
           </Reveal>
-          <Reveal delay={80}>
-            <h1 className="mt-6 text-4xl font-bold tracking-tight text-navy-900 sm:text-5xl">
+          <Reveal delay={120}>
+            <h1 className="mt-6 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Simple, <GradientText animated>honest pricing</GradientText>
             </h1>
           </Reveal>
-          <Reveal delay={160}>
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+          <Reveal delay={200}>
+            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-400">
               Every plan includes a 14-day free trial. Annual billing is 10× the monthly price — two
               months free. No setup fees.
             </p>
@@ -110,12 +113,12 @@ export default function PricingPage() {
         <div className="grid items-stretch gap-6 md:grid-cols-3">
           {cards.map((card, i) => (
             <Reveal key={card.id} delay={i * 80}>
-              <SpotlightCard className="h-full rounded-2xl">
+              <SpotlightCard className="h-full rounded-[2px]">
                 <Card
                   className={
                     card.featured
-                      ? 'glow-ring aurora-border card-lift relative h-full bg-white/90'
-                      : 'card-lift h-full'
+                      ? 'glow-ring corner-frame card-lift relative h-full border-cyan-400/30 bg-surface-800/90'
+                      : 'card-lift h-full bg-surface-900/80'
                   }
                 >
                   <CardHeader>
@@ -125,20 +128,20 @@ export default function PricingPage() {
                       </Badge>
                     ) : null}
                     <CardTitle className="text-lg">{card.name}</CardTitle>
-                    <p className="text-sm text-slate-500">{card.blurb}</p>
+                    <p className="text-sm text-slate-400">{card.blurb}</p>
                     <p className="pt-2">
-                      <span className="font-display text-4xl font-bold text-navy-900">
+                      <span className="font-display text-4xl font-bold text-white">
                         ${PLANS[card.id].priceMonthly}
                       </span>
                       <span className="text-sm text-slate-500">/month</span>
                     </p>
-                    <p className="text-xs text-slate-400">or ${annualPrice(card.id)}/year</p>
+                    <p className="text-xs text-slate-500">or ${annualPrice(card.id)}/year</p>
                   </CardHeader>
                   <CardContent className="space-y-5">
-                    <ul className="space-y-2.5 text-sm text-slate-600">
+                    <ul className="space-y-2.5 text-sm text-slate-300">
                       {card.features.map((f) => (
                         <li key={f} className="flex items-start gap-2.5">
-                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-1 ring-inset ring-emerald-600/15">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
                             <Check className="h-3 w-3" />
                           </span>
                           {f}
@@ -166,20 +169,25 @@ export default function PricingPage() {
       {/* ── Comparison table ─────────────────────────────────────────── */}
       <section className="mx-auto max-w-5xl px-6 py-16">
         <Reveal>
-          <h2 className="text-center font-display text-2xl font-bold tracking-tight text-navy-900">
-            Compare <GradientText>plans</GradientText>
-          </h2>
+          <div className="text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+              Side by side
+            </p>
+            <h2 className="mt-4 font-display text-2xl font-bold tracking-tight text-white">
+              Compare <GradientText>plans</GradientText>
+            </h2>
+          </div>
         </Reveal>
         <Reveal delay={80}>
-          <div className="mt-8 overflow-x-auto rounded-2xl border border-slate-200/80 bg-white/80 shadow-sm backdrop-blur-sm">
+          <div className="glass mt-8 overflow-x-auto rounded-[2px]">
             <table className="w-full min-w-[560px] border-collapse text-sm">
               <thead>
-                <tr className="border-b border-slate-200">
+                <tr className="border-b border-slate-400/20 bg-surface-850/70">
                   <th className="px-6 py-4 text-left font-medium text-slate-500" />
                   {planOrder.map((p) => (
                     <th
                       key={p}
-                      className="px-6 py-4 text-center font-semibold capitalize text-navy-900"
+                      className="px-6 py-4 text-center font-semibold capitalize text-white"
                     >
                       {p}
                     </th>
@@ -190,21 +198,21 @@ export default function PricingPage() {
                 {comparison.map((row) => (
                   <tr
                     key={row.label}
-                    className="border-b border-slate-100 last:border-0 transition-colors hover:bg-emerald-50/40"
+                    className="border-b border-slate-400/10 last:border-0 transition-colors hover:bg-cyan-400/5"
                   >
-                    <td className="px-6 py-3.5 text-slate-600">{row.label}</td>
+                    <td className="px-6 py-3.5 text-slate-400">{row.label}</td>
                     {planOrder.map((p) => {
                       const v = row.value(p);
                       return (
                         <td key={p} className="px-6 py-3.5 text-center">
                           {typeof v === 'boolean' ? (
                             v ? (
-                              <Check className="mx-auto h-4 w-4 text-emerald-600" />
+                              <Check className="mx-auto h-4 w-4 text-cyan-400" />
                             ) : (
-                              <Minus className="mx-auto h-4 w-4 text-slate-300" />
+                              <Minus className="mx-auto h-4 w-4 text-slate-600" />
                             )
                           ) : (
-                            <span className="font-medium text-slate-700">{v}</span>
+                            <span className="font-medium text-slate-200">{v}</span>
                           )}
                         </td>
                       );

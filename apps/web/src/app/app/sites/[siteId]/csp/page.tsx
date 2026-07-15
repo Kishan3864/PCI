@@ -39,18 +39,29 @@ export default async function CspPage({ params }: { params: Promise<{ siteId: st
 
   const reportUri = `${appUrl()}/api/ingest/csp/${site.id}`;
 
+  const totalOccurrences = reports.reduce((sum, r) => sum + r.count, 0);
+  const uniqueDirectives = [...new Set(reports.map((r) => r.violatedDirective))];
+  const uniqueUris = new Set(reports.map((r) => r.blockedUri)).size;
+
+  const stats = [
+    { label: 'Reported violations', value: reports.length },
+    { label: 'Total occurrences', value: totalOccurrences },
+    { label: 'Directives hit', value: uniqueDirectives.length },
+    { label: 'Distinct blocked URIs', value: uniqueUris },
+  ];
+
   return (
     <div className="space-y-8">
       <Reveal>
         <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.8)]">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[2px] border border-cyan-400/40 bg-cyan-400/10 text-cyan-300 shadow-[0_14px_34px_-14px_rgba(34,211,238,0.55)]">
             <ShieldCheck className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="font-display text-2xl font-bold tracking-tight text-navy-900">
+            <h2 className="font-display text-2xl font-bold tracking-tight text-white">
               CSP <GradientText>Insights</GradientText>
             </h2>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-400">
               Discover what a Content Security Policy would block on your checkout — safely, before
               you enforce it.
             </p>
@@ -63,9 +74,9 @@ export default async function CspPage({ params }: { params: Promise<{ siteId: st
           <CardHeader>
             <CardTitle className="text-base">Start collecting CSP reports</CardTitle>
             <CardDescription>
-              Add this <code>Content-Security-Policy-Report-Only</code> header to your payment page.
-              It does not block anything — it just reports what a policy <em>would</em> block, so
-              you can build a safe allowlist before enforcing.
+              Add this <code className="text-cyan-200">Content-Security-Policy-Report-Only</code>{' '}
+              header to your payment page. It does not block anything — it just reports what a
+              policy <em>would</em> block, so you can build a safe allowlist before enforcing.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -74,8 +85,8 @@ export default async function CspPage({ params }: { params: Promise<{ siteId: st
               value={cspReportOnlyHeader(reportUri)}
             />
             <p className="text-xs text-slate-500">
-              Reports are sent by the browser to <span className="font-mono">{reportUri}</span> and
-              aggregated below.
+              Reports are sent by the browser to{' '}
+              <span className="font-mono text-cyan-300/80">{reportUri}</span> and aggregated below.
             </p>
           </CardContent>
         </Card>
@@ -85,11 +96,11 @@ export default async function CspPage({ params }: { params: Promise<{ siteId: st
         <Reveal delay={160}>
           <Card>
             <CardContent className="flex flex-col items-center gap-3 py-16 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 ring-1 ring-inset ring-emerald-600/15">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] border border-cyan-400/25 bg-cyan-400/5 text-cyan-300">
                 <ShieldAlert className="h-7 w-7" />
               </div>
-              <p className="font-medium text-navy-900">No CSP reports yet</p>
-              <p className="max-w-md text-sm text-slate-500">
+              <p className="font-medium text-white">No CSP reports yet</p>
+              <p className="max-w-md text-sm text-slate-400">
                 Once the header is live, blocked resources your policy would stop will appear here
                 so you can decide what to allow.
               </p>
@@ -98,11 +109,34 @@ export default async function CspPage({ params }: { params: Promise<{ siteId: st
         </Reveal>
       ) : (
         <Reveal delay={160}>
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-navy-900">Reported violations</h3>
-              <Badge variant="brand">{reports.length}</Badge>
+          <div className="space-y-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-4 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.7)]"
+                >
+                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                    {stat.label}
+                  </p>
+                  <p className="mt-1.5 font-display text-2xl font-bold tabular-nums text-white">
+                    {stat.value}
+                  </p>
+                </div>
+              ))}
             </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-sm font-semibold text-white">Reported violations</h3>
+              <Badge variant="brand">{reports.length}</Badge>
+              <span className="mx-1 hidden h-4 w-px bg-slate-400/20 sm:block" />
+              {uniqueDirectives.map((directive) => (
+                <Badge key={directive} variant="secondary" className="font-mono normal-case">
+                  {directive}
+                </Badge>
+              ))}
+            </div>
+
             <Card className="overflow-hidden">
               <Table>
                 <TableHeader>
@@ -117,17 +151,17 @@ export default async function CspPage({ params }: { params: Promise<{ siteId: st
                   {reports.map((r) => (
                     <TableRow key={r.id}>
                       <TableCell
-                        className="max-w-md truncate font-mono text-xs text-navy-800"
+                        className="max-w-md truncate font-mono text-xs text-cyan-100"
                         title={r.blockedUri}
                       >
                         {r.blockedUri}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="secondary" className="font-mono font-medium">
+                        <Badge variant="secondary" className="font-mono font-medium normal-case">
                           {r.violatedDirective}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right font-semibold tabular-nums text-navy-900">
+                      <TableCell className="text-right font-semibold tabular-nums text-white">
                         {r.count}
                       </TableCell>
                       <TableCell className="whitespace-nowrap text-xs text-slate-500">

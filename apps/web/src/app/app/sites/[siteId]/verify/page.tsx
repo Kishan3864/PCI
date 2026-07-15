@@ -18,14 +18,14 @@ export default async function VerifyPage({ params }: { params: Promise<{ siteId:
       <Reveal>
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-[0_8px_20px_-8px_rgba(16,185,129,0.8)]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
               Verify <GradientText>ownership</GradientText>
             </h1>
           </div>
-          <p className="max-w-2xl text-sm leading-6 text-slate-600">
+          <p className="max-w-2xl text-sm leading-6 text-slate-400">
             ScriptProof only monitors domains whose ownership has been proven. Pick either method —
             verification usually completes in a couple of minutes. Monitoring and the first baseline
             scan start automatically once verified.
