@@ -5,6 +5,8 @@ export interface PlanLimits {
   maxSites: number;
   maxPagesPerSite: number;
   frequencies: ScanFrequency[];
+  /** Minimum gap between manual "Scan now" runs for a site. */
+  manualScanCooldownMs: number;
   agentSnippet: boolean;
   cspInsights: boolean;
   evidencePacks: boolean;
@@ -19,6 +21,7 @@ export const PLANS: Record<PlanId, PlanLimits> = {
     maxSites: 1,
     maxPagesPerSite: 3,
     frequencies: ['daily'],
+    manualScanCooldownMs: 30 * 60_000,
     agentSnippet: false,
     cspInsights: false,
     evidencePacks: false,
@@ -31,6 +34,7 @@ export const PLANS: Record<PlanId, PlanLimits> = {
     maxSites: 5,
     maxPagesPerSite: 10,
     frequencies: ['daily', '6h'],
+    manualScanCooldownMs: 10 * 60_000,
     agentSnippet: true,
     cspInsights: true,
     evidencePacks: true,
@@ -43,6 +47,7 @@ export const PLANS: Record<PlanId, PlanLimits> = {
     maxSites: 20,
     maxPagesPerSite: 10,
     frequencies: ['daily', '6h'],
+    manualScanCooldownMs: 5 * 60_000,
     agentSnippet: true,
     cspInsights: true,
     evidencePacks: true,
@@ -67,6 +72,11 @@ export function canAddPage(plan: PlanId, currentPageCount: number): boolean {
 
 export function frequencyAllowed(plan: PlanId, frequency: ScanFrequency): boolean {
   return PLANS[plan].frequencies.includes(frequency);
+}
+
+/** Server-side cooldown between manual "Scan now" runs: starter 30 min, pro 10 min, agency 5 min. */
+export function manualScanCooldownMs(plan: PlanId): number {
+  return PLANS[plan].manualScanCooldownMs;
 }
 
 export type PlanFeature = keyof Pick<

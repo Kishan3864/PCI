@@ -80,7 +80,7 @@ meta tag; mockable in test mode) → pages CRUD → first scan = baseline (all s
 
 ## Phase 3 — Growth layer
 
-- [ ] 3.1 packages/agent: <6KB gzip IIFE, MutationObserver, POST /api/ingest/agent, fail-silent; "runtime-injected" badge in inventory
+- [x] 3.1 packages/agent: <6KB gzip IIFE, MutationObserver, POST /api/ingest/agent, fail-silent; "runtime-injected" badge in inventory
 - [ ] 3.2 Slack incoming-webhook alerts (Pro+), org settings field
 - [ ] 3.3 Agency white-label (logo on Evidence Pack cover) + CSV inventory export
 - [ ] 3.4 On-demand scan button polish (rate-limited)

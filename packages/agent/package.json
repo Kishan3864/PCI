@@ -1,0 +1,10 @@
+{
+  "name": "@scriptproof/agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ScriptProof runtime agent — dependency-free, fail-silent browser snippet that reports runtime-injected scripts.",
+  "main": "src/agent.js",
+  "files": [
+    "src/agent.js"
+  ]
+}

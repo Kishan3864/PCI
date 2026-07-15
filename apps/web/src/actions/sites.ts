@@ -5,12 +5,13 @@ import {
   createSiteSchema,
   generateVerifyToken,
   isValidSiteDomain,
+  manualScanCooldownMs,
   normalizeDomain,
   verifySiteSchema,
   scanNowSchema,
 } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
-import { and, count, eq } from 'drizzle-orm';
+import { and, count, desc, eq, gte, inArray } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { db } from '@/lib/db';
@@ -112,9 +113,48 @@ export async function scanNow(_prev: ActionState, formData: FormData): Promise<A
   });
   if (!parsed.success) return { ok: false, message: 'Invalid request' };
 
-  const { site } = await requireSite(parsed.data.siteId);
+  const { site, org } = await requireSite(parsed.data.siteId);
   if (!site.verifiedAt) {
     return { ok: false, message: 'Verify domain ownership before scanning.' };
+  }
+
+  const now = Date.now();
+
+  // Duplicate cap: a scan for this site is already queued or running (last 10 min).
+  const [inProgress] = await db
+    .select({ id: schema.scans.id })
+    .from(schema.scans)
+    .innerJoin(schema.pages, eq(schema.scans.pageId, schema.pages.id))
+    .where(
+      and(
+        eq(schema.pages.siteId, site.id),
+        inArray(schema.scans.status, ['queued', 'running']),
+        gte(schema.scans.startedAt, new Date(now - 10 * 60_000)),
+      ),
+    )
+    .limit(1);
+  if (inProgress) {
+    return { ok: false, message: 'A scan is already in progress. Results appear in a minute.' };
+  }
+
+  // Per-site cooldown enforced from the DB, by plan (starter 30m / pro 10m / agency 5m).
+  const cooldownMs = manualScanCooldownMs(org.plan);
+  const [latest] = await db
+    .select({ startedAt: schema.scans.startedAt })
+    .from(schema.scans)
+    .innerJoin(schema.pages, eq(schema.scans.pageId, schema.pages.id))
+    .where(eq(schema.pages.siteId, site.id))
+    .orderBy(desc(schema.scans.startedAt))
+    .limit(1);
+  if (latest) {
+    const elapsed = now - latest.startedAt.getTime();
+    if (elapsed < cooldownMs) {
+      const waitMin = Math.max(1, Math.ceil((cooldownMs - elapsed) / 60_000));
+      return {
+        ok: false,
+        message: `Please wait ${waitMin} minute${waitMin === 1 ? '' : 's'} between manual scans.`,
+      };
+    }
   }
 
   await enqueueSiteScan({

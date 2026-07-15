@@ -73,6 +73,7 @@ export function PageRow({ page, verified, allow6h }: PageRowProps) {
         <ActionButton
           action={scanNow}
           fields={{ siteId: page.siteId, pageId: page.id }}
+          showResult
           variant="outline"
           size="sm"
         >

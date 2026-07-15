@@ -246,6 +246,8 @@ export const scripts = pgTable(
     latestSha256: text('latest_sha256'),
     latestByteSize: integer('latest_byte_size'),
     latestSriPresent: boolean('latest_sri_present').notNull().default(false),
+    /** True when the runtime agent saw this script injected in a real browser. */
+    runtimeSeen: boolean('runtime_seen').notNull().default(false),
   },
   (t) => [
     index('scripts_site_id_idx').on(t.siteId),
@@ -257,9 +259,8 @@ export const scriptObservations = pgTable(
   'script_observations',
   {
     id: id(),
-    scanId: text('scan_id')
-      .notNull()
-      .references(() => scans.id, { onDelete: 'cascade' }),
+    /** Crawler scan that produced this observation; NULL for runtime-agent reports. */
+    scanId: text('scan_id').references(() => scans.id, { onDelete: 'cascade' }),
     scriptId: text('script_id')
       .notNull()
       .references(() => scripts.id, { onDelete: 'cascade' }),

@@ -4,6 +4,7 @@ import {
   canAddPage,
   canAddSite,
   frequencyAllowed,
+  manualScanCooldownMs,
   planAllows,
   PLANS,
 } from '../src/plans';
@@ -38,6 +39,14 @@ describe('plan limits (section 7)', () => {
     expect(canAddSite('agency', 20)).toBe(false);
     expect(planAllows('agency', 'whiteLabel')).toBe(true);
     expect(planAllows('agency', 'csvExport')).toBe(true);
+  });
+
+  it('manual scan cooldown: starter 30 min, pro 10 min, agency 5 min', () => {
+    expect(manualScanCooldownMs('starter')).toBe(30 * 60_000);
+    expect(manualScanCooldownMs('pro')).toBe(10 * 60_000);
+    expect(manualScanCooldownMs('agency')).toBe(5 * 60_000);
+    expect(manualScanCooldownMs('agency')).toBeLessThan(manualScanCooldownMs('pro'));
+    expect(manualScanCooldownMs('pro')).toBeLessThan(manualScanCooldownMs('starter'));
   });
 
   it('prices: 29 / 79 / 199 monthly, annual = 10x monthly', () => {

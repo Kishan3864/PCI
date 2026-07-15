@@ -4,6 +4,7 @@ import {
   renderDailyDigestEmail,
   type DigestItem,
 } from '@scriptproof/email';
+import { planAllows } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
 import { and, eq, gte, inArray } from 'drizzle-orm';
 import { db } from './db';
@@ -82,6 +83,40 @@ async function isDuplicateAlert(ctx: ChangeContext): Promise<boolean> {
   return Boolean(sent);
 }
 
+/**
+ * Posts a message to an org's Slack webhook when configured and the plan allows
+ * it. Fully fail-safe: any error (bad URL, timeout, Slack 4xx/5xx, DB write) is
+ * caught and logged so Slack can never affect the email path or scan status.
+ */
+async function dispatchSlack(orgId: string, text: string, changeIds: string[]): Promise<void> {
+  try {
+    const org = await db.query.orgs.findFirst({ where: eq(schema.orgs.id, orgId) });
+    if (!org?.slackWebhookUrl || !planAllows(org.plan, 'slackAlerts')) return;
+
+    const res = await fetch(org.slackWebhookUrl, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text }),
+      signal: AbortSignal.timeout(5000),
+    });
+    const status = res.ok ? ('sent' as const) : ('failed' as const);
+    if (changeIds.length > 0) {
+      await db
+        .insert(schema.alerts)
+        .values(changeIds.map((changeId) => ({ changeId, channel: 'slack' as const, status })));
+    }
+    if (res.ok) {
+      console.log(`[alerts] slack alert sent for org ${orgId}`);
+    } else {
+      console.error(
+        `[alerts] slack webhook rejected message for org ${orgId} (HTTP ${res.status})`,
+      );
+    }
+  } catch (error) {
+    console.error(`[alerts] slack dispatch failed for org ${orgId}:`, error);
+  }
+}
+
 /** Immediate email for a critical change (spec 5.3). */
 export async function handleAlertDispatch(job: AlertDispatchJob): Promise<void> {
   const ctx = await loadChangeContext(job.changeId);
@@ -126,6 +161,23 @@ export async function handleAlertDispatch(job: AlertDispatchJob): Promise<void> 
       .values({ changeId: ctx.change.id, channel: 'email', status: 'failed' });
     throw error; // let pg-boss retry
   }
+
+  // Slack (Pro+/Agency) — best effort, isolated from the email path above.
+  const scriptUrl = typeof detail.srcUrl === 'string' ? detail.srcUrl : null;
+  const reviewUrl = `${appUrl()}/app/sites/${ctx.site.id}/changes`;
+  await dispatchSlack(
+    ctx.site.orgId,
+    [
+      `:rotating_light: *Critical change detected on ${ctx.site.domain}*`,
+      `• Page: ${ctx.page.label} (${ctx.page.url})`,
+      scriptUrl ? `• Script: ${scriptUrl}` : null,
+      `• Change: ${ctx.change.type}`,
+      `<${reviewUrl}|Review this change>`,
+    ]
+      .filter(Boolean)
+      .join('\n'),
+    [ctx.change.id],
+  );
 }
 
 /** Daily digest of warning/info changes that never triggered an alert. */
@@ -185,6 +237,12 @@ export async function handleDailyDigest(): Promise<void> {
         })),
       );
       console.log(`[alerts] digest sent to org ${orgId} (${orgChanges.length} changes)`);
+      // Slack copy of the digest — best effort, never fails the email path.
+      await dispatchSlack(
+        orgId,
+        `:memo: *ScriptProof daily digest for ${org.name}* — ${orgChanges.length} non-critical change${orgChanges.length === 1 ? '' : 's'} detected.\n<${appUrl()}/app|Open dashboard>`,
+        [],
+      );
     } catch (error) {
       failures += 1;
       console.error(`[alerts] digest failed for org ${orgId}:`, error);

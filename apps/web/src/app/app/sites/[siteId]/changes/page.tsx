@@ -1,10 +1,12 @@
+import { planAllows } from '@scriptproof/core';
 import { CHANGE_TYPE_LABELS } from '@scriptproof/email';
 import { schema } from '@scriptproof/db';
 import { desc, eq, inArray } from 'drizzle-orm';
-import { History } from 'lucide-react';
+import { Download, History } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ActionButton } from '@/components/action-button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { GradientText, Reveal } from '@/components/visual';
 import { acknowledgeChange } from '@/actions/changes';
@@ -41,7 +43,8 @@ function changeSummary(type: string, detail: Record<string, unknown>): string {
 
 export default async function ChangesPage({ params }: { params: Promise<{ siteId: string }> }) {
   const { siteId } = await params;
-  const { site } = await requireSite(siteId);
+  const { site, org } = await requireSite(siteId);
+  const canExportCsv = planAllows(org.plan, 'csvExport');
 
   const sitePages = await db.query.pages.findMany({ where: eq(schema.pages.siteId, site.id) });
   const pagesById = new Map(sitePages.map((p) => [p.id, p]));
@@ -66,14 +69,25 @@ export default async function ChangesPage({ params }: { params: Promise<{ siteId
   return (
     <div className="space-y-8">
       <Reveal>
-        <div className="space-y-2">
-          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">
-            Change <GradientText>timeline</GradientText>
-          </h1>
-          <p className="max-w-2xl text-sm leading-6 text-slate-600">
-            Every new, modified or removed script and every security-header change detected on your
-            pages — the tamper-detection trail behind requirement 11.6.1.
-          </p>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">
+              Change <GradientText>timeline</GradientText>
+            </h1>
+            <p className="max-w-2xl text-sm leading-6 text-slate-600">
+              Every new, modified or removed script and every security-header change detected on
+              your pages — the tamper-detection trail behind requirement 11.6.1.
+            </p>
+          </div>
+          {canExportCsv ? (
+            <Button asChild variant="outline" size="sm">
+              <a href={`/app/sites/${site.id}/changes/export`} download>
+                <Download className="h-4 w-4" /> Export CSV
+              </a>
+            </Button>
+          ) : (
+            <span className="text-xs text-slate-400">CSV export — Agency plan</span>
+          )}
         </div>
       </Reveal>
 

@@ -27,6 +27,8 @@ const nextConfig: NextConfig = {
   transpilePackages: ['@scriptproof/core', '@scriptproof/db', '@scriptproof/email'],
   serverExternalPackages: ['pg', 'pg-boss'],
   poweredByHeader: false,
+  // Logo uploads are capped at 1 MB server-side; allow multipart overhead.
+  experimental: { serverActions: { bodySizeLimit: '2mb' } },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },

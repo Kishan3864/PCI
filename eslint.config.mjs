@@ -32,4 +32,23 @@ export default tseslint.config(
     files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     ...tseslint.configs.disableTypeChecked,
   },
+  {
+    // Browser runtime agent: dependency-free IIFE executed on merchant pages.
+    files: ['packages/agent/**/*.js', '**/public/agent.js'],
+    languageOptions: {
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        navigator: 'readonly',
+        location: 'readonly',
+        fetch: 'readonly',
+        URL: 'readonly',
+        TextEncoder: 'readonly',
+        MutationObserver: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        crypto: 'readonly',
+      },
+    },
+  },
 );

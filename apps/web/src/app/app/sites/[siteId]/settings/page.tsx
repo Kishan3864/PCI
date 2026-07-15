@@ -1,17 +1,19 @@
-import { PLANS, txtRecordValue } from '@scriptproof/core';
+import { PLANS, planAllows, txtRecordValue } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
 import { asc, eq } from 'drizzle-orm';
-import { CheckCircle2, FileStack, ShieldCheck } from 'lucide-react';
+import { Activity, CheckCircle2, FileStack, ShieldCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AddPageForm } from '@/components/add-page-form';
 import { PageRow } from '@/components/page-row';
 import { CopyBlock } from '@/components/copy-block';
+import { UpgradePrompt } from '@/components/upgrade-prompt';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { GradientText, Reveal } from '@/components/visual';
 import { db } from '@/lib/db';
+import { appUrl } from '@/lib/env';
 import { requireSite } from '@/lib/org';
 import { formatDateTime } from '@/lib/utils';
 
@@ -35,6 +37,8 @@ export default async function SettingsPage({
 
   const limits = PLANS[org.plan];
   const allow6h = limits.frequencies.includes('6h');
+  const allowAgent = planAllows(org.plan, 'agentSnippet');
+  const agentEmbedTag = `<script src="${appUrl()}/agent.js" data-site-key="${site.id}" async></script>`;
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
@@ -152,6 +156,45 @@ export default async function SettingsPage({
             )}
           </CardContent>
         </Card>
+      </Reveal>
+
+      <Reveal delay={240}>
+        {allowAgent ? (
+          <Card>
+            <CardHeader>
+              <div className="flex items-start gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white">
+                  <Activity className="h-5 w-5" />
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <CardTitle className="text-base">Runtime agent</CardTitle>
+                    <Badge variant="brand">Pro</Badge>
+                  </div>
+                  <CardDescription>
+                    Scheduled crawls can miss scripts that are injected at runtime. This snippet
+                    watches real shoppers&apos; browsers and reports runtime-injected scripts back
+                    to your inventory.
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4 text-sm">
+              <p className="text-slate-600">
+                Add the tag to every monitored payment page. It is under 6KB, dependency-free, and
+                fail-silent — it can never break or slow your checkout. Reported scripts appear in
+                the inventory with a <Badge variant="info">runtime</Badge> badge.
+              </p>
+              <CopyBlock label="Embed on your payment pages" value={agentEmbedTag} />
+              <p className="text-xs text-slate-500">
+                Reports are validated, plan-gated, and rate-limited server-side. Only pages you
+                monitor for this site are accepted.
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <UpgradePrompt feature="Runtime agent" requiredPlan="Pro" />
+        )}
       </Reveal>
     </div>
   );

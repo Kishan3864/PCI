@@ -1,3 +1,5 @@
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { planAllows, shortHashSafe } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
 import { and, asc, desc, eq, gte, inArray, lte } from 'drizzle-orm';
@@ -13,7 +15,24 @@ import {
 } from './evidence/report-html';
 import { renderHtmlToPdf } from './pdf';
 import { EVIDENCE_GENERATE, type EvidenceGenerateJob } from './queues';
-import { writeArtifact } from './storage';
+import { storageDir, writeArtifact } from './storage';
+
+/**
+ * Loads the org's white-label logo (Agency) as a data URI for the PDF cover.
+ * Fail-safe: any problem falls back to the text brand (returns null).
+ */
+async function loadLogoDataUri(org: { plan: 'starter' | 'pro' | 'agency'; logo: string | null }) {
+  if (!planAllows(org.plan, 'whiteLabel') || !org.logo) return null;
+  if (org.logo.startsWith('data:')) return org.logo; // legacy inline value
+  try {
+    const bytes = await readFile(path.join(storageDir(), org.logo));
+    const mime = org.logo.endsWith('.png') ? 'image/png' : 'image/jpeg';
+    return `data:${mime};base64,${bytes.toString('base64')}`;
+  } catch (error) {
+    console.error('[evidence] could not load org logo, using text brand:', error);
+    return null;
+  }
+}
 
 function changeSummary(type: string, detail: Record<string, unknown>): string {
   const src = typeof detail.srcUrl === 'string' ? detail.srcUrl : null;
@@ -131,8 +150,8 @@ export async function handleEvidenceGenerate(job: EvidenceGenerateJob): Promise<
 
   const data: EvidenceData = {
     orgName: org.name,
-    // White-label logo (Agency plan) — org.logo may hold a data URI.
-    logoDataUri: planAllows(org.plan, 'whiteLabel') && org.logo ? org.logo : null,
+    // White-label logo (Agency plan) — org.logo holds a STORAGE_DIR-relative path.
+    logoDataUri: await loadLogoDataUri(org),
     siteDomain: site.domain,
     periodStart,
     periodEnd,

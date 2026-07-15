@@ -1,10 +1,12 @@
+import { planAllows } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
 import { asc, desc, eq } from 'drizzle-orm';
-import { Fingerprint, ShieldCheck } from 'lucide-react';
+import { Download, Fingerprint, ShieldCheck } from 'lucide-react';
 import type { Metadata } from 'next';
 import { ActionButton } from '@/components/action-button';
 import { JustifyDialog } from '@/components/justify-dialog';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Table,
@@ -26,7 +28,8 @@ const statusVariant = { pending: 'warning', authorized: 'success', blocked: 'cri
 
 export default async function InventoryPage({ params }: { params: Promise<{ siteId: string }> }) {
   const { siteId } = await params;
-  const { site } = await requireSite(siteId);
+  const { site, org } = await requireSite(siteId);
+  const canExportCsv = planAllows(org.plan, 'csvExport');
 
   const scripts = await db.query.scripts.findMany({
     where: eq(schema.scripts.siteId, site.id),
@@ -57,16 +60,27 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
               </p>
             </div>
           </div>
-          {site.verifiedAt ? (
-            <ActionButton
-              action={scanNow}
-              fields={{ siteId: site.id }}
-              showResult
-              variant="outline"
-            >
-              Scan now
-            </ActionButton>
-          ) : null}
+          <div className="flex flex-wrap items-center gap-2">
+            {canExportCsv ? (
+              <Button asChild variant="outline" size="sm">
+                <a href={`/app/sites/${site.id}/inventory/export`} download>
+                  <Download className="h-4 w-4" /> Export CSV
+                </a>
+              </Button>
+            ) : (
+              <span className="text-xs text-slate-400">CSV export — Agency plan</span>
+            )}
+            {site.verifiedAt ? (
+              <ActionButton
+                action={scanNow}
+                fields={{ siteId: site.id }}
+                showResult
+                variant="outline"
+              >
+                Scan now
+              </ActionButton>
+            ) : null}
+          </div>
         </div>
       </Reveal>
 
@@ -111,6 +125,11 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
                           className="block truncate font-mono text-xs text-slate-700"
                           title={name}
                         >
+                          {script.runtimeSeen ? (
+                            <Badge variant="info" className="mr-1.5">
+                              runtime
+                            </Badge>
+                          ) : null}
                           {script.isInline ? (
                             <>
                               <Badge variant="secondary" className="mr-1.5">
