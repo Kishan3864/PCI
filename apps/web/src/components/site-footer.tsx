@@ -1,3 +1,4 @@
+import { Fingerprint, Lock, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { BrandMark } from '@/components/brand-mark';
 import { DISCLAIMER } from '@/lib/constants';
@@ -6,19 +7,35 @@ const groups = [
   {
     title: 'Product',
     links: [
+      { href: '/how-it-works', label: 'How it works' },
       { href: '/pricing', label: 'Pricing' },
       { href: '/free-scan', label: 'Free scan' },
       { href: '/signup', label: 'Start free trial' },
     ],
   },
   {
-    title: 'Learn',
+    title: 'Resources',
     links: [
       { href: '/blog', label: 'Blog' },
+      { href: '/security', label: 'Security' },
       { href: '/bot', label: 'About our crawler' },
-      { href: '/legal', label: 'Terms & privacy' },
     ],
   },
+  {
+    title: 'Legal',
+    links: [
+      { href: '/legal', label: 'Legal center' },
+      { href: '/legal/privacy', label: 'Privacy policy' },
+      { href: '/legal/terms', label: 'Terms of service' },
+      { href: '/legal/refund', label: 'Refund policy' },
+    ],
+  },
+];
+
+const marks = [
+  { icon: ShieldCheck, label: 'PCI DSS 6.4.3 / 11.6.1 controls' },
+  { icon: Fingerprint, label: 'SHA-256 script fingerprints' },
+  { icon: Lock, label: 'Zero cardholder data stored' },
 ];
 
 export function SiteFooter() {
@@ -29,7 +46,7 @@ export function SiteFooter() {
         className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"
       />
       <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-2.5">
               <BrandMark />
@@ -41,6 +58,14 @@ export function SiteFooter() {
               Payment-page script monitoring &amp; PCI DSS evidence for merchants and the agencies
               that keep their checkouts safe.
             </p>
+            <ul className="mt-5 space-y-2">
+              {marks.map((m) => (
+                <li key={m.label} className="flex items-center gap-2 text-xs text-slate-500">
+                  <m.icon className="h-3.5 w-3.5 text-blue-600" />
+                  {m.label}
+                </li>
+              ))}
+            </ul>
           </div>
           {groups.map((group) => (
             <div key={group.title}>

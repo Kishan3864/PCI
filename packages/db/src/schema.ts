@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
+  bigint,
   boolean,
   index,
   integer,
@@ -397,3 +398,12 @@ export const subscriptions = pgTable(
   },
   (t) => [uniqueIndex('subscriptions_provider_sub_uq').on(t.provider, t.providerSubId)],
 );
+
+// Better Auth server-side rate limiting (storage: 'database') — persists
+// per-key counters so limits survive restarts and apply across instances.
+export const rateLimits = pgTable('rate_limits', {
+  id: id(),
+  key: text('key').notNull(),
+  count: integer('count').notNull().default(0),
+  lastRequest: bigint('last_request', { mode: 'number' }),
+});

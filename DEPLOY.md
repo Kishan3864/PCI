@@ -190,3 +190,52 @@ pm2 restart pci-web pci-worker
   `proxy_pass` port in sync.
 - The worker does not expose an HTTP port in production (the fixture test server only starts
   when `NODE_ENV` is not `production`).
+
+---
+
+## Go-live checklist: real email (Resend) — REQUIRED for public signups
+
+Signups require email verification, and the app now **rejects fake/disposable
+addresses** (live MX checks + blocklists) before an account is created. For the
+verification mail to actually arrive you need a real provider:
+
+1. Create a free account at https://resend.com (100 emails/day free).
+2. Resend dashboard → Domains → Add `pci.flexypdf.com` → it shows 3 DNS records
+   (SPF/DKIM). Add them at your DNS panel → wait for "Verified".
+3. API Keys → Create → copy the `re_...` key.
+4. On the server edit `~/pci/.env`:
+   ```ini
+   EMAIL_PROVIDER=resend
+   RESEND_API_KEY=re_xxxxxxxxxxxx
+   EMAIL_FROM=ScriptProof <notify@pci.flexypdf.com>
+   ```
+5. `pm2 restart pci-web pci-worker`
+
+## Go-live checklist: real payments (Dodo Payments)
+
+Billing runs in safe **mock mode** until keys exist — the moment they do, real
+checkout activates automatically (no code change).
+
+1. Create a Dodo Payments account (https://dodopayments.com), complete
+   merchant verification.
+2. Create three subscription products (Starter / Pro / Agency) with your
+   monthly prices → copy each product id.
+3. Dashboard → API keys → copy the live API key. Webhooks → add endpoint
+   `https://pci.flexypdf.com/api/webhooks/billing`, subscribe to subscription
+   created/active/renewed/updated/cancelled events → copy the webhook secret.
+4. On the server edit `~/pci/.env`:
+   ```ini
+   BILLING_PROVIDER=dodo
+   DODO_API_KEY=...
+   DODO_WEBHOOK_SECRET=...
+   DODO_PRODUCT_STARTER=...
+   DODO_PRODUCT_PRO=...
+   DODO_PRODUCT_AGENCY=...
+   ```
+5. `pm2 restart pci-web pci-worker`, then buy a plan with Dodo's test card to
+   confirm the org's plan flips after the webhook fires.
+
+## After every deploy of this release
+
+`pnpm db:migrate` is required (new `rate_limits` table backs the
+database-stored auth rate limiter).

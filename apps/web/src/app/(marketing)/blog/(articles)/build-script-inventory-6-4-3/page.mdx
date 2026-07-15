@@ -1,0 +1,190 @@
+export const metadata = {
+  title: 'How to build a payment-page script inventory (step by step)',
+  description:
+    'A hands-on walkthrough for PCI DSS 6.4.3: find every script on your payment page with devtools, record it properly, write justifications auditors accept, and keep it current.',
+};
+
+# How to build a payment-page script inventory (step by step)
+
+_Published 15 July 2026 · 8 min read_
+
+PCI DSS requirement **6.4.3** asks for something concrete: an inventory of every script on your
+payment pages, a written business justification for each, confirmation that each is authorized, and
+a method to assure each script's integrity. That sounds like paperwork, but it is really a
+four-step working process: **discover, record, justify, maintain.** This guide walks through each
+step in enough detail that you can build a defensible inventory this afternoon.
+
+## Step 0: know what counts as a "payment page script"
+
+Your inventory covers **every piece of JavaScript that loads or runs on the page where cardholder
+data is entered** — and, sensibly, on the page that delivers or redirects to your payment form.
+That includes:
+
+- **External script files** — anything loaded via `<script src="...">`, whether from your own
+  domain, a plugin, or a third party (payment SDK, analytics, chat, pixels, tag managers).
+- **Inline scripts** — code embedded directly in the page HTML, including the small config snippets
+  plugins print inline.
+- **Dynamically injected scripts** — scripts added by other scripts at runtime. A tag manager is
+  the classic case: one script in your HTML can load ten more you never wrote down.
+
+The scope is the _page_, not the payment form. Even when the card fields live in a provider's
+iframe, every script on the surrounding page belongs in your inventory, because any of them could
+tamper with that page.
+
+## Step 1: discover — a devtools walkthrough
+
+You can find everything the page loads with the browser you already have.
+
+1. **Open your live payment page** — the real one customers use, not a staging copy, since plugins
+   and tags often differ between environments.
+2. **Open developer tools** (F12, or right-click → Inspect) and switch to the **Network** tab.
+3. **Tick "Disable cache"**, then filter by **JS**.
+4. **Reload the page** and let it settle for a few seconds — some scripts load late, after
+   consent banners or user interaction.
+5. **Walk the list.** Every row is a script your page executed. For each, note the full URL and the
+   **Initiator** column, which tells you _what loaded it_ — this is how you spot chains like
+   "tag manager loaded X, which loaded Y."
+6. **Catch the inline scripts.** The Network tab only shows fetched files. Switch to the
+   **Elements** tab and search the page source (Ctrl+F) for `<script` to find inline blocks, or
+   view the raw page source. Note each inline block and which plugin or theme printed it.
+7. **Do a second pass as a real shopper.** Add an item to the cart, proceed to checkout, and watch
+   the Network tab for scripts that only appear once payment fields render.
+
+Expect the list to be longer than you thought. That reaction is normal — and it is exactly the
+visibility 6.4.3 is designed to force.
+
+## Step 2: record — what to write down for each script
+
+A spreadsheet is a perfectly acceptable format. For each script, record:
+
+- **URL (or location)** — the full script URL; for inline scripts, a short label and where it
+  appears in the page.
+- **Purpose** — one plain sentence describing what it does.
+- **Owner** — who answers for it: you (theme/custom code), a named plugin, or the third-party
+  vendor.
+- **Justification** — the business reason it must be on the _payment_ page (see step 3).
+- **Authorized by / date** — the responsible person's sign-off and when they gave it.
+- **Integrity method** — how you would know the code changed: a content hash (fingerprint) recorded
+  at authorization time, an SRI attribute on the tag, or a monitoring tool that hashes it on a
+  schedule.
+
+The hash matters more than it first appears. A script's URL can stay identical while its contents
+change — that is precisely how skimmers hide — so the inventory needs a fingerprint of _what the
+code was_ when you approved it.
+
+## Step 3: justify — writing reasons auditors accept
+
+A justification is not a description; it explains why the script is **necessary on this page**.
+"Analytics script" is a description. Assessors look for the necessity. Three examples of the kind
+of justification that holds up:
+
+> **Stripe.js (`js.stripe.com/v3`)** — Required to render the hosted card fields and tokenize
+> cardholder data so that card numbers never touch our servers. Payment cannot be taken without it.
+> Owner: Stripe. Integrity: script is version-pinned and monitored for content changes.
+
+> **Cart/checkout bundle (`/wp-content/plugins/woocommerce/.../checkout.min.js`)** — Core
+> WooCommerce checkout logic: validates the address form and submits the order. Checkout is
+> non-functional without it. Owner: WooCommerce plugin, updated via managed plugin updates.
+> Integrity: fingerprint re-baselined and re-authorized at each plugin update.
+
+> **Google Tag Manager (`googletagmanager.com/gtm.js`)** — Loads our conversion tracking so paid
+> advertising spend can be attributed. Business has accepted the risk of a tag container on the
+> payment page; the container is access-controlled, publish rights are limited to two named staff,
+> and child scripts it loads are included in this inventory. Owner: Marketing.
+
+Notice the pattern: what it does, why this page needs it, who owns it, and how its risk is managed.
+And notice the honest implication of the third example — if you cannot write a justification you
+would be comfortable reading aloud to an assessor, the right move is usually to **remove the script
+from the payment page** rather than to write creatively. Many tags can live everywhere _except_
+checkout.
+
+## Step 4: keep it current — change control
+
+An inventory that was accurate in July is evidence of nothing in November. 6.4.3 expects the
+inventory to reflect reality, which means tying it to change:
+
+- **When you add or update a plugin, theme, or tag** that touches the payment page, update the
+  inventory in the same change: new scripts get a justification and authorization; changed scripts
+  get a fresh fingerprint.
+- **Re-check the live page on a schedule** and reconcile it against the inventory. Anything on the
+  page but not in the inventory is either a missed change or an incident — both need attention.
+  (This reconciliation is also the bridge to requirement 11.6.1, which requires change- and
+  tamper-detection on payment pages at least weekly.)
+- **Re-authorize periodically.** A yearly review where the owner re-confirms each script still
+  earns its place keeps the list from silently accumulating.
+
+## Manual vs automated: an honest comparison
+
+<table>
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>Manual (spreadsheet + devtools)</th>
+      <th>Automated (monitoring tool)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Initial inventory</td>
+      <td>A few hours of devtools work; good learning exercise</td>
+      <td>First crawl builds the list for you</td>
+    </tr>
+    <tr>
+      <td>Catching new scripts</td>
+      <td>Only when someone remembers to re-check</td>
+      <td>Flagged automatically on the next scheduled scan</td>
+    </tr>
+    <tr>
+      <td>Catching changed script contents</td>
+      <td>Impractical by hand — you would have to re-hash every file</td>
+      <td>Fingerprints compared on every scan</td>
+    </tr>
+    <tr>
+      <td>Weekly cadence (11.6.1)</td>
+      <td>Depends on a human never skipping a week</td>
+      <td>Runs on schedule regardless</td>
+    </tr>
+    <tr>
+      <td>Evidence trail</td>
+      <td>Assembled by hand at assessment time</td>
+      <td>Scan logs and reports accumulate automatically</td>
+    </tr>
+    <tr>
+      <td>Cost</td>
+      <td>Free in cash, expensive in discipline</td>
+      <td>A subscription, cheap in discipline</td>
+    </tr>
+  </tbody>
+</table>
+
+The honest summary: manual is fine for building the _first_ inventory and genuinely worth doing
+once, because it teaches you what your page actually loads. It is the _ongoing_ comparison —
+weekly, forever, including content hashes — where manual processes quietly die.
+
+## Evidence tips
+
+When an acquirer or assessor asks about 6.4.3, they want to see the process working, not just a
+list. Keep:
+
+- The **inventory itself**, versioned — so you can show what it said at any point in time.
+- **Authorization records** — who approved each script and when, even if that is a sign-off column
+  plus an email.
+- **Recorded fingerprints** or SRI attributes demonstrating your integrity method.
+- **Reconciliation history** — dated notes or scan logs showing the live page was compared against
+  the inventory regularly, and what you did when something new appeared.
+- **Change-control entries** linking plugin/tag changes to inventory updates.
+
+Date everything. A dated trail of small, boring updates is far more convincing than one perfect
+document created the week before an assessment.
+
+## Where ScriptProof fits
+
+Everything above can be done with devtools and a spreadsheet. ScriptProof exists for step 4 and the
+evidence: it crawls your verified payment pages on a schedule, discovers and fingerprints every
+script, keeps the inventory with justifications and authorizations in one place, alerts you when
+the page drifts from the approved baseline, and generates the periodic evidence document. It
+supports your 6.4.3 process and produces supporting evidence — it does not certify compliance, so
+confirm your specific obligations with your acquirer or a QSA.
+
+Build the inventory once by hand if you like; it is a genuinely useful exercise. Just make sure
+something — a tool or an unusually disciplined human — keeps it honest afterwards.

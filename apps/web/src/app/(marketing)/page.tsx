@@ -1,14 +1,21 @@
 import {
   AlertTriangle,
   ArrowRight,
+  BellRing,
+  Braces,
   Building2,
+  CalendarClock,
   CheckCircle2,
+  ClipboardCheck,
   FileText,
   Fingerprint,
+  Layers,
+  Mail,
   Radar,
   ScanLine,
   ShieldCheck,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   AlertMock,
@@ -90,6 +97,121 @@ const monitored = [
   'SRI hashes',
   'Third-party pixels',
   'Inline scripts',
+];
+
+const personas = [
+  {
+    image: '/images/ecommerce-store.jpg',
+    alt: 'Small online shop owner preparing orders',
+    kicker: 'Small merchants',
+    title: 'You run the store. We run the checks.',
+    points: [
+      'Your acquirer sent an SAQ mentioning 6.4.3 and 11.6.1 — with no explanation of how to actually do it',
+      'No security team and no time to hand-audit checkout scripts every week',
+      'Verify your domain once; scans, alerts and evidence run on their own after that',
+      'A monthly Evidence Pack you can forward to your bank instead of writing one yourself',
+    ],
+  },
+  {
+    image: '/images/team-work.jpg',
+    alt: 'Agency team collaborating around a table',
+    kicker: 'Agencies & freelancers',
+    title: 'Every client store, one pane of glass.',
+    points: [
+      'Clients forward compliance letters from their bank and expect you to make them go away',
+      'Dozens of storefronts, each with its own theme, apps and third-party tags',
+      'Per-client alerts and white-label Evidence Packs turn compliance into a billable service',
+      'CSV export and one dashboard across every site you manage',
+    ],
+  },
+  {
+    image: '/images/code-screen.jpg',
+    alt: 'Developer reviewing code on screen',
+    kicker: 'Developers',
+    title: 'Provable diffs, not vague warnings.',
+    points: [
+      'That tag you didn’t add? Marketing pasted it in six months ago — now it’s on the payment page',
+      'Every script is fingerprinted with SHA-256, so “changed” is a fact you can verify',
+      'Alerts carry before/after hashes and the exact header deltas, not just “something changed”',
+      'Nothing to deploy: monitoring runs from outside, and the optional snippet is under 6 KB',
+    ],
+  },
+];
+
+const deliverables = [
+  {
+    icon: CalendarClock,
+    title: 'Daily scheduled scans',
+    body: 'Your payment pages are crawled every day — every 6 hours on Pro — and each run is logged with a timestamp, comfortably inside the weekly cadence 11.6.1 asks for.',
+  },
+  {
+    icon: Fingerprint,
+    title: 'SHA-256 script inventory',
+    body: 'Every script on your checkout is hashed and catalogued, so your inventory is always current, exportable, and provable rather than guessed.',
+  },
+  {
+    icon: ClipboardCheck,
+    title: 'Authorization log',
+    body: 'Record why each script is on the page and who approved it — the written justification requirement 6.4.3 expects to see.',
+  },
+  {
+    icon: Layers,
+    title: 'Security-header monitoring',
+    body: 'CSP, HSTS and other security headers are captured on every scan and diffed against the previous run, so silent weakening gets caught.',
+  },
+  {
+    icon: Braces,
+    title: 'CSP insights',
+    body: 'See which scripts your Content-Security-Policy actually allows — and where policy and what is really loading have drifted apart.',
+  },
+  {
+    icon: BellRing,
+    title: 'Instant change alerts',
+    body: 'A new or modified script triggers an immediate email with before/after fingerprints and a one-click review link.',
+  },
+  {
+    icon: Mail,
+    title: 'Daily digest',
+    body: 'Lower-severity changes are grouped into one readable daily summary, so you stay informed without alert fatigue.',
+  },
+  {
+    icon: FileText,
+    title: 'Monthly Evidence Pack PDF',
+    body: 'A dated PDF compiling inventory, authorizations, change log and scan history — formatted to attach straight to your SAQ.',
+  },
+  {
+    icon: ScanLine,
+    title: 'Free checkout scanner',
+    body: 'Point it at any checkout URL and get a one-page report of its scripts and headers in seconds — no account needed.',
+  },
+  {
+    icon: Building2,
+    title: 'Agency white-label',
+    body: 'Put your agency’s branding on Evidence Packs and manage every client store from a single dashboard on the Agency plan.',
+  },
+];
+
+const auditorQuestions = [
+  {
+    q: '“Can you show me an inventory of all scripts on your payment pages?”',
+    a: 'Yes — a live, timestamped inventory of every script on your checkout, each fingerprinted with SHA-256 and exportable for any point in time.',
+  },
+  {
+    q: '“Is there a documented business justification for each script?”',
+    a: 'Every script carries a recorded authorization — what it does, why it’s there, and who approved it — kept alongside the inventory.',
+  },
+  {
+    q: '“How would you detect tampering with page content or headers?”',
+    a: 'Every scan diffs script hashes and security headers against the previous run. Any unexpected change raises an alert with before/after evidence.',
+  },
+  {
+    q: '“Are those checks performed at least weekly?”',
+    a: 'Scans run daily — or every 6 hours on Pro — and every run is logged, so the cadence is something you can demonstrate, not just claim.',
+  },
+  {
+    q: '“Can you produce evidence covering the assessment period?”',
+    a: 'The monthly Evidence Pack compiles inventory, authorizations, change log and scan history into a dated PDF you can hand over as-is.',
+  },
 ];
 
 function Kicker({ children }: { children: React.ReactNode }) {
@@ -196,6 +318,58 @@ export default function LandingPage() {
         </Reveal>
       </section>
 
+      {/* ── Who it's for (personas) ──────────────────────────────────── */}
+      <section className="mt-20 border-y border-slate-200 bg-slate-50/70 py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal>
+            <div className="mx-auto max-w-2xl text-center">
+              <Kicker>Who it&apos;s for</Kicker>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950 sm:text-4xl">
+                Built for the people who actually get the compliance email
+              </h2>
+              <p className="mt-4 text-slate-600">
+                Whether you own the store, manage twenty of them, or wrote the checkout yourself —
+                ScriptProof does the monitoring and the paperwork.
+              </p>
+            </div>
+          </Reveal>
+          <div className="mt-14 grid gap-6 lg:grid-cols-3">
+            {personas.map((p, i) => (
+              <Reveal key={p.title} delay={i * 100}>
+                <div className="card-lift flex h-full flex-col overflow-hidden rounded-[2px] border border-slate-200 bg-white shadow-sm">
+                  <div className="relative h-44 w-full">
+                    <Image
+                      src={p.image}
+                      alt={p.alt}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">
+                      {p.kicker}
+                    </p>
+                    <h3 className="mt-1 font-semibold text-navy-900">{p.title}</h3>
+                    <ul className="mt-4 space-y-3">
+                      {p.points.map((point) => (
+                        <li
+                          key={point}
+                          className="flex items-start gap-2.5 text-sm leading-6 text-slate-600"
+                        >
+                          <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-blue-600" />
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Product modules (enterprise card grid) ───────────────────── */}
       <section className="relative isolate overflow-hidden py-24">
         <div aria-hidden className="sp-dots absolute inset-0 -z-10" />
@@ -263,6 +437,64 @@ export default function LandingPage() {
                 </li>
               ))}
             </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── The stakes: e-skimming & PCI DSS v4 ──────────────────────── */}
+      <section className="py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-2">
+          <Reveal>
+            <Kicker>The stakes</Kicker>
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950 sm:text-4xl">
+              E-skimming turned the checkout into the front line
+            </h2>
+            <div className="mt-5 space-y-4 leading-7 text-slate-600">
+              <p>
+                In a Magecart-style attack, criminals don&apos;t break into your database — they
+                slip a few lines of JavaScript into a script your payment page already loads, often
+                through a compromised third-party tag or plugin. The skimmer copies card details as
+                your customer types them, sends them to a server the attacker controls, and lets the
+                order complete normally. Nothing looks wrong to the shopper, and nothing looks wrong
+                to you.
+              </p>
+              <p>
+                The card brands responded. PCI DSS v4.0 added requirements 6.4.3 and 11.6.1, which
+                became mandatory on 31 March 2025: merchants must keep an authorized, justified
+                inventory of all payment-page scripts, and detect tampering with page content and
+                security headers at least weekly. Even merchants who validate with a short SAQ are
+                increasingly asked by their acquirer to show how their payment page is protected
+                against script attacks.
+              </p>
+              <p>
+                Doing that by hand means diffing scripts and headers on a schedule, keeping a
+                written justification for every tag, and filing the results where an assessor can
+                find them. ScriptProof automates the whole loop — and keeps the receipts.
+              </p>
+            </div>
+            <ul className="mt-7 space-y-3">
+              {[
+                'An inventory with recorded justifications — the core of requirement 6.4.3',
+                'Tamper detection on scripts and headers — the mechanism 11.6.1 describes',
+                'Dated logs and reports, so “we monitor it” comes with proof attached',
+              ].map((point) => (
+                <li key={point} className="flex items-start gap-3 text-sm text-slate-700">
+                  <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="corner-frame overflow-hidden rounded-[2px] border border-slate-200 bg-white shadow-sm">
+              <Image
+                src="/images/security-lock.jpg"
+                alt="Padlock resting on a laptop keyboard, symbolizing payment page security"
+                width={1600}
+                height={1067}
+                className="h-full w-full rounded-[2px] object-cover"
+              />
+            </div>
           </Reveal>
         </div>
       </section>
@@ -343,6 +575,71 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── Everything you get (deliverables checklist) ──────────────── */}
+      <section className="relative isolate overflow-hidden py-24">
+        <div aria-hidden className="sp-dots absolute inset-0 -z-10" />
+        <div className="mx-auto max-w-6xl px-6">
+          <Reveal>
+            <div className="mx-auto max-w-2xl text-center">
+              <Kicker>Everything you get</Kicker>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950 sm:text-4xl">
+                One subscription, the whole control loop
+              </h2>
+              <p className="mt-4 text-slate-600">
+                No modules to bolt on, no per-report fees. Every plan covers the full cycle from
+                scan to evidence.
+              </p>
+            </div>
+          </Reveal>
+          <div className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2">
+            {deliverables.map((d, i) => (
+              <Reveal key={d.title} delay={(i % 2) * 90}>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
+                    <d.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-navy-900">{d.title}</h3>
+                    <p className="mt-1.5 text-sm leading-6 text-slate-600">{d.body}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── What your auditor will ask ───────────────────────────────── */}
+      <section className="border-y border-slate-200 bg-slate-50/70 py-24">
+        <div className="mx-auto max-w-3xl px-6">
+          <Reveal>
+            <div className="text-center">
+              <Kicker>Assessment day</Kicker>
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950">
+                What your auditor will ask — and what you&apos;ll answer
+              </h2>
+              <p className="mt-4 text-slate-600">
+                Five questions that come up in almost every review of payment-page controls, and how
+                ScriptProof lets you answer each one with a document instead of a shrug.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <dl className="corner-frame mt-12 divide-y divide-slate-200 rounded-[2px] border border-slate-200 bg-white shadow-sm">
+              {auditorQuestions.map((item) => (
+                <div key={item.q} className="flex items-start gap-4 p-6">
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-blue-600" />
+                  <div>
+                    <dt className="font-semibold text-navy-900">{item.q}</dt>
+                    <dd className="mt-2 text-sm leading-6 text-slate-600">{item.a}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ── Monitored tech marquee ───────────────────────────────────── */}
       <section className="py-16">
         <p className="mb-6 text-center text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
@@ -407,8 +704,49 @@ export default function LandingPage() {
         </dl>
       </section>
 
+      {/* ── Trust band: bank-ready evidence ──────────────────────────── */}
+      <section className="border-y border-slate-200 bg-slate-50/70 py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-2">
+          <Reveal>
+            <div className="corner-frame overflow-hidden rounded-[2px] border border-slate-200 bg-white shadow-sm">
+              <Image
+                src="/images/trust-handshake.jpg"
+                alt="Two professionals shaking hands over a signed agreement"
+                width={1600}
+                height={1067}
+                className="h-full w-full rounded-[2px] object-cover"
+              />
+            </div>
+          </Reveal>
+          <Reveal delay={120}>
+            <Kicker>Built for scrutiny</Kicker>
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950 sm:text-4xl">
+              Evidence your bank can actually accept
+            </h2>
+            <p className="mt-5 leading-7 text-slate-600">
+              The monthly Evidence Pack isn&apos;t a screenshot of a dashboard. It&apos;s a dated
+              PDF that reads the way an assessor expects: your script inventory with fingerprints,
+              the authorization behind each script, the full change log, and the scan history that
+              proves your cadence. Attach it to your SAQ, forward it to your acquirer, or hand it to
+              a QSA as-is.
+            </p>
+            <p className="mt-4 leading-7 text-slate-600">
+              And because ScriptProof watches payment pages for a living, we hold ourselves to the
+              same bar: we never request, process, or store cardholder data — only URLs, hashes,
+              headers, and your account details.
+            </p>
+            <Link
+              href="/security"
+              className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800"
+            >
+              How we protect your data <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ── CTA (dark contrast band — enterprise style) ──────────────── */}
-      <section className="mx-auto max-w-6xl px-6 pb-24">
+      <section className="mx-auto max-w-6xl px-6 py-24">
         <Reveal>
           <div className="corner-frame corner-frame-dark relative isolate overflow-hidden rounded-[2px] border border-navy-800 bg-navy-950 px-8 py-16 text-center shadow-[0_30px_80px_-30px_rgba(11,37,69,0.6)] sm:px-16">
             <div

@@ -1,0 +1,136 @@
+export const metadata = {
+  title: 'What is e-skimming (Magecart) and why small stores are targets',
+  description:
+    'How web skimming attacks actually work, why neither shoppers nor owners notice them, and the script controls PCI DSS v4 now expects every payment page to have.',
+};
+
+# What is e-skimming (Magecart) and why small stores are targets
+
+_Published 15 July 2026 · 7 min read_
+
+E-skimming — often called **Magecart**, after the loose collection of criminal groups that made the
+technique infamous — is the online equivalent of a card skimmer glued onto a petrol-station
+terminal. Instead of tampering with a physical card reader, attackers plant a small piece of
+JavaScript on your checkout page. It sits quietly in the shopper's browser, copies card numbers as
+they are typed, and sends them to a server the attacker controls. The payment still goes through.
+Nobody sees anything wrong.
+
+This article explains how these attacks actually work, why small stores are attractive targets, why
+the attacks are so hard to spot, and what PCI DSS v4 now requires you to do about them.
+
+## How an e-skimming attack works
+
+The defining feature of e-skimming is that it happens **in the browser, not on your server**. Your
+database is never touched. Your server logs look normal. The attack lives entirely inside the page
+your customer is looking at. There are a few common routes in:
+
+**1. A compromised third-party script.** Most checkout pages load JavaScript from other companies —
+analytics, chat widgets, review badges, tag managers, marketing pixels. If any one of those vendors
+is breached, the attacker can modify the script _at its source_, and every store that loads it
+serves the skimmer to its customers automatically. You did nothing wrong, changed nothing, and are
+now distributing malware from your checkout. The 2018 Ticketmaster breach followed exactly this
+pattern: a customer-support widget supplied by a third party was modified upstream and skimmed
+payment details on the pages that embedded it.
+
+**2. An injected loader on your own site.** If an attacker gets a foothold on your platform — a
+vulnerable plugin, a stolen admin password, an outdated theme — they rarely paste the whole skimmer
+into your page. They inject a tiny, innocent-looking **loader**: a line or two of JavaScript that
+fetches the real skimming code from an external domain at runtime. The loader is easy to miss in a
+sea of legitimate tags, and the attacker can update the payload remotely without touching your site
+again.
+
+**3. A swapped or modified payment script.** In the most direct pattern, the attacker alters a
+script that is _supposed_ to be on the page. The 2018 British Airways breach is the famous example:
+a script already used by the site was modified with a short addition that forwarded payment details
+to a look-alike domain. The page still worked perfectly. The change was a handful of lines inside a
+file everyone trusted.
+
+Once running, the skimmer does its job with depressing simplicity: it listens for keystrokes or
+form submissions on the payment fields, packages up the card number, expiry, CVV, name, and
+address, and posts them to the attacker's collection server — often a domain chosen to look
+plausible in a network log.
+
+## Why nobody notices
+
+E-skimming is invisible to the two people you would expect to catch it.
+
+**The shopper sees nothing.** The page looks identical, the payment succeeds, the order
+confirmation arrives. The card is charged the correct amount. Fraud on the card may not appear for
+weeks, and when it does, the shopper has no way to connect it to your store.
+
+**The owner sees nothing either.** Server-side security — firewalls, malware scans, database
+monitoring — never fires, because the attack does not touch the server. Orders keep flowing.
+Revenue looks normal. The only observable symptom is that _the JavaScript running on your payment
+page is not quite the same as it was last week_ — and almost no small store is watching for that.
+Skimmers routinely operate for weeks or months before a card network traces a fraud pattern back to
+its common point of purchase: your checkout.
+
+## Why small stores are targets
+
+It is tempting to assume attackers only care about household names. The economics point the other
+way:
+
+- **Small stores are soft.** A typical small store runs a platform plus a stack of plugins and
+  third-party tags, with no security team and no script monitoring. One vulnerable plugin is enough.
+- **Attacks are automated.** Magecart-style groups scan the internet for stores running known
+  vulnerable software and inject skimmers at scale. You are not chosen; you are _found_.
+- **Third-party compromises hit everyone at once.** When a widely used widget is breached, every
+  store loading it — from enterprises to one-person shops — serves the skimmer. Size is irrelevant.
+- **Detection takes longer.** A large retailer may have monitoring that catches an injected script
+  in days. A small store without monitoring gives the attacker a longer, quieter harvest.
+
+A skimmer on a store taking twenty orders a day is still a profitable skimmer, because it cost the
+attacker almost nothing to place.
+
+## What PCI DSS v4 requires now
+
+The PCI Security Standards Council responded to this exact attack class with two requirements that
+became mandatory on 31 March 2025:
+
+- **Requirement 6.4.3** — maintain an **inventory of all scripts** on your payment pages, with a
+  written business justification for each, an authorization for each, and a method to assure the
+  integrity of each script. In short: know every script, know why it is there, and be able to tell
+  when its code changes.
+- **Requirement 11.6.1** — deploy a **change- and tamper-detection mechanism** on payment pages
+  that alerts you to unauthorized modification of the HTTP headers and the script contents the
+  consumer's browser receives, evaluated **at least once every seven days**.
+
+Together they attack the problem from both ends: 6.4.3 makes you establish what _should_ be on the
+page, and 11.6.1 makes you notice when reality drifts from that. Note that under PCI DSS v4, even
+merchants on the lightweight SAQ A questionnaire are expected to address these script controls for
+the page that delivers or redirects to payment — outsourcing the card form no longer means there is
+nothing to do.
+
+## A practical defence checklist
+
+You do not need an enterprise budget to make e-skimming dramatically harder. Work through these:
+
+1. **Build a script inventory.** List every script that loads on your payment page — first-party,
+   plugin, and third-party — with its URL, purpose, and owner. If you cannot justify a script,
+   remove it. (This is 6.4.3, and it is also just good hygiene.)
+2. **Add Subresource Integrity (SRI) where you can.** For scripts served from third-party hosts
+   with stable versions, an `integrity` attribute makes the browser refuse to run the file if its
+   contents change.
+3. **Set a Content-Security-Policy (CSP).** A CSP restricts which domains scripts can load from and
+   where data can be sent. Even a modest policy blocks the skimmer's easiest move — posting card
+   data to an attacker-controlled domain.
+4. **Monitor for change.** Re-check the page on a schedule: compare the set of scripts, their
+   content hashes, and your security headers against your authorized baseline, and alert on any
+   drift. Weekly is the compliance floor; daily is a safer habit.
+5. **Keep the boring things patched.** Most footholds come from outdated plugins, themes, and weak
+   admin credentials. Updates and strong authentication close the door the loader walks through.
+6. **Minimize what runs on the payment page.** Every tag you drop from the checkout is one less
+   thing to inventory, justify, and worry about.
+
+## Where ScriptProof fits
+
+The checklist above is entirely doable by hand — the hard part is doing it _every week, forever_.
+That repetition is the specific job ScriptProof automates: it crawls your verified payment pages on
+a schedule, fingerprints every script, maintains your authorized inventory with justifications,
+watches your security headers, alerts you when anything changes, and produces the periodic evidence
+document that 6.4.3 and 11.6.1 assessments ask for. It supports those controls and generates
+supporting evidence; it does not certify compliance — your exact obligations should always be
+confirmed with your acquirer or a QSA.
+
+E-skimming works because nobody is looking at the scripts on the payment page. Be the store where
+someone is.

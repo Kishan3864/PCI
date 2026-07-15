@@ -33,6 +33,22 @@ export const BLOG_POSTS: BlogPost[] = [
     date: '2026-06-30',
     readingMinutes: 8,
   },
+  {
+    slug: 'what-is-e-skimming-magecart',
+    title: 'What is e-skimming (Magecart) and why small stores are targets',
+    description:
+      'How web skimming attacks actually work, why neither shoppers nor owners notice them, and the script controls PCI DSS v4 now expects every payment page to have.',
+    date: '2026-07-15',
+    readingMinutes: 7,
+  },
+  {
+    slug: 'build-script-inventory-6-4-3',
+    title: 'How to build a payment-page script inventory (step by step)',
+    description:
+      'A hands-on walkthrough for PCI DSS 6.4.3: find every script on your payment page with devtools, record it properly, write justifications auditors accept, and keep it current.',
+    date: '2026-07-15',
+    readingMinutes: 8,
+  },
 ];
 
 export function getPost(slug: string): BlogPost | undefined {
