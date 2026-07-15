@@ -50,13 +50,13 @@ export default function SignupPage() {
     <Reveal>
       <Card className="glass-strong rounded-[2px] p-8">
         <div className="mb-6 flex flex-col items-center text-center">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.7)]">
             <Sparkles className="h-5 w-5" />
           </div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900">
             Create your <GradientText>account</GradientText>
           </h1>
-          <p className="mt-1.5 text-sm text-slate-400">
+          <p className="mt-1.5 text-sm text-slate-600">
             14-day free trial. No card required to look around.
           </p>
         </div>
@@ -81,7 +81,7 @@ export default function SignupPage() {
             />
           </div>
           {error ? (
-            <p className="rounded-[2px] border border-rose-400/30 bg-rose-400/10 px-3 py-2 text-sm text-rose-200">
+            <p className="rounded-[2px] border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
               {error}
             </p>
           ) : null}
@@ -91,7 +91,10 @@ export default function SignupPage() {
         </form>
         <p className="mt-6 text-center text-sm text-slate-500">
           Already have an account?{' '}
-          <Link href="/login" className="font-medium text-cyan-300 hover:text-cyan-200 hover:underline">
+          <Link
+            href="/login"
+            className="font-medium text-blue-700 hover:text-blue-800 hover:underline"
+          >
             Log in
           </Link>
         </p>

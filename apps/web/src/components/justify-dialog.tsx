@@ -48,8 +48,8 @@ export function JustifyDialog({ scriptId, scriptName, action }: JustifyDialogPro
             <div
               className={`flex h-10 w-10 items-center justify-center rounded-[2px] ring-1 ring-inset ${
                 authorize
-                  ? 'bg-emerald-400/10 text-emerald-300 ring-emerald-400/30'
-                  : 'bg-rose-400/10 text-rose-300 ring-rose-400/30'
+                  ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/25'
+                  : 'bg-rose-50 text-rose-700 ring-rose-600/25'
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -65,7 +65,7 @@ export function JustifyDialog({ scriptId, scriptName, action }: JustifyDialogPro
           <input type="hidden" name="action" value={action} />
           <div className="space-y-1.5">
             <Label htmlFor={`justification-${scriptId}`}>
-              Written justification <span className="text-rose-400">*</span>
+              Written justification <span className="text-rose-600">*</span>
             </Label>
             <Textarea
               id={`justification-${scriptId}`}
@@ -84,7 +84,7 @@ export function JustifyDialog({ scriptId, scriptName, action }: JustifyDialogPro
               a timestamp.
             </p>
           </div>
-          {state && !state.ok ? <p className="text-sm text-rose-400">{state.message}</p> : null}
+          {state && !state.ok ? <p className="text-sm text-rose-600">{state.message}</p> : null}
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
               Cancel

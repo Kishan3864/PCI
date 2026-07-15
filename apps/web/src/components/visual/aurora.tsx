@@ -1,12 +1,12 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Aurora — deep cyan/blue signal glows drifting over the dark canvas.
+ * Aurora — soft blue/cyan/sky glows drifting over the light canvas.
  * Pure CSS (no client JS). Drop into any `relative` container; it sits behind
  * content at -z-10 and is aria-hidden.
  */
 export function Aurora({ className, muted = false }: { className?: string; muted?: boolean }) {
-  const o = muted ? 0.16 : 0.3;
+  const o = muted ? 0.25 : 0.45;
   return (
     <div
       aria-hidden
@@ -20,7 +20,7 @@ export function Aurora({ className, muted = false }: { className?: string; muted
           width: '44rem',
           height: '44rem',
           opacity: o,
-          background: 'radial-gradient(circle, #22d3ee, transparent 62%)',
+          background: 'radial-gradient(circle, #93c5fd, transparent 62%)',
         }}
       />
       <div
@@ -31,7 +31,7 @@ export function Aurora({ className, muted = false }: { className?: string; muted
           width: '40rem',
           height: '40rem',
           opacity: o,
-          background: 'radial-gradient(circle, #3b82f6, transparent 62%)',
+          background: 'radial-gradient(circle, #a5f3fc, transparent 62%)',
         }}
       />
       <div
@@ -42,7 +42,7 @@ export function Aurora({ className, muted = false }: { className?: string; muted
           width: '36rem',
           height: '36rem',
           opacity: o * 0.7,
-          background: 'radial-gradient(circle, #0ea5e9, transparent 62%)',
+          background: 'radial-gradient(circle, #bae6fd, transparent 62%)',
         }}
       />
     </div>

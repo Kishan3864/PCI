@@ -19,7 +19,7 @@ export function TerminalScan({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'corner-frame w-full max-w-xl rounded-[2px] border border-cyan-400/20 bg-surface-950/95 font-mono text-[12px] leading-6 shadow-[0_30px_80px_-30px_rgba(34,211,238,0.3)]',
+        'corner-frame corner-frame-dark w-full max-w-xl rounded-[2px] border border-cyan-400/20 bg-surface-950/95 font-mono text-[12px] leading-6 shadow-[0_30px_80px_-30px_rgba(11,37,69,0.5)]',
         className,
       )}
     >

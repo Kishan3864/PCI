@@ -58,19 +58,19 @@ export default async function ChangesPage({ params }: { params: Promise<{ siteId
     : [];
 
   const railColor = {
-    info: 'bg-sky-400',
-    warning: 'bg-amber-400',
-    critical: 'bg-rose-500',
+    info: 'bg-sky-500',
+    warning: 'bg-amber-500',
+    critical: 'bg-rose-600',
   } as const;
 
   return (
     <div className="space-y-8">
       <Reveal>
         <div className="space-y-2">
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">
             Change <GradientText>timeline</GradientText>
           </h1>
-          <p className="max-w-2xl text-sm leading-6 text-slate-400">
+          <p className="max-w-2xl text-sm leading-6 text-slate-600">
             Every new, modified or removed script and every security-header change detected on your
             pages — the tamper-detection trail behind requirement 11.6.1.
           </p>
@@ -81,10 +81,10 @@ export default async function ChangesPage({ params }: { params: Promise<{ siteId
         <Reveal delay={80}>
           <Card>
             <CardContent className="flex flex-col items-center gap-4 py-20 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200">
                 <History className="h-6 w-6" />
               </div>
-              <p className="font-semibold text-white">No changes detected</p>
+              <p className="font-semibold text-navy-900">No changes detected</p>
               <p className="max-w-md text-sm leading-6 text-slate-500">
                 After the baseline scan, every new, modified or removed script and every security
                 header change on your pages shows up here.
@@ -112,14 +112,14 @@ export default async function ChangesPage({ params }: { params: Promise<{ siteId
                           <Badge variant={severityVariant[change.severity]}>
                             {change.severity}
                           </Badge>
-                          <span className="font-semibold text-white">
+                          <span className="font-semibold text-navy-900">
                             {CHANGE_TYPE_LABELS[change.type] ?? change.type}
                           </span>
                           <span className="text-xs text-slate-500">
                             {page ? `${page.label} · ${page.url}` : ''}
                           </span>
                         </div>
-                        <p className="break-all rounded-[2px] bg-surface-900/70 px-3 py-2 font-mono text-xs text-slate-300 ring-1 ring-inset ring-slate-400/15">
+                        <p className="break-all rounded-[2px] bg-white px-3 py-2 font-mono text-xs text-slate-600 shadow-sm ring-1 ring-inset ring-slate-200">
                           {changeSummary(change.type, change.detail)}
                         </p>
                         <p className="text-xs text-slate-500">

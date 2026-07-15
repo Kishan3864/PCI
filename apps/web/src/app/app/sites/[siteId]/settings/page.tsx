@@ -40,20 +40,20 @@ export default async function SettingsPage({
     <div className="mx-auto max-w-4xl space-y-8">
       <Reveal>
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900">
             Site <GradientText>settings</GradientText>
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-slate-600">
             Manage the pages we monitor and confirm domain ownership for{' '}
-            <span className="font-medium text-white">{site.domain}</span>.
+            <span className="font-medium text-navy-900">{site.domain}</span>.
           </p>
         </div>
       </Reveal>
 
       {justVerified ? (
         <Reveal>
-          <div className="flex items-start gap-3 rounded-[2px] border border-emerald-400/30 bg-emerald-400/5 px-4 py-3 text-sm text-emerald-300 backdrop-blur-sm">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+          <div className="flex items-start gap-3 rounded-[2px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
             <span>
               Domain verified — monitoring is active. The baseline scan for existing pages has been
               queued.
@@ -66,7 +66,7 @@ export default async function SettingsPage({
         <Card>
           <CardHeader>
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white">
                 <FileStack className="h-5 w-5" />
               </div>
               <div className="space-y-1.5">
@@ -97,7 +97,7 @@ export default async function SettingsPage({
                 />
               ))}
             </div>
-            <div className="mt-6 border-t border-slate-400/15 pt-6">
+            <div className="mt-6 border-t border-slate-200 pt-6">
               <AddPageForm siteId={site.id} domain={site.domain} allow6h={allow6h} />
             </div>
           </CardContent>
@@ -108,7 +108,7 @@ export default async function SettingsPage({
         <Card>
           <CardHeader>
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white">
                 <ShieldCheck className="h-5 w-5" />
               </div>
               <div className="space-y-1.5">
@@ -122,7 +122,7 @@ export default async function SettingsPage({
           <CardContent className="space-y-4 text-sm">
             {site.verifiedAt ? (
               <>
-                <p className="flex flex-wrap items-center gap-2 text-slate-400">
+                <p className="flex flex-wrap items-center gap-2 text-slate-600">
                   <Badge variant="success">
                     <CheckCircle2 className="h-3.5 w-3.5" /> Verified
                   </Badge>
@@ -141,7 +141,7 @@ export default async function SettingsPage({
                   <Badge variant="warning">Not verified</Badge>
                   <span className="text-slate-500">Monitoring is paused until verified.</span>
                 </div>
-                <p className="text-slate-400">
+                <p className="text-slate-600">
                   This site is not verified yet. Monitoring and scanning are disabled until you
                   prove domain ownership.
                 </p>

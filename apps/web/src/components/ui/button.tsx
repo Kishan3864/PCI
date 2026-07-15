@@ -4,20 +4,20 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'group relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[2px] text-sm font-semibold uppercase tracking-wide transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-900 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
+  'group relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[2px] text-sm font-semibold uppercase tracking-wide transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
   {
     variants: {
       variant: {
         default:
-          'shimmer bg-gradient-to-b from-cyan-400 to-cyan-500 text-surface-900 shadow-[0_10px_30px_-10px_rgba(34,211,238,0.6)] hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(34,211,238,0.8)]',
+          'shimmer bg-gradient-to-b from-blue-600 to-blue-700 text-white shadow-[0_10px_28px_-10px_rgba(37,99,235,0.55)] hover:-translate-y-0.5 hover:shadow-[0_16px_38px_-12px_rgba(37,99,235,0.7)]',
         destructive:
-          'shimmer bg-gradient-to-b from-rose-500 to-rose-600 text-white shadow-[0_10px_30px_-10px_rgba(244,63,94,0.5)] hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-12px_rgba(244,63,94,0.7)]',
+          'shimmer bg-gradient-to-b from-rose-600 to-rose-700 text-white shadow-[0_10px_28px_-10px_rgba(225,29,72,0.45)] hover:-translate-y-0.5 hover:shadow-[0_16px_38px_-12px_rgba(225,29,72,0.6)]',
         outline:
-          'border border-cyan-400/40 bg-transparent text-cyan-300 hover:-translate-y-0.5 hover:border-cyan-400/80 hover:bg-cyan-400/10 hover:text-cyan-200',
+          'border border-navy-200 bg-white text-navy-800 shadow-sm hover:-translate-y-0.5 hover:border-blue-400 hover:bg-blue-50/50 hover:text-blue-800 hover:shadow-md',
         secondary:
-          'border border-surface-600 bg-surface-700 text-slate-200 hover:border-cyan-400/40 hover:bg-surface-600',
-        ghost: 'normal-case tracking-normal text-slate-300 hover:bg-cyan-400/10 hover:text-cyan-300',
-        link: 'normal-case tracking-normal text-cyan-400 underline-offset-4 hover:underline',
+          'border border-blue-100 bg-blue-50 text-blue-800 hover:border-blue-200 hover:bg-blue-100',
+        ghost: 'normal-case tracking-normal text-slate-600 hover:bg-blue-50 hover:text-blue-800',
+        link: 'normal-case tracking-normal text-blue-700 underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-9 px-4 py-2',

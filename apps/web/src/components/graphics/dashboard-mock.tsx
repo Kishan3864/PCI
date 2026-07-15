@@ -19,7 +19,7 @@ export function DashboardMock({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'corner-frame relative w-full max-w-2xl rounded-[2px] border border-cyan-400/20 bg-surface-900/95 shadow-[0_40px_120px_-40px_rgba(34,211,238,0.35)]',
+        'corner-frame corner-frame-dark relative w-full max-w-2xl rounded-[2px] border border-cyan-400/20 bg-surface-900/95 shadow-[0_40px_120px_-40px_rgba(11,37,69,0.55)]',
         className,
       )}
     >

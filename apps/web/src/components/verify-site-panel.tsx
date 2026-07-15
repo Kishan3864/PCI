@@ -18,7 +18,7 @@ interface VerifySitePanelProps {
 /** Numbered step marker — sharp, mono, Sentinel style. */
 function StepNumber({ n }: { n: number }) {
   return (
-    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[2px] bg-cyan-400/10 font-mono text-[11px] font-bold text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[2px] bg-blue-50 font-mono text-[11px] font-bold text-blue-700 ring-1 ring-inset ring-blue-600/20">
       {String(n).padStart(2, '0')}
     </span>
   );
@@ -30,11 +30,11 @@ function MonoCopyBlock({ label, value }: { label: string; value: string }) {
 
   return (
     <div>
-      <p className="mb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-cyan-400">
+      <p className="mb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-blue-700">
         {label}
       </p>
-      <div className="flex items-start gap-2 rounded-[2px] border border-cyan-400/20 bg-surface-950 p-3.5 font-mono">
-        <code className="flex-1 break-all text-xs leading-5 text-slate-300">{value}</code>
+      <div className="flex items-start gap-2 rounded-[2px] border border-navy-800 bg-navy-950 p-3.5 font-mono">
+        <code className="flex-1 break-all text-xs leading-5 text-cyan-200">{value}</code>
         <button
           type="button"
           aria-label="Copy to clipboard"
@@ -54,7 +54,7 @@ function MonoCopyBlock({ label, value }: { label: string; value: string }) {
 
 function VerifyError({ message }: { message: string }) {
   return (
-    <p className="flex items-start gap-2 rounded-[2px] bg-rose-400/10 px-3 py-2 text-sm text-rose-300 ring-1 ring-inset ring-rose-400/30">
+    <p className="flex items-start gap-2 rounded-[2px] bg-rose-50 px-3 py-2 text-sm text-rose-700 ring-1 ring-inset ring-rose-600/20">
       <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
       <span>{message}</span>
     </p>
@@ -71,7 +71,7 @@ export function VerifySitePanel({ siteId, domain, txtRecord, metaTag }: VerifySi
         <Card className="card-lift h-full">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                 <Server className="h-5 w-5" />
               </div>
               <div className="space-y-1">
@@ -86,16 +86,16 @@ export function VerifySitePanel({ siteId, domain, txtRecord, metaTag }: VerifySi
           <CardContent className="space-y-4">
             <div className="flex items-start gap-3">
               <StepNumber n={1} />
-              <p className="pt-0.5 text-sm leading-6 text-slate-400">
+              <p className="pt-0.5 text-sm leading-6 text-slate-600">
                 Open the DNS settings for{' '}
-                <span className="font-mono text-slate-300">{domain.split(':')[0]}</span> at your
-                DNS provider.
+                <span className="font-mono text-navy-800">{domain.split(':')[0]}</span> at your DNS
+                provider.
               </p>
             </div>
             <div className="flex items-start gap-3">
               <StepNumber n={2} />
               <div className="min-w-0 flex-1 pt-0.5">
-                <p className="mb-3 text-sm leading-6 text-slate-400">
+                <p className="mb-3 text-sm leading-6 text-slate-600">
                   Add a TXT record with this exact value.
                 </p>
                 <MonoCopyBlock label="TXT record value" value={txtRecord} />
@@ -104,7 +104,7 @@ export function VerifySitePanel({ siteId, domain, txtRecord, metaTag }: VerifySi
             <div className="flex items-start gap-3">
               <StepNumber n={3} />
               <div className="flex-1 pt-0.5">
-                <p className="mb-3 text-sm leading-6 text-slate-400">
+                <p className="mb-3 text-sm leading-6 text-slate-600">
                   Wait for DNS to propagate (usually minutes), then check.
                 </p>
                 <form action={dnsAction}>
@@ -125,7 +125,7 @@ export function VerifySitePanel({ siteId, domain, txtRecord, metaTag }: VerifySi
         <Card className="card-lift h-full">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                 <Code2 className="h-5 w-5" />
               </div>
               <div className="space-y-1">
@@ -140,17 +140,17 @@ export function VerifySitePanel({ siteId, domain, txtRecord, metaTag }: VerifySi
           <CardContent className="space-y-4">
             <div className="flex items-start gap-3">
               <StepNumber n={1} />
-              <p className="pt-0.5 text-sm leading-6 text-slate-400">
+              <p className="pt-0.5 text-sm leading-6 text-slate-600">
                 Open the template that renders the{' '}
-                <code className="font-mono text-slate-300">&lt;head&gt;</code> of your homepage.
+                <code className="font-mono text-navy-800">&lt;head&gt;</code> of your homepage.
               </p>
             </div>
             <div className="flex items-start gap-3">
               <StepNumber n={2} />
               <div className="min-w-0 flex-1 pt-0.5">
-                <p className="mb-3 text-sm leading-6 text-slate-400">
+                <p className="mb-3 text-sm leading-6 text-slate-600">
                   Paste this tag anywhere inside the{' '}
-                  <code className="font-mono text-slate-300">&lt;head&gt;</code>.
+                  <code className="font-mono text-navy-800">&lt;head&gt;</code>.
                 </p>
                 <MonoCopyBlock label="Meta tag" value={metaTag} />
               </div>
@@ -158,7 +158,7 @@ export function VerifySitePanel({ siteId, domain, txtRecord, metaTag }: VerifySi
             <div className="flex items-start gap-3">
               <StepNumber n={3} />
               <div className="flex-1 pt-0.5">
-                <p className="mb-3 text-sm leading-6 text-slate-400">
+                <p className="mb-3 text-sm leading-6 text-slate-600">
                   Deploy the change so it’s live on your homepage, then check.
                 </p>
                 <form action={metaAction}>

@@ -14,7 +14,7 @@ export function EvidenceMock({ className }: { className?: string }) {
         className="absolute -right-3 top-3 h-full w-full rounded-[2px] border border-slate-400/10 bg-surface-800/60"
       />
       {/* front page */}
-      <div className="corner-frame relative rounded-[2px] border border-cyan-400/20 bg-surface-900/95 p-6 shadow-[0_30px_80px_-30px_rgba(34,211,238,0.3)]">
+      <div className="corner-frame corner-frame-dark relative rounded-[2px] border border-cyan-400/20 bg-surface-900/95 p-6 shadow-[0_30px_80px_-30px_rgba(11,37,69,0.5)]">
         <div className="flex items-center justify-between border-b border-slate-400/10 pb-4">
           <div className="flex items-center gap-2.5">
             <span className="flex h-9 w-9 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900">

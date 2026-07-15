@@ -93,9 +93,7 @@ const monitored = [
 ];
 
 function Kicker({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">{children}</p>
-  );
+  return <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">{children}</p>;
 }
 
 export default function LandingPage() {
@@ -108,20 +106,20 @@ export default function LandingPage() {
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 py-20 lg:grid-cols-[1.05fr_1fr] lg:py-28">
           <div>
             <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-[2px] border border-cyan-400/30 bg-cyan-400/5 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-300">
+              <span className="inline-flex items-center gap-2 rounded-[2px] border border-blue-200 bg-blue-50/80 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-700">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 PCI DSS v4.0.1 · Req. 6.4.3 &amp; 11.6.1
               </span>
             </Reveal>
             <Reveal delay={80}>
-              <h1 className="mt-6 text-4xl font-bold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.4rem]">
+              <h1 className="mt-6 text-4xl font-bold leading-[1.06] tracking-tight text-navy-950 sm:text-5xl lg:text-[3.4rem]">
                 Every script on your checkout.
                 <br />
                 <GradientText animated>Watched. Fingerprinted. Proven.</GradientText>
               </h1>
             </Reveal>
             <Reveal delay={160}>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-slate-400">
+              <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
                 ScriptProof keeps an inventory of every script on your payment pages, records why
                 each one is authorized, detects tampering, and turns it all into evidence you can
                 hand to your bank — no agent install required to start.
@@ -142,13 +140,13 @@ export default function LandingPage() {
             <Reveal delay={320}>
               <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
                 <span className="inline-flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-cyan-400" /> No agent install
+                  <CheckCircle2 className="h-4 w-4 text-blue-600" /> No agent install
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-cyan-400" /> 14-day trial
+                  <CheckCircle2 className="h-4 w-4 text-blue-600" /> 14-day trial
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-cyan-400" /> Never touches card data
+                  <CheckCircle2 className="h-4 w-4 text-blue-600" /> Never touches card data
                 </span>
               </p>
             </Reveal>
@@ -163,7 +161,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Trust / compliance badge bar ─────────────────────────────── */}
-      <section className="border-y border-cyan-400/10 bg-surface-850/70">
+      <section className="border-y border-slate-200 bg-slate-50/70">
         <div className="mx-auto max-w-6xl px-6 py-10">
           <Reveal>
             <TrustBar />
@@ -174,14 +172,14 @@ export default function LandingPage() {
       {/* ── Stat band ────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-6 pt-16">
         <Reveal>
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-slate-400/15 bg-slate-400/15 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-slate-200 bg-slate-200 md:grid-cols-4">
             {[
               { value: 2, suffix: '', label: 'PCI controls supported (6.4.3 · 11.6.1)' },
               { value: 256, prefix: 'SHA-', label: 'fingerprint on every script' },
               { value: 6, suffix: ' KB', label: 'optional snippet — fails silently' },
               { value: 0, suffix: '', label: 'cardholder data ever touched' },
             ].map((stat) => (
-              <div key={stat.label} className="bg-surface-900 p-7 text-center">
+              <div key={stat.label} className="bg-white p-7 text-center">
                 <div className="font-display text-3xl font-bold sm:text-4xl">
                   <GradientText>
                     <AnimatedCounter
@@ -205,10 +203,10 @@ export default function LandingPage() {
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <Kicker>The platform</Kicker>
-              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950 sm:text-4xl">
                 Monitoring and evidence, without a security team
               </h2>
-              <p className="mt-4 text-slate-400">
+              <p className="mt-4 text-slate-600">
                 The controls auditors ask about — packaged for small merchants and busy agencies.
               </p>
             </div>
@@ -216,15 +214,15 @@ export default function LandingPage() {
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {modules.map((m, i) => (
               <Reveal key={m.title} delay={i * 90}>
-                <SpotlightCard className="card-lift corner-frame h-full rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-6">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
+                <SpotlightCard className="card-lift corner-frame h-full rounded-[2px] border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.6)]">
                     <m.icon className="h-5 w-5" />
                   </div>
-                  <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                  <p className="mt-5 text-[11px] font-bold uppercase tracking-wider text-blue-700">
                     {m.kicker}
                   </p>
-                  <h3 className="mt-1 font-semibold text-white">{m.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">{m.body}</p>
+                  <h3 className="mt-1 font-semibold text-navy-900">{m.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{m.body}</p>
                 </SpotlightCard>
               </Reveal>
             ))}
@@ -232,20 +230,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Threat model (diagram left, copy right) ──────────────────── */}
-      <section className="border-y border-cyan-400/10 bg-surface-850/70 py-24">
+      {/* ── Threat model (dark diagram panel left, copy right) ───────── */}
+      <section className="border-y border-slate-200 bg-slate-50/70 py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 lg:grid-cols-2">
           <Reveal>
-            <div className="corner-frame rounded-[2px] border border-slate-400/15 bg-surface-900/80 p-6">
+            <div className="corner-frame corner-frame-dark rounded-[2px] border border-navy-800 bg-surface-900 p-6 shadow-[0_30px_80px_-30px_rgba(11,37,69,0.55)]">
               <ThreatDiagram />
             </div>
           </Reveal>
           <Reveal delay={120}>
             <Kicker>The threat</Kicker>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950">
               Skimmers hide in the scripts you already trust
             </h2>
-            <p className="mt-5 leading-7 text-slate-400">
+            <p className="mt-5 leading-7 text-slate-600">
               Since PCI DSS v4.0, requirements 6.4.3 and 11.6.1 ask merchants to maintain an
               authorized inventory of all payment-page scripts and to detect tampering with page
               content and HTTP headers at least weekly. That applies to small shops too — skimming
@@ -259,8 +257,8 @@ export default function LandingPage() {
                 'Changes are invisible to shoppers — and to you, without monitoring',
                 'Your acquirer can ask for proof of these controls at any time',
               ].map((point) => (
-                <li key={point} className="flex items-start gap-3 text-sm text-slate-300">
-                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+                <li key={point} className="flex items-start gap-3 text-sm text-slate-700">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
                   {point}
                 </li>
               ))}
@@ -276,7 +274,7 @@ export default function LandingPage() {
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <Kicker>What lands in your hands</Kicker>
-              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950 sm:text-4xl">
                 From live scan to bank-ready evidence
               </h2>
             </div>
@@ -285,17 +283,17 @@ export default function LandingPage() {
             <Reveal>
               <div className="flex flex-col items-center gap-4">
                 <TerminalScan />
-                <p className="text-center text-sm text-slate-400">
-                  <span className="font-semibold text-white">1 · Scheduled scans</span> fingerprint
-                  every script &amp; header
+                <p className="text-center text-sm text-slate-600">
+                  <span className="font-semibold text-navy-900">1 · Scheduled scans</span>{' '}
+                  fingerprint every script &amp; header
                 </p>
               </div>
             </Reveal>
             <Reveal delay={120}>
               <div className="flex flex-col items-center gap-4">
                 <AlertMock />
-                <p className="text-center text-sm text-slate-400">
-                  <span className="font-semibold text-white">2 · Instant alerts</span> with
+                <p className="text-center text-sm text-slate-600">
+                  <span className="font-semibold text-navy-900">2 · Instant alerts</span> with
                   before/after hashes when something changes
                 </p>
               </div>
@@ -303,8 +301,8 @@ export default function LandingPage() {
             <Reveal delay={240}>
               <div className="flex flex-col items-center gap-4">
                 <EvidenceMock />
-                <p className="text-center text-sm text-slate-400">
-                  <span className="font-semibold text-white">3 · Monthly Evidence Pack</span> —
+                <p className="text-center text-sm text-slate-600">
+                  <span className="font-semibold text-navy-900">3 · Monthly Evidence Pack</span> —
                   the paper trail for your SAQ
                 </p>
               </div>
@@ -314,12 +312,12 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it works ─────────────────────────────────────────────── */}
-      <section className="border-y border-cyan-400/10 bg-surface-850/70 py-24">
+      <section className="border-y border-slate-200 bg-slate-50/70 py-24">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
             <div className="mx-auto max-w-2xl text-center">
               <Kicker>How it works</Kicker>
-              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white">
+              <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950">
                 Four steps to a signed, dated paper trail
               </h2>
             </div>
@@ -327,17 +325,17 @@ export default function LandingPage() {
           <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, i) => (
               <Reveal key={step.title} delay={i * 90}>
-                <div className="card-lift h-full rounded-[2px] border border-slate-400/15 bg-surface-900/80 p-6">
+                <div className="card-lift h-full rounded-[2px] border border-slate-200 bg-white p-6 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                       <step.icon className="h-5 w-5" />
                     </div>
-                    <span className="font-display text-2xl font-bold text-surface-600">
+                    <span className="font-display text-2xl font-bold text-slate-200">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                   </div>
-                  <h3 className="mt-5 font-semibold text-white">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">{step.body}</p>
+                  <h3 className="mt-5 font-semibold text-navy-900">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{step.body}</p>
                 </div>
               </Reveal>
             ))}
@@ -354,9 +352,9 @@ export default function LandingPage() {
           {monitored.map((name) => (
             <span
               key={name}
-              className="inline-flex items-center gap-2 rounded-[2px] border border-slate-400/15 bg-surface-800/80 px-4 py-2 text-sm font-medium text-slate-300"
+              className="inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
               {name}
             </span>
           ))}
@@ -366,13 +364,13 @@ export default function LandingPage() {
       {/* ── Agencies strip ───────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-6 pb-8">
         <Reveal>
-          <div className="corner-frame flex flex-col items-start gap-6 rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-8 sm:flex-row sm:items-center">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900">
+          <div className="corner-frame flex flex-col items-start gap-6 rounded-[2px] border border-slate-200 bg-white p-8 shadow-sm sm:flex-row sm:items-center">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white">
               <Building2 className="h-6 w-6" />
             </div>
             <div className="flex-1">
-              <h3 className="font-display text-xl font-bold text-white">Run an agency?</h3>
-              <p className="mt-1 text-sm leading-6 text-slate-400">
+              <h3 className="font-display text-xl font-bold text-navy-950">Run an agency?</h3>
+              <p className="mt-1 text-sm leading-6 text-slate-600">
                 Manage many client stores from one place, with white-label Evidence Packs and CSV
                 export on the Agency plan. Zero performance hit — monitoring runs on our servers,
                 and the optional snippet is under 6&nbsp;KB and fails silently.
@@ -392,7 +390,7 @@ export default function LandingPage() {
         <Reveal>
           <div className="text-center">
             <Kicker>FAQ</Kicker>
-            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-white">
+            <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-navy-950">
               Frequently asked questions
             </h2>
           </div>
@@ -400,28 +398,36 @@ export default function LandingPage() {
         <dl className="mt-10 space-y-3">
           {faqs.map((faq, i) => (
             <Reveal key={faq.q} delay={i * 60}>
-              <div className="rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-6">
-                <dt className="font-semibold text-white">{faq.q}</dt>
-                <dd className="mt-2 leading-7 text-slate-400">{faq.a}</dd>
+              <div className="rounded-[2px] border border-slate-200 bg-white p-6 shadow-sm">
+                <dt className="font-semibold text-navy-900">{faq.q}</dt>
+                <dd className="mt-2 leading-7 text-slate-600">{faq.a}</dd>
               </div>
             </Reveal>
           ))}
         </dl>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────────── */}
+      {/* ── CTA (dark contrast band — enterprise style) ──────────────── */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
         <Reveal>
-          <div className="corner-frame relative isolate overflow-hidden rounded-[2px] border border-cyan-400/30 bg-surface-850 px-8 py-16 text-center sm:px-16">
-            <div aria-hidden className="sp-grid absolute inset-0 -z-10" />
+          <div className="corner-frame corner-frame-dark relative isolate overflow-hidden rounded-[2px] border border-navy-800 bg-navy-950 px-8 py-16 text-center shadow-[0_30px_80px_-30px_rgba(11,37,69,0.6)] sm:px-16">
             <div
               aria-hidden
-              className="absolute -bottom-24 left-1/2 -z-10 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-cyan-400/15 blur-3xl"
+              className="absolute inset-0 -z-10 opacity-60"
+              style={{
+                backgroundImage:
+                  'linear-gradient(to right, rgba(103,232,249,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(103,232,249,0.06) 1px, transparent 1px)',
+                backgroundSize: '46px 46px',
+              }}
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-24 left-1/2 -z-10 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-blue-500/25 blur-3xl"
             />
             <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Start protecting your checkout <GradientText animated>today</GradientText>
+              Start protecting your checkout today
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-slate-400">
+            <p className="mx-auto mt-4 max-w-xl text-slate-300">
               Run a free scan in seconds, or start a 14-day trial and get your first Evidence Pack
               this month.
             </p>
@@ -431,7 +437,12 @@ export default function LandingPage() {
                   Start 14-day free trial <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button size="xl" variant="outline" asChild>
+              <Button
+                size="xl"
+                variant="outline"
+                asChild
+                className="border-white/30 bg-transparent text-white hover:border-white/60 hover:bg-white/10 hover:text-white"
+              >
                 <Link href="/free-scan">Run a free scan</Link>
               </Button>
             </div>

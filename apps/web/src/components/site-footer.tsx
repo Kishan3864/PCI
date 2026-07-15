@@ -23,28 +23,28 @@ const groups = [
 
 export function SiteFooter() {
   return (
-    <footer className="relative mt-20 border-t border-cyan-400/10 bg-surface-950/80">
+    <footer className="relative mt-20 border-t border-slate-200 bg-slate-50/70">
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"
       />
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <Link href="/" className="flex items-center gap-2.5">
               <BrandMark />
-              <span className="font-display text-lg font-bold tracking-tight text-white">
+              <span className="font-display text-lg font-bold tracking-tight text-navy-900">
                 ScriptProof
               </span>
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-6 text-slate-400">
+            <p className="mt-4 max-w-xs text-sm leading-6 text-slate-500">
               Payment-page script monitoring &amp; PCI DSS evidence for merchants and the agencies
               that keep their checkouts safe.
             </p>
           </div>
           {groups.map((group) => (
             <div key={group.title}>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-blue-700">
                 {group.title}
               </h3>
               <ul className="mt-4 space-y-2.5">
@@ -52,7 +52,7 @@ export function SiteFooter() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-400 transition-colors hover:text-cyan-300"
+                      className="text-sm text-slate-600 transition-colors hover:text-blue-700"
                     >
                       {link.label}
                     </Link>
@@ -62,7 +62,7 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
-        <p className="mt-12 max-w-3xl border-t border-slate-400/10 pt-6 text-xs leading-5 text-slate-500">
+        <p className="mt-12 max-w-3xl border-t border-slate-200 pt-6 text-xs leading-5 text-slate-400">
           {DISCLAIMER}
         </p>
       </div>

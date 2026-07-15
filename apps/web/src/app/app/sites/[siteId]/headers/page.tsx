@@ -37,10 +37,10 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
     <div className="space-y-8">
       <Reveal>
         <div className="space-y-2">
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900 sm:text-3xl">
             Security <GradientText>headers</GradientText>
           </h1>
-          <p className="max-w-2xl text-sm leading-6 text-slate-400">
+          <p className="max-w-2xl text-sm leading-6 text-slate-600">
             The full HTTP response header set of every scan is stored for your 11.6.1 evidence. The
             six security-relevant headers below are actively monitored for changes.
           </p>
@@ -51,10 +51,10 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
         <Reveal delay={80}>
           <Card>
             <CardContent className="flex flex-col items-center gap-4 py-20 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+              <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200">
                 <FileWarning className="h-6 w-6" />
               </div>
-              <p className="font-semibold text-white">No header snapshots yet</p>
+              <p className="font-semibold text-navy-900">No header snapshots yet</p>
               <p className="text-sm text-slate-500">Run a scan to capture response headers.</p>
             </CardContent>
           </Card>
@@ -64,7 +64,7 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
           <Reveal key={page.id} delay={Math.min(i, 6) * 70}>
             <Card>
               <CardHeader className="flex-row items-start gap-3 space-y-0">
-                <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                <div className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-[2px] bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div className="min-w-0 space-y-1.5">
@@ -75,7 +75,7 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
                 </div>
               </CardHeader>
               <CardContent>
-                <dl className="divide-y divide-slate-400/10 overflow-hidden rounded-[2px] bg-surface-900/70 ring-1 ring-inset ring-slate-400/15">
+                <dl className="divide-y divide-slate-200 overflow-hidden rounded-[2px] bg-white shadow-sm ring-1 ring-inset ring-slate-200">
                   {TRACKED_HEADERS.map((header) => {
                     const value = snapshot?.headersJson[header];
                     return (
@@ -86,7 +86,7 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
                         <dt className="w-72 shrink-0 font-mono text-xs font-medium text-slate-500">
                           {header}
                         </dt>
-                        <dd className="min-w-0 flex-1 break-all font-mono text-xs text-slate-300">
+                        <dd className="min-w-0 flex-1 break-all font-mono text-xs text-slate-600">
                           {value ?? <Badge variant="warning">missing</Badge>}
                         </dd>
                       </div>
@@ -94,20 +94,20 @@ export default async function HeadersPage({ params }: { params: Promise<{ siteId
                   })}
                 </dl>
                 <details className="mt-4">
-                  <summary className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-cyan-400 transition-colors hover:text-cyan-300">
+                  <summary className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-blue-700 transition-colors hover:text-blue-600">
                     All {Object.keys(snapshot?.headersJson ?? {}).length} response headers
                   </summary>
-                  <dl className="mt-3 space-y-1 rounded-[2px] bg-surface-900/70 p-3 ring-1 ring-inset ring-slate-400/15">
+                  <dl className="mt-3 space-y-1 rounded-[2px] bg-white p-3 shadow-sm ring-1 ring-inset ring-slate-200">
                     {Object.entries(snapshot?.headersJson ?? {})
                       .sort(([a], [b]) => a.localeCompare(b))
                       .map(([name, value]) => (
                         <div key={name} className="flex flex-wrap gap-2 text-xs">
                           <dt
-                            className={`w-72 shrink-0 font-mono ${tracked.has(name) ? 'font-semibold text-cyan-300' : 'text-slate-500'}`}
+                            className={`w-72 shrink-0 font-mono ${tracked.has(name) ? 'font-semibold text-blue-700' : 'text-slate-500'}`}
                           >
                             {name}
                           </dt>
-                          <dd className="min-w-0 flex-1 break-all font-mono text-slate-300">
+                          <dd className="min-w-0 flex-1 break-all font-mono text-slate-600">
                             {value}
                           </dd>
                         </div>

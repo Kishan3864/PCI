@@ -35,7 +35,7 @@ export function FreeScanForm() {
         </div>
       </div>
       {state && !state.ok ? (
-        <p className="mt-3 flex items-center justify-center gap-1.5 rounded-[2px] bg-rose-400/10 px-3 py-2 text-center text-sm font-medium text-rose-300 ring-1 ring-inset ring-rose-400/30">
+        <p className="mt-3 flex items-center justify-center gap-1.5 rounded-[2px] bg-rose-50 px-3 py-2 text-center text-sm font-medium text-rose-700 ring-1 ring-inset ring-rose-600/25">
           <AlertCircle className="h-4 w-4 shrink-0" />
           {state.message}
         </p>

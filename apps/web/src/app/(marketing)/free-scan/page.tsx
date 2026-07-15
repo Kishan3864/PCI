@@ -24,18 +24,18 @@ export default function FreeScanPage() {
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:py-28">
         <div>
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-[2px] border border-cyan-400/30 bg-cyan-400/5 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-300">
+            <span className="inline-flex items-center gap-2 rounded-[2px] border border-blue-200 bg-blue-50/80 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-blue-700">
               <ScanLine className="h-3.5 w-3.5" />
               Instant scan · No account needed
             </span>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-white sm:text-5xl">
+            <h1 className="mt-6 text-4xl font-bold leading-[1.08] tracking-tight text-navy-950 sm:text-5xl">
               Free <GradientText animated>payment-page</GradientText> scan
             </h1>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-400">
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
               Enter a checkout or payment page URL. We'll show you every script it loads, which
               external domains they come from, SRI coverage, and which security headers are missing
               — no account needed.
@@ -47,17 +47,17 @@ export default function FreeScanPage() {
             </div>
           </Reveal>
           <Reveal delay={300}>
-            <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
+            <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-600">
               {seen.map((item) => (
                 <span key={item.label} className="inline-flex items-center gap-1.5">
-                  <item.icon className="h-4 w-4 text-cyan-400" /> {item.label}
+                  <item.icon className="h-4 w-4 text-blue-600" /> {item.label}
                 </span>
               ))}
             </p>
           </Reveal>
           <Reveal delay={360}>
             <p className="mt-6 flex items-start gap-2 text-xs leading-5 text-slate-500">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400/70" />
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-blue-600/70" />
               <span>
                 We only fetch the page you enter and store the report. We never collect card data.
                 Limited to 3 scans per day.

@@ -40,10 +40,10 @@ export default async function DashboardPage() {
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-navy-900">
               Your <GradientText>Sites</GradientText>
             </h1>
-            <p className="mt-2 max-w-xl text-sm text-slate-400">
+            <p className="mt-2 max-w-xl text-sm text-slate-600">
               Every domain ScriptProof watches for you — script inventory, tamper detection, and the
               evidence trail behind each one.
             </p>
@@ -62,15 +62,15 @@ export default async function DashboardPage() {
             <CardContent className="relative flex flex-col items-center gap-4 px-6 py-20 text-center">
               <div
                 aria-hidden
-                className="absolute -top-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-cyan-400/15 blur-3xl"
+                className="absolute -top-16 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-blue-500/10 blur-3xl"
               />
-              <div className="relative flex h-16 w-16 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_16px_36px_-12px_rgba(34,211,238,0.7)]">
+              <div className="relative flex h-16 w-16 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-[0_16px_36px_-12px_rgba(37,99,235,0.5)]">
                 <Globe className="h-8 w-8" />
               </div>
-              <p className="relative font-display text-lg font-semibold text-white">
+              <p className="relative font-display text-lg font-semibold text-navy-900">
                 No sites yet
               </p>
-              <p className="relative max-w-sm text-sm leading-6 text-slate-400">
+              <p className="relative max-w-sm text-sm leading-6 text-slate-600">
                 Add your store's domain, verify you own it, and ScriptProof starts building your
                 script inventory on the first scan.
               </p>
@@ -99,7 +99,7 @@ export default async function DashboardPage() {
                   <Card className="card-lift h-full">
                     <CardHeader className="flex-row items-center justify-between space-y-0">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                           <Globe className="h-5 w-5" />
                         </div>
                         <CardTitle className="text-base">{site.domain}</CardTitle>
@@ -110,20 +110,20 @@ export default async function DashboardPage() {
                         <Badge variant="warning">Unverified</Badge>
                       )}
                     </CardHeader>
-                    <CardContent className="space-y-3 text-sm text-slate-400">
+                    <CardContent className="space-y-3 text-sm text-slate-600">
                       <p className="flex items-center gap-1.5 text-slate-500">
                         <FileText className="h-4 w-4 text-slate-500" />
                         {site.pages.length} monitored page{site.pages.length === 1 ? '' : 's'} ·
                         last scan {formatDateTime(lastScan ?? null)}
                       </p>
                       {criticals > 0 ? (
-                        <p className="flex items-center gap-1.5 font-medium text-rose-300">
+                        <p className="flex items-center gap-1.5 font-medium text-rose-600">
                           <AlertTriangle className="h-4 w-4" />
                           {criticals} unacknowledged critical change{criticals === 1 ? '' : 's'}
                         </p>
                       ) : (
-                        <p className="flex items-center gap-1.5 text-emerald-300">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <p className="flex items-center gap-1.5 text-emerald-700">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                           No open critical changes
                         </p>
                       )}

@@ -9,16 +9,16 @@ export function CopyBlock({ value, label }: { value: string; label?: string }) {
   return (
     <div>
       {label ? (
-        <p className="mb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-cyan-400">
+        <p className="mb-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-blue-700">
           {label}
         </p>
       ) : null}
-      <div className="group relative flex items-start gap-3 overflow-hidden rounded-[2px] border border-cyan-400/20 bg-surface-950 p-3.5 shadow-[0_18px_40px_-24px_rgba(34,211,238,0.35)]">
+      <div className="group relative flex items-start gap-3 overflow-hidden rounded-[2px] border border-navy-800 bg-navy-950 p-3.5 shadow-sm">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent"
         />
-        <code className="relative flex-1 break-all font-mono text-xs leading-5 text-cyan-100">
+        <code className="relative flex-1 break-all font-mono text-xs leading-5 text-cyan-200">
           {value}
         </code>
         <button

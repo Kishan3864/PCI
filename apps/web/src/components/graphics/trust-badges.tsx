@@ -22,7 +22,7 @@ export function ShieldBadge({
   return (
     <div
       className={cn(
-        'flex items-center gap-3 rounded-[2px] border border-slate-400/15 bg-surface-800/80 px-4 py-3 transition-colors hover:border-cyan-400/40',
+        'flex items-center gap-3 rounded-[2px] border border-slate-200 bg-white px-4 py-3 shadow-sm transition-colors hover:border-blue-400/60',
         className,
       )}
     >
@@ -30,16 +30,16 @@ export function ShieldBadge({
         <svg viewBox="0 0 40 44" className="absolute inset-0 h-full w-full" aria-hidden>
           <path
             d="M20 1 37 8v13c0 10.5-7.2 18.6-17 22C10.2 39.6 3 31.5 3 21V8l17-7z"
-            fill="rgba(34,211,238,0.08)"
-            stroke="rgba(34,211,238,0.45)"
+            fill="rgba(37,99,235,0.06)"
+            stroke="rgba(37,99,235,0.45)"
             strokeWidth="1.5"
           />
         </svg>
-        <Icon className="relative h-[18px] w-[18px] text-cyan-300" />
+        <Icon className="relative h-[18px] w-[18px] text-blue-600" />
       </span>
       <div className="leading-tight">
-        <p className="text-sm font-bold text-white">{title}</p>
-        <p className="mt-0.5 text-[11px] text-slate-400">{sub}</p>
+        <p className="text-sm font-bold text-navy-900">{title}</p>
+        <p className="mt-0.5 text-[11px] text-slate-500">{sub}</p>
       </div>
     </div>
   );

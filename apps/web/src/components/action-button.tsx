@@ -31,9 +31,7 @@ export function ActionButton({
         {children}
       </Button>
       {showResult && state ? (
-        <p className={`text-xs ${state.ok ? 'text-emerald-300' : 'text-rose-400'}`}>
-          {state.message}
-        </p>
+        <p className={`text-xs ${state.ok ? 'text-blue-700' : 'text-rose-600'}`}>{state.message}</p>
       ) : null}
     </form>
   );

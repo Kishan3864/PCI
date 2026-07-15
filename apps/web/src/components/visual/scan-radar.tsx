@@ -3,7 +3,7 @@ import type { ComponentType } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
- * ScanRadar — radar disc with a rotating cyan sweep, "script" nodes (one
+ * ScanRadar — radar disc with a rotating blue sweep, "script" nodes (one
  * flagged), a pulsing core, and floating chips narrating the monitoring
  * story. Pure CSS motion. (Radar disc is intentionally circular — it's a
  * radar — while chips/panels stay sharp per the 2px-radius system.)
@@ -43,17 +43,17 @@ function Chip({
       <span
         className={cn(
           'flex h-7 w-7 items-center justify-center rounded-[2px]',
-          tone === 'ok' ? 'bg-cyan-400/15 text-cyan-300' : 'bg-rose-400/15 text-rose-400',
+          tone === 'ok' ? 'bg-blue-50 text-blue-600' : 'bg-rose-50 text-rose-600',
         )}
       >
         <Icon className="h-4 w-4" />
       </span>
       <div className="leading-tight">
-        <p className="font-mono text-xs font-semibold text-white">{label}</p>
+        <p className="font-mono text-xs font-semibold text-navy-900">{label}</p>
         <p
           className={cn(
             'text-[10px] font-medium uppercase tracking-wide',
-            tone === 'ok' ? 'text-cyan-400' : 'text-rose-400',
+            tone === 'ok' ? 'text-blue-600' : 'text-rose-600',
           )}
         >
           {sub}
@@ -69,7 +69,7 @@ export function ScanRadar({ className }: { className?: string }) {
       {/* ambient glow */}
       <div
         aria-hidden
-        className="absolute inset-8 animate-glow rounded-full bg-cyan-400/15 blur-3xl"
+        className="absolute inset-8 animate-glow rounded-full bg-blue-400/20 blur-3xl"
       />
 
       {/* radar disc */}
@@ -79,14 +79,14 @@ export function ScanRadar({ className }: { className?: string }) {
           <div
             key={inset}
             aria-hidden
-            className="absolute rounded-full border border-cyan-400/15"
+            className="absolute rounded-full border border-blue-500/15"
             style={{ inset: `${inset}%` }}
           />
         ))}
 
         {/* crosshair */}
-        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-cyan-400/10" />
-        <div className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-cyan-400/10" />
+        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-blue-500/10" />
+        <div className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-blue-500/10" />
         <div aria-hidden className="sp-grid absolute inset-0 opacity-60" />
 
         {/* rotating sweep */}
@@ -95,7 +95,7 @@ export function ScanRadar({ className }: { className?: string }) {
           className="absolute inset-0 animate-radar"
           style={{
             background:
-              'conic-gradient(from 0deg, rgba(34,211,238,0) 0deg, rgba(34,211,238,0) 296deg, rgba(34,211,238,0.12) 330deg, rgba(34,211,238,0.5) 358deg, rgba(34,211,238,0) 360deg)',
+              'conic-gradient(from 0deg, rgba(37,99,235,0) 0deg, rgba(37,99,235,0) 296deg, rgba(37,99,235,0.1) 330deg, rgba(37,99,235,0.4) 358deg, rgba(37,99,235,0) 360deg)',
           }}
         />
 
@@ -108,7 +108,7 @@ export function ScanRadar({ className }: { className?: string }) {
             <span
               className={cn(
                 'block h-2.5 w-2.5 rounded-full ring-2',
-                n.detect ? 'bg-rose-500 ring-rose-300/40' : 'bg-cyan-400 ring-cyan-300/40',
+                n.detect ? 'bg-rose-500 ring-rose-200' : 'bg-blue-600 ring-blue-200',
               )}
             />
           </div>
@@ -116,15 +116,15 @@ export function ScanRadar({ className }: { className?: string }) {
 
         {/* center core */}
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <span className="absolute -inset-3 animate-pulse-ring rounded-full bg-cyan-400/40" />
-          <span className="relative block h-4 w-4 rounded-full bg-gradient-to-br from-cyan-300 to-blue-500 shadow-[0_0_22px_rgba(34,211,238,0.85)]" />
+          <span className="absolute -inset-3 animate-pulse-ring rounded-full bg-blue-400/40" />
+          <span className="relative block h-4 w-4 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 shadow-[0_0_22px_rgba(37,99,235,0.75)]" />
         </div>
 
         {/* horizontal scan line */}
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 h-16 animate-scan"
-          style={{ background: 'linear-gradient(to bottom, rgba(34,211,238,0.3), transparent)' }}
+          style={{ background: 'linear-gradient(to bottom, rgba(37,99,235,0.18), transparent)' }}
         />
       </div>
 

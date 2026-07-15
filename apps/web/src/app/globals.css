@@ -2,10 +2,10 @@
 @plugin '@tailwindcss/typography';
 
 /* ------------------------------------------------------------------ *
- * ScriptProof design system — "Sentinel Dark"
- * Enterprise security look (jscrambler/reflectiz-class): deep navy
- * canvas, electric cyan/blue accents, SHARP corners (max 2px radius),
- * technical grids, glowing signal accents, trust-forward graphics.
+ * ScriptProof design system — "Sentinel Light"
+ * Enterprise trust look on a LIGHT canvas: white background, deep navy
+ * ink, trust-blue + cyan accents, SHARP corners (max 2px radius),
+ * technical grids, and dark product-screenshot graphics for contrast.
  * Pure CSS (SSR-safe, zero runtime deps).
  * ------------------------------------------------------------------ */
 
@@ -16,8 +16,7 @@
   --font-display:
     var(--font-sora), var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  /* Ink ramp (deep navy) — kept for compatibility; on dark canvas the
-     low numbers are light-ish panels, high numbers near-black */
+  /* Ink ramp (deep navy) — headings & brand ink */
   --color-navy-50: #f0f4f9;
   --color-navy-100: #dce5f0;
   --color-navy-200: #b9cbe0;
@@ -30,7 +29,9 @@
   --color-navy-900: #0b2545;
   --color-navy-950: #061530;
 
-  /* Surface ramp — the dark canvas & panels */
+  /* Surface ramp — INTENTIONALLY DARK. Reserved for the "product
+     screenshot" graphics (DashboardMock, TerminalScan, AlertMock,
+     EvidenceMock, ThreatDiagram wrappers) that sit on the light canvas. */
   --color-surface-950: #050a14;
   --color-surface-900: #070d1a;
   --color-surface-850: #0a1322;
@@ -38,18 +39,18 @@
   --color-surface-700: #122139;
   --color-surface-600: #1a2c49;
 
-  /* Brand — electric cyan (primary signal color) */
-  --color-brand-50: #ecfeff;
-  --color-brand-100: #cffafe;
-  --color-brand-200: #a5f3fc;
-  --color-brand-300: #67e8f9;
-  --color-brand-400: #22d3ee;
-  --color-brand-500: #06b6d4;
-  --color-brand-600: #0891b2;
-  --color-brand-700: #0e7490;
-  --color-brand-800: #155e75;
-  --color-brand-900: #164e63;
-  --color-brand-950: #083344;
+  /* Brand — trust blue (primary) */
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+  --color-brand-900: #1e3a8a;
+  --color-brand-950: #172554;
 
   /* Sharp radius scale — nothing above 2px */
   --radius-app: 2px;
@@ -73,15 +74,15 @@
 
 /* ---- Design tokens (runtime CSS vars) --------------------------- */
 :root {
-  --sp-bg: #070d1a;
-  --sp-ink: #e6edf7;
-  --panel-bg: rgba(13, 24, 44, 0.72);
-  --panel-bg-strong: rgba(13, 24, 44, 0.92);
-  --panel-border: rgba(103, 232, 249, 0.14);
-  --panel-border-soft: rgba(148, 163, 184, 0.14);
-  --panel-shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.65);
-  --glow-cyan: 0 14px 44px -12px rgba(34, 211, 238, 0.45);
-  --grid-line: rgba(103, 232, 249, 0.055);
+  --sp-bg: #ffffff;
+  --sp-ink: #0b2545;
+  --panel-bg: rgba(255, 255, 255, 0.78);
+  --panel-bg-strong: rgba(255, 255, 255, 0.92);
+  --panel-border: rgba(37, 99, 235, 0.18);
+  --panel-border-soft: rgba(11, 37, 69, 0.12);
+  --panel-shadow: 0 14px 40px -18px rgba(11, 37, 69, 0.18);
+  --glow-blue: 0 14px 44px -12px rgba(37, 99, 235, 0.35);
+  --grid-line: rgba(30, 64, 175, 0.07);
 }
 
 /* ---- Base --------------------------------------------------------- */
@@ -110,32 +111,32 @@
   }
 
   ::selection {
-    background: rgba(34, 211, 238, 0.3);
-    color: #eafcff;
+    background: rgba(37, 99, 235, 0.18);
+    color: #0b2545;
   }
 
   /* Custom scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(34, 211, 238, 0.35) transparent;
+    scrollbar-color: rgba(37, 99, 235, 0.35) transparent;
   }
   *::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   *::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, rgba(34, 211, 238, 0.45), rgba(59, 130, 246, 0.45));
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.4), rgba(8, 145, 178, 0.4));
     border-radius: 0;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   *::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, rgba(34, 211, 238, 0.75), rgba(59, 130, 246, 0.75));
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.7), rgba(8, 145, 178, 0.7));
     background-clip: padding-box;
   }
 }
 
-/* ---- Panels (dark "glass") ---------------------------------------- */
+/* ---- Panels (light glass) ------------------------------------------ */
 .glass {
   background: var(--panel-bg);
   backdrop-filter: blur(16px) saturate(140%);
@@ -143,7 +144,7 @@
   border: 1px solid var(--panel-border-soft);
   box-shadow:
     var(--panel-shadow),
-    inset 0 1px 0 0 rgba(148, 163, 184, 0.08);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
 }
 .glass-strong {
   background: var(--panel-bg-strong);
@@ -152,29 +153,18 @@
   border: 1px solid var(--panel-border);
   box-shadow:
     var(--panel-shadow),
-    inset 0 1px 0 0 rgba(148, 163, 184, 0.1);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85);
 }
 
 /* ---- Gradient text ----------------------------------------------- */
 .text-gradient {
-  background-image: linear-gradient(
-    100deg,
-    var(--color-brand-300),
-    var(--color-brand-400) 46%,
-    var(--color-blue-400)
-  );
+  background-image: linear-gradient(100deg, #1d4ed8, #0891b2 52%, #0284c7);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 .text-gradient-animated {
-  background-image: linear-gradient(
-    100deg,
-    var(--color-brand-300),
-    var(--color-brand-400) 30%,
-    var(--color-blue-400) 55%,
-    var(--color-brand-300) 80%
-  );
+  background-image: linear-gradient(100deg, #1d4ed8, #0891b2 30%, #0284c7 55%, #1d4ed8 80%);
   background-size: 220% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -183,17 +173,18 @@
 }
 
 /* ---- Glow --------------------------------------------------------- */
-.glow-cyan {
-  box-shadow: var(--glow-cyan);
+.glow-blue {
+  box-shadow: var(--glow-blue);
 }
-/* legacy alias (pre-rebrand class name) */
+/* legacy aliases (pre-rebrand class names) */
+.glow-cyan,
 .glow-emerald {
-  box-shadow: var(--glow-cyan);
+  box-shadow: var(--glow-blue);
 }
 .glow-ring {
   box-shadow:
-    0 0 0 1px rgba(34, 211, 238, 0.35),
-    0 18px 50px -18px rgba(34, 211, 238, 0.5);
+    0 0 0 1px rgba(37, 99, 235, 0.3),
+    0 18px 50px -18px rgba(37, 99, 235, 0.35);
 }
 
 /* ---- Technical grid overlay --------------------------------------- */
@@ -205,20 +196,20 @@
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 78%);
 }
-/* Fine dot matrix (reflectiz-style texture) */
+/* Fine dot matrix texture */
 .sp-dots {
-  background-image: radial-gradient(rgba(103, 232, 249, 0.14) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(30, 64, 175, 0.12) 1px, transparent 1px);
   background-size: 22px 22px;
   -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, #000 25%, transparent 75%);
   mask-image: radial-gradient(ellipse 70% 55% at 50% 45%, #000 25%, transparent 75%);
 }
 
-/* ---- Signal blobs (dark aurora) ------------------------------------ */
+/* ---- Soft signal blobs (light aurora) ------------------------------ */
 .sp-aurora-blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(70px);
-  opacity: 0.28;
+  filter: blur(64px);
+  opacity: 0.5;
   will-change: transform;
   pointer-events: none;
 }
@@ -232,8 +223,8 @@
 }
 .card-lift:hover {
   transform: translateY(-4px);
-  border-color: rgba(34, 211, 238, 0.4);
-  box-shadow: 0 24px 60px -28px rgba(34, 211, 238, 0.35);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 24px 55px -26px rgba(11, 37, 69, 0.35);
 }
 
 /* ---- Cursor spotlight (SpotlightCard sets --mx/--my) -------------- */
@@ -248,7 +239,7 @@
   border-radius: inherit;
   background: radial-gradient(
     340px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(34, 211, 238, 0.12),
+    rgba(37, 99, 235, 0.1),
     transparent 62%
   );
   opacity: 0;
@@ -282,7 +273,7 @@
   background: linear-gradient(
     100deg,
     transparent 30%,
-    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.45) 50%,
     transparent 70%
   );
   transform: translateX(-120%);
@@ -293,7 +284,7 @@
   transform: translateX(120%);
 }
 
-/* ---- Animated conic border (feature tiles / highlight panels) ----- */
+/* ---- Animated conic border (highlight panels) ---------------------- */
 .aurora-border {
   position: relative;
   background-clip: padding-box;
@@ -304,13 +295,7 @@
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: conic-gradient(
-    from 0deg,
-    var(--color-brand-400),
-    var(--color-blue-500),
-    var(--color-brand-600),
-    var(--color-brand-400)
-  );
+  background: conic-gradient(from 0deg, #2563eb, #0891b2, #1e40af, #2563eb);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -330,7 +315,7 @@
   position: absolute;
   width: 14px;
   height: 14px;
-  border: 1.5px solid rgba(34, 211, 238, 0.6);
+  border: 1.5px solid rgba(37, 99, 235, 0.55);
   pointer-events: none;
 }
 .corner-frame::before {
@@ -344,6 +329,11 @@
   right: -1px;
   border-left: none;
   border-top: none;
+}
+/* Cyan variant for corner brackets on DARK screenshot panels */
+.corner-frame-dark::before,
+.corner-frame-dark::after {
+  border-color: rgba(103, 232, 249, 0.6);
 }
 
 /* ---- Keyframes ---------------------------------------------------- */

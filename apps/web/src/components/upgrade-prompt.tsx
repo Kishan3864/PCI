@@ -12,22 +12,22 @@ export function UpgradePrompt({
   requiredPlan: string;
 }) {
   return (
-    <Card className="card-lift relative isolate overflow-hidden rounded-[2px] border-cyan-400/30 bg-cyan-400/5">
+    <Card className="card-lift relative isolate overflow-hidden rounded-[2px] border-blue-200 bg-blue-50/60">
       <div
         aria-hidden
-        className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-cyan-400/10 blur-3xl"
+        className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-blue-500/10 blur-3xl"
       />
       <CardContent className="relative flex flex-col items-center gap-4 py-16 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_10px_24px_-8px_rgba(34,211,238,0.7)]">
+        <div className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-[0_10px_24px_-8px_rgba(37,99,235,0.6)]">
           <Lock className="h-6 w-6" />
         </div>
         <Badge variant="brand" className="capitalize">
           <Sparkles className="h-3.5 w-3.5" /> {requiredPlan} feature
         </Badge>
-        <p className="font-display text-lg font-semibold text-white">
+        <p className="font-display text-lg font-semibold text-navy-900">
           {feature} is a {requiredPlan} feature
         </p>
-        <p className="max-w-sm text-sm leading-6 text-slate-400">
+        <p className="max-w-sm text-sm leading-6 text-slate-600">
           Upgrade your plan to unlock {feature.toLowerCase()}.
         </p>
         <Button className="mt-1" asChild>

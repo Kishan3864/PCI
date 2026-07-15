@@ -26,19 +26,19 @@ export function PageRow({ page, verified, allow6h }: PageRowProps) {
   const [freqState, freqAction, freqPending] = useActionState(updatePage, null);
 
   return (
-    <div className="-mx-3 flex flex-wrap items-center gap-3 rounded-[2px] border-b border-slate-400/10 px-3 py-3 transition-colors last:border-0 hover:bg-cyan-400/5">
+    <div className="-mx-3 flex flex-wrap items-center gap-3 rounded-[2px] border-b border-slate-100 px-3 py-3 transition-colors last:border-0 hover:bg-blue-50/40">
       <div className="flex min-w-0 flex-1 items-center gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
           <Globe className="h-4 w-4" />
         </div>
         <div className="min-w-0">
-          <p className="flex items-center gap-2 font-medium text-white">
+          <p className="flex items-center gap-2 font-medium text-navy-900">
             {page.label}
             {!page.isActive ? <Badge variant="secondary">paused</Badge> : null}
           </p>
           <p className="truncate font-mono text-xs text-slate-500">{page.url}</p>
           {freqState && !freqState.ok ? (
-            <p className="text-xs text-rose-400">{freqState.message}</p>
+            <p className="text-xs text-rose-600">{freqState.message}</p>
           ) : null}
         </div>
       </div>
@@ -48,7 +48,7 @@ export function PageRow({ page, verified, allow6h }: PageRowProps) {
         <select
           name="scanFrequency"
           defaultValue={page.scanFrequency}
-          className="h-8 rounded-[2px] border border-slate-400/20 bg-surface-800 px-2 text-xs text-slate-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/70"
+          className="h-8 rounded-[2px] border border-slate-300 bg-white px-2 text-xs text-navy-900 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60"
         >
           <option value="daily">Daily</option>
           <option value="6h" disabled={!allow6h}>
@@ -85,7 +85,7 @@ export function PageRow({ page, verified, allow6h }: PageRowProps) {
         fields={{ pageId: page.id }}
         variant="ghost"
         size="sm"
-        className="text-rose-400 hover:bg-rose-400/10 hover:text-rose-300"
+        className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
       >
         Delete
       </ActionButton>

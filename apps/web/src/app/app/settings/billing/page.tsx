@@ -41,10 +41,10 @@ export default async function BillingPage({
     <div className="mx-auto max-w-4xl space-y-8">
       <Reveal>
         <div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-white">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-navy-900">
             Billing &amp; <GradientText>plan</GradientText>
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-slate-600">
             Manage your subscription.{' '}
             {isOwner ? '' : 'Only the organization owner can make changes.'}
           </p>
@@ -53,8 +53,8 @@ export default async function BillingPage({
 
       {activated ? (
         <Reveal>
-          <div className="flex items-start gap-3 rounded-[2px] border border-emerald-400/30 bg-emerald-400/5 px-4 py-3 text-sm text-emerald-300 backdrop-blur-sm">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+          <div className="flex items-start gap-3 rounded-[2px] border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
             <span>Subscription active — your plan is now {org.plan}.</span>
           </div>
         </Reveal>
@@ -62,8 +62,8 @@ export default async function BillingPage({
 
       {isMockBilling() ? (
         <Reveal>
-          <div className="flex items-start gap-3 rounded-[2px] border border-amber-400/30 bg-amber-400/5 px-4 py-3 text-xs text-amber-300 backdrop-blur-sm">
-            <FlaskConical className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
+          <div className="flex items-start gap-3 rounded-[2px] border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800">
+            <FlaskConical className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
             <span>
               Billing is in local/mock mode (no payment provider configured). Choosing a plan
               simulates a successful checkout so you can test the flow. Set{' '}
@@ -77,11 +77,11 @@ export default async function BillingPage({
         <Card className="relative isolate overflow-hidden">
           <div
             aria-hidden
-            className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl"
+            className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl"
           />
           <CardHeader>
             <div className="flex items-start gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.6)]">
                 <CreditCard className="h-5 w-5" />
               </div>
               <div className="space-y-1.5">
@@ -129,16 +129,16 @@ export default async function BillingPage({
               <Card
                 className={`card-lift relative isolate flex h-full flex-col overflow-hidden ${
                   current
-                    ? 'glow-ring border-cyan-400/40'
+                    ? 'glow-ring border-blue-300'
                     : highlight
-                      ? 'glow-ring border-cyan-400/30'
+                      ? 'glow-ring border-blue-200'
                       : ''
                 }`}
               >
                 {highlight ? (
                   <div
                     aria-hidden
-                    className="absolute -right-14 -top-14 h-40 w-40 rounded-full bg-cyan-400/10 blur-3xl"
+                    className="absolute -right-14 -top-14 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl"
                   />
                 ) : null}
                 <CardHeader className="relative">
@@ -155,7 +155,7 @@ export default async function BillingPage({
                     ) : null}
                   </div>
                   <p className="pt-1">
-                    <span className="font-display text-3xl font-bold text-white">
+                    <span className="font-display text-3xl font-bold text-navy-900">
                       ${plan.priceMonthly}
                     </span>
                     <span className="text-sm text-slate-500">/mo</span>
@@ -163,9 +163,9 @@ export default async function BillingPage({
                   <p className="text-xs text-slate-500">or ${annualPrice(p)}/year</p>
                 </CardHeader>
                 <CardContent className="relative flex flex-1 flex-col gap-4">
-                  <ul className="space-y-2 text-xs text-slate-400">
+                  <ul className="space-y-2 text-xs text-slate-600">
                     <li className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" />
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600" />
                       <span>
                         {plan.maxSites} site{plan.maxSites === 1 ? '' : 's'}, {plan.maxPagesPerSite}{' '}
                         pages each
@@ -173,26 +173,26 @@ export default async function BillingPage({
                     </li>
                     {plan.evidencePacks ? (
                       <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" /> Evidence
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600" /> Evidence
                         Packs
                       </li>
                     ) : null}
                     {plan.cspInsights ? (
                       <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" /> CSP
-                        insights + agent
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600" /> CSP insights
+                        + agent
                       </li>
                     ) : null}
                     {plan.whiteLabel ? (
                       <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" />{' '}
-                        White-label + CSV
+                        <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-600" /> White-label
+                        + CSV
                       </li>
                     ) : null}
                   </ul>
                   <div className="mt-auto pt-1">
                     {current ? (
-                      <div className="flex items-center justify-center gap-1.5 rounded-[2px] border border-cyan-400/30 bg-cyan-400/5 py-2 text-xs font-semibold text-cyan-300">
+                      <div className="flex items-center justify-center gap-1.5 rounded-[2px] border border-blue-200 bg-blue-50 py-2 text-xs font-semibold text-blue-700">
                         <CheckCircle2 className="h-3.5 w-3.5" /> Your current plan
                       </div>
                     ) : (
@@ -219,15 +219,15 @@ function UsageMeter({ label, used, limit }: { label: string; used: number; limit
   return (
     <div>
       <div className="flex justify-between text-sm">
-        <span className="text-slate-400">{label}</span>
-        <span className="font-medium text-slate-200">
+        <span className="text-slate-600">{label}</span>
+        <span className="font-medium text-navy-900">
           {used} / {limit}
         </span>
       </div>
-      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-[1px] bg-surface-700">
+      <div className="mt-1.5 h-2 w-full overflow-hidden rounded-[1px] bg-slate-200">
         <div
           className={`h-full rounded-[1px] ${
-            pct >= 100 ? 'bg-rose-500' : 'bg-gradient-to-r from-cyan-400 to-blue-500'
+            pct >= 100 ? 'bg-rose-500' : 'bg-gradient-to-r from-blue-600 to-cyan-500'
           }`}
           style={{ width: `${pct}%` }}
         />

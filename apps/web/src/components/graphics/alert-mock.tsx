@@ -9,7 +9,7 @@ export function AlertMock({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'corner-frame relative w-full max-w-sm rounded-[2px] border border-rose-400/25 bg-surface-900/95 shadow-[0_30px_80px_-30px_rgba(244,63,94,0.25)]',
+        'corner-frame corner-frame-dark relative w-full max-w-sm rounded-[2px] border border-rose-400/25 bg-surface-900/95 shadow-[0_30px_80px_-30px_rgba(11,37,69,0.5)]',
         className,
       )}
     >

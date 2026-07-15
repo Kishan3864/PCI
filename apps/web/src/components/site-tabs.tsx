@@ -20,7 +20,7 @@ export function SiteTabs({ siteId, verified }: { siteId: string; verified: boole
   const items = verified ? tabs : ([{ slug: 'verify', label: 'Verification' }, ...tabs] as const);
 
   return (
-    <nav className="flex flex-wrap gap-1 rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-1 backdrop-blur-sm">
+    <nav className="flex flex-wrap gap-1 rounded-[2px] border border-slate-200 bg-white p-1 shadow-sm">
       {items.map((tab) => {
         const href = `${base}/${tab.slug}`;
         const active = pathname === href || (tab.slug === 'inventory' && pathname === base);
@@ -31,8 +31,8 @@ export function SiteTabs({ siteId, verified }: { siteId: string; verified: boole
             className={cn(
               'rounded-[2px] px-3.5 py-1.5 text-sm font-medium transition-all',
               active
-                ? 'bg-gradient-to-b from-cyan-400 to-cyan-500 text-surface-900 shadow-[0_6px_16px_-8px_rgba(34,211,238,0.8)]'
-                : 'text-slate-400 hover:bg-cyan-400/10 hover:text-cyan-300',
+                ? 'bg-gradient-to-b from-blue-600 to-blue-700 text-white shadow-[0_6px_16px_-8px_rgba(37,99,235,0.7)]'
+                : 'text-slate-500 hover:bg-blue-50 hover:text-blue-700',
             )}
           >
             {tab.label}

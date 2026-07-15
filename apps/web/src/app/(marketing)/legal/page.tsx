@@ -14,18 +14,18 @@ export default function LegalPage() {
         <GridGlow />
         <div className="mx-auto max-w-3xl px-6 py-20 text-center lg:py-24">
           <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-[2px] border border-cyan-400/30 bg-cyan-400/5 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">
+            <span className="inline-flex items-center gap-2 rounded-[2px] border border-blue-200 bg-blue-50/80 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-blue-700">
               <ScrollText className="h-3.5 w-3.5" />
               Plain-English, no fine print
             </span>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-6 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl">
+            <h1 className="mt-6 font-display text-4xl font-bold tracking-tight text-navy-950 sm:text-5xl">
               Terms &amp; <GradientText animated>privacy</GradientText>
             </h1>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-slate-400">
+            <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-slate-600">
               Plain-English summary. The full terms will be published before general availability.
             </p>
           </Reveal>
@@ -35,30 +35,30 @@ export default function LegalPage() {
       {/* ── Prose panel ──────────────────────────────────────────────── */}
       <section className="mx-auto max-w-3xl px-6 pb-24">
         <Reveal delay={80}>
-          <div className="corner-frame rounded-[2px] border border-slate-400/15 bg-surface-800/80 p-8 sm:p-12">
+          <div className="corner-frame rounded-[2px] border border-slate-200 bg-white p-8 shadow-sm sm:p-12">
             <div className="space-y-10">
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                     <FileText className="h-5 w-5" />
                   </div>
-                  <h2 className="font-display text-xl font-semibold text-white">
+                  <h2 className="font-display text-xl font-semibold text-navy-900">
                     What ScriptProof is
                   </h2>
                 </div>
-                <p className="mt-4 leading-7 text-slate-400">{DISCLAIMER}</p>
+                <p className="mt-4 leading-7 text-slate-600">{DISCLAIMER}</p>
               </div>
 
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                     <Database className="h-5 w-5" />
                   </div>
-                  <h2 className="font-display text-xl font-semibold text-white">
+                  <h2 className="font-display text-xl font-semibold text-navy-900">
                     What we store
                   </h2>
                 </div>
-                <ul className="mt-4 list-disc space-y-2 pl-6 leading-7 text-slate-400 marker:text-cyan-400">
+                <ul className="mt-4 list-disc space-y-2 pl-6 leading-7 text-slate-600 marker:text-blue-600">
                   <li>Your account details: name, email, password hash.</li>
                   <li>
                     Monitoring data for sites you verify: page URLs, script URLs and content hashes,
@@ -70,14 +70,14 @@ export default function LegalPage() {
 
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                     <UserCheck className="h-5 w-5" />
                   </div>
-                  <h2 className="font-display text-xl font-semibold text-white">
+                  <h2 className="font-display text-xl font-semibold text-navy-900">
                     Your responsibilities
                   </h2>
                 </div>
-                <ul className="mt-4 list-disc space-y-2 pl-6 leading-7 text-slate-400 marker:text-cyan-400">
+                <ul className="mt-4 list-disc space-y-2 pl-6 leading-7 text-slate-600 marker:text-blue-600">
                   <li>Only add domains you own or are authorized to monitor.</li>
                   <li>
                     Review and act on alerts; ScriptProof detects changes, it does not remediate
@@ -88,14 +88,14 @@ export default function LegalPage() {
 
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
                     <Trash2 className="h-5 w-5" />
                   </div>
-                  <h2 className="font-display text-xl font-semibold text-white">
+                  <h2 className="font-display text-xl font-semibold text-navy-900">
                     Data deletion
                   </h2>
                 </div>
-                <p className="mt-4 leading-7 text-slate-400">
+                <p className="mt-4 leading-7 text-slate-600">
                   Deleting a site removes its scans, inventory, and change history. Deleting your
                   account removes your organization and all associated data.
                 </p>

@@ -20,7 +20,7 @@ export function PlanChooseButton({ plan, label, disabled, action }: PlanChooseBu
       <Button type="submit" size="sm" className="w-full" disabled={disabled || pending}>
         {pending ? 'Starting…' : label}
       </Button>
-      {state && !state.ok ? <p className="mt-1 text-xs text-rose-400">{state.message}</p> : null}
+      {state && !state.ok ? <p className="mt-1 text-xs text-rose-600">{state.message}</p> : null}
     </form>
   );
 }

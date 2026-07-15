@@ -33,14 +33,14 @@ export default async function MockCheckoutPage({
         </Badge>
       </div>
 
-      <Card className="relative isolate overflow-hidden border-amber-400/20">
+      <Card className="relative isolate overflow-hidden border-amber-300 bg-amber-50/60">
         <div
           aria-hidden
-          className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/10 blur-3xl"
+          className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-amber-400/10 blur-3xl"
         />
         <CardHeader>
           <div className="flex items-start gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-cyan-400 to-blue-600 text-surface-900 shadow-[0_8px_20px_-8px_rgba(34,211,238,0.7)]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-gradient-to-br from-blue-600 to-cyan-600 text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.6)]">
               <CreditCard className="h-5 w-5" />
             </div>
             <div className="space-y-1.5">
@@ -55,15 +55,15 @@ export default async function MockCheckoutPage({
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between rounded-[2px] border border-slate-400/15 bg-surface-900/80 p-4 backdrop-blur-sm">
+          <div className="flex items-center justify-between rounded-[2px] border border-slate-200 bg-white p-4 shadow-sm">
             <div>
-              <p className="font-display font-semibold capitalize text-white">
+              <p className="font-display font-semibold capitalize text-navy-900">
                 {validPlan} plan
               </p>
-              <p className="text-sm text-slate-400">Billed monthly</p>
+              <p className="text-sm text-slate-600">Billed monthly</p>
             </div>
             <p className="text-right">
-              <span className="text-2xl font-bold text-white">
+              <span className="text-2xl font-bold text-navy-900">
                 ${PLANS[validPlan].priceMonthly}
               </span>
               <span className="text-sm text-slate-500">/mo</span>
@@ -81,7 +81,7 @@ export default async function MockCheckoutPage({
       </Card>
 
       <p className="flex items-center justify-center gap-1.5 text-xs text-slate-500">
-        <ShieldCheck className="h-3.5 w-3.5 text-cyan-400" /> ScriptProof never touches card data
+        <ShieldCheck className="h-3.5 w-3.5 text-blue-600" /> ScriptProof never touches card data
       </p>
     </div>
   );

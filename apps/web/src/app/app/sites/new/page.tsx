@@ -12,7 +12,7 @@ export default function NewSitePage() {
       <Reveal>
         <Card>
           <CardHeader className="space-y-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-cyan-400/10 text-cyan-300 ring-1 ring-inset ring-cyan-400/30">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[2px] bg-blue-50 text-blue-600 ring-1 ring-inset ring-blue-600/20">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <CardTitle className="text-xl">
