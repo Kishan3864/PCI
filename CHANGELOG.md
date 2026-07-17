@@ -2,6 +2,33 @@
 
 All notable changes, newest first. Format: date — feature (commit type).
 
+## Trust & support release (2026-07-17)
+
+- fix(verify): DNS TXT verification now queries Google DoH + Cloudflare DoH + system resolver
+  in parallel and unions the answers — a freshly added record verifies as soon as any public
+  resolver sees it; failure message now distinguishes "no record yet" from "stale token from
+  an earlier add-site attempt" (with count)
+- fix(storage): relative `STORAGE_DIR` resolves against the monorepo root in both web and
+  worker — Evidence Pack PDFs written by the worker are now found by the web download route
+  in dev (was: 404 → browser saved `download.txt`); download filename is now
+  `scriptproof-evidence-<domain>-<YYYY-MM>.pdf`
+- feat(export): CSV exports replaced with styled XLSX (exceljs) — brand banner (white-label
+  org name on Agency), PCI requirement in title, sized columns, color-coded status/severity
+  cells, zebra rows, freeze panes, auto-filter; applies to inventory + change log
+- feat(support): full support system — `support_tickets` table + migration, `/app/support`
+  page (ticket form with category/priority, contact channels, resources, ticket history),
+  emails to `SUPPORT_EMAIL` inbox + confirmation to the requester, Support link in the app
+  header, admin queue with open-ticket tile and resolve/reopen actions
+- feat(settings): settings tab navigation (Organization / Account & security / Billing);
+  organization rename (owner-gated); new Account & security page — display name, password
+  change via Better Auth (revokes other sessions), active-session list with per-device
+  sign-out
+- feat(billing-page): in-app plans page rebuilt — billing-clarity chips, detailed plan cards,
+  12-row comparison table with current-plan highlight, Dodo "we never see your card" note,
+  billing FAQ, support CTA; renewal date shown on the current-plan card
+- fix(dev): web drizzle client rebuilt per hot-reload (pool stays singleton) so schema changes
+  appear in `db.query.*` without a dev-server restart
+
 ## Phase 2 — Money layer (2026-07-14)
 
 - feat(billing): `BillingProvider` interface + Dodo Payments + Lemon Squeezy + local mock;

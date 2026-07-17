@@ -1,7 +1,9 @@
 import { schema } from '@scriptproof/db';
 import { count, desc, eq, gte, sql } from 'drizzle-orm';
-import { Activity, Building2, Globe, Search, ShieldCheck, Users } from 'lucide-react';
+import { Activity, Building2, Globe, LifeBuoy, Search, ShieldCheck, Users } from 'lucide-react';
 import type { Metadata } from 'next';
+import { adminUpdateTicketStatus } from '@/actions/support';
+import { ActionButton } from '@/components/action-button';
 import { Badge, type BadgeProps } from '@/components/ui/badge';
 import {
   Table,
@@ -29,6 +31,20 @@ const SCAN_VARIANT: Record<string, BadgeProps['variant']> = {
   success: 'success',
   done: 'success',
   error: 'critical',
+};
+
+const TICKET_STATUS_VARIANT: Record<string, BadgeProps['variant']> = {
+  open: 'info',
+  in_progress: 'brand',
+  resolved: 'success',
+  closed: 'secondary',
+};
+
+const TICKET_PRIORITY_VARIANT: Record<string, BadgeProps['variant']> = {
+  low: 'secondary',
+  normal: 'info',
+  high: 'brand',
+  urgent: 'critical',
 };
 
 function formatDuration(start: Date, end: Date | null): string {
@@ -70,7 +86,7 @@ export default async function AdminPage() {
   const plans = new Map(planRows.map((r) => [r.plan, r.value]));
   const totalOrgs = planRows.reduce((sum, r) => sum + r.value, 0);
 
-  const [orgRows, scanRows, freeScanRows] = await Promise.all([
+  const [orgRows, scanRows, freeScanRows, ticketRows] = await Promise.all([
     db
       .select({
         id: schema.orgs.id,
@@ -112,7 +128,27 @@ export default async function AdminPage() {
       .from(schema.freeScans)
       .orderBy(desc(schema.freeScans.createdAt))
       .limit(20),
+    db
+      .select({
+        id: schema.supportTickets.id,
+        subject: schema.supportTickets.subject,
+        category: schema.supportTickets.category,
+        priority: schema.supportTickets.priority,
+        status: schema.supportTickets.status,
+        createdAt: schema.supportTickets.createdAt,
+        orgName: schema.orgs.name,
+        userEmail: schema.users.email,
+      })
+      .from(schema.supportTickets)
+      .innerJoin(schema.orgs, eq(schema.supportTickets.orgId, schema.orgs.id))
+      .innerJoin(schema.users, eq(schema.supportTickets.userId, schema.users.id))
+      .orderBy(desc(schema.supportTickets.createdAt))
+      .limit(50),
   ]);
+
+  const openTicketCount = ticketRows.filter((t) =>
+    (['open', 'in_progress'] as string[]).includes(t.status),
+  ).length;
 
   const tiles = [
     {
@@ -140,6 +176,12 @@ export default async function AdminPage() {
       value: freeScanStats?.total ?? 0,
       detail: 'lead magnet',
     },
+    {
+      icon: LifeBuoy,
+      label: 'Open tickets',
+      value: openTicketCount,
+      detail: 'support queue',
+    },
   ];
 
   return (
@@ -153,7 +195,7 @@ export default async function AdminPage() {
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {tiles.map((tile) => (
           <div
             key={tile.label}
@@ -243,6 +285,82 @@ export default async function AdminPage() {
                   </TableCell>
                   <TableCell>{formatDateTime(scan.startedAt)}</TableCell>
                   <TableCell>{formatDuration(scan.startedAt, scan.finishedAt)}</TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </section>
+
+      <section className="rounded-[2px] border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200 px-5 py-4">
+          <h2 className="font-display text-sm font-semibold text-navy-900">Support tickets</h2>
+          <p className="mt-0.5 text-xs text-slate-500">
+            Last 50 tickets across all organizations — {openTicketCount} awaiting a reply
+          </p>
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Ticket</TableHead>
+              <TableHead>Org / user</TableHead>
+              <TableHead>Subject</TableHead>
+              <TableHead>Priority</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {ticketRows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-slate-500">
+                  No support tickets yet.
+                </TableCell>
+              </TableRow>
+            ) : (
+              ticketRows.map((t) => (
+                <TableRow key={t.id}>
+                  <TableCell className="font-mono text-xs text-slate-500">
+                    {t.id.slice(0, 8).toUpperCase()}
+                  </TableCell>
+                  <TableCell>
+                    <span className="font-medium text-navy-900">{t.orgName}</span>
+                    <span className="block text-xs text-slate-500">{t.userEmail}</span>
+                  </TableCell>
+                  <TableCell className="max-w-[240px] truncate">{t.subject}</TableCell>
+                  <TableCell>
+                    <Badge variant={TICKET_PRIORITY_VARIANT[t.priority] ?? 'secondary'}>
+                      {t.priority}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={TICKET_STATUS_VARIANT[t.status] ?? 'secondary'}>
+                      {t.status.replace('_', ' ')}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{formatDateTime(t.createdAt)}</TableCell>
+                  <TableCell className="text-right">
+                    {t.status === 'open' || t.status === 'in_progress' ? (
+                      <ActionButton
+                        action={adminUpdateTicketStatus}
+                        fields={{ ticketId: t.id, status: 'resolved' }}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Mark resolved
+                      </ActionButton>
+                    ) : (
+                      <ActionButton
+                        action={adminUpdateTicketStatus}
+                        fields={{ ticketId: t.id, status: 'open' }}
+                        variant="ghost"
+                        size="sm"
+                      >
+                        Reopen
+                      </ActionButton>
+                    )}
+                  </TableCell>
                 </TableRow>
               ))
             )}

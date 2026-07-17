@@ -1,9 +1,9 @@
 import { planAllows } from '@scriptproof/core';
-import { ImageIcon, MessageSquare } from 'lucide-react';
+import { Building2, ImageIcon, MessageSquare } from 'lucide-react';
 import type { Metadata } from 'next';
 import { removeLogo, removeSlackWebhook, sendSlackTest } from '@/actions/organization';
 import { ActionButton } from '@/components/action-button';
-import { LogoUploadForm, SlackWebhookForm } from '@/components/org-settings-forms';
+import { LogoUploadForm, OrgNameForm, SlackWebhookForm } from '@/components/org-settings-forms';
 import { UpgradePrompt } from '@/components/upgrade-prompt';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +13,7 @@ import { requireOrg } from '@/lib/org';
 export const metadata: Metadata = { title: 'Organization settings' };
 
 export default async function OrganizationSettingsPage() {
-  const { org } = await requireOrg();
+  const { org, role } = await requireOrg();
   const slackAllowed = planAllows(org.plan, 'slackAlerts');
   const logoAllowed = planAllows(org.plan, 'whiteLabel');
 
@@ -29,6 +29,27 @@ export default async function OrganizationSettingsPage() {
             organization.
           </p>
         </div>
+      </Reveal>
+
+      <Reveal delay={40}>
+        <Card>
+          <CardHeader>
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[2px] bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <div className="space-y-1.5">
+                <CardTitle className="text-base">Organization name</CardTitle>
+                <CardDescription>
+                  The display name for your workspace across the app and reports.
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <OrgNameForm currentName={org.name} isOwner={role === 'owner'} />
+          </CardContent>
+        </Card>
       </Reveal>
 
       <Reveal delay={80}>

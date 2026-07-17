@@ -82,11 +82,11 @@ export default async function ChangesPage({ params }: { params: Promise<{ siteId
           {canExportCsv ? (
             <Button asChild variant="outline" size="sm">
               <a href={`/app/sites/${site.id}/changes/export`} download>
-                <Download className="h-4 w-4" /> Export CSV
+                <Download className="h-4 w-4" /> Export Excel
               </a>
             </Button>
           ) : (
-            <span className="text-xs text-slate-400">CSV export — Agency plan</span>
+            <span className="text-xs text-slate-400">Excel export — Agency plan</span>
           )}
         </div>
       </Reveal>

@@ -64,11 +64,11 @@ export default async function InventoryPage({ params }: { params: Promise<{ site
             {canExportCsv ? (
               <Button asChild variant="outline" size="sm">
                 <a href={`/app/sites/${site.id}/inventory/export`} download>
-                  <Download className="h-4 w-4" /> Export CSV
+                  <Download className="h-4 w-4" /> Export Excel
                 </a>
               </Button>
             ) : (
-              <span className="text-xs text-slate-400">CSV export — Agency plan</span>
+              <span className="text-xs text-slate-400">Excel export — Agency plan</span>
             )}
             {site.verifiedAt ? (
               <ActionButton

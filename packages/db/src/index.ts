@@ -17,12 +17,27 @@ export interface CreateDbResult {
   pool: Pool;
 }
 
-export function createDb(connectionString?: string): CreateDbResult {
+export function createPool(connectionString?: string): Pool {
   const url = connectionString ?? process.env.DATABASE_URL;
   if (!url) {
     throw new Error('DATABASE_URL is not set');
   }
-  const pool = new Pool({ connectionString: url });
-  const db = drizzle(pool, { schema });
-  return { db, pool };
+  return new Pool({ connectionString: url });
 }
+
+/**
+ * Wraps an existing pool in a drizzle client. Callers that cache across dev
+ * hot-reloads must cache the POOL, not this client — a cached client keeps
+ * the schema it was built with, so newly added tables would be missing from
+ * `db.query.*` until the process restarts.
+ */
+export function createDbFromPool(pool: Pool): Db {
+  return drizzle(pool, { schema });
+}
+
+export function createDb(connectionString?: string): CreateDbResult {
+  const pool = createPool(connectionString);
+  return { db: createDbFromPool(pool), pool };
+}
+
+export type { Pool };

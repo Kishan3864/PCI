@@ -408,3 +408,41 @@ export const rateLimits = pgTable('rate_limits', {
   count: integer('count').notNull().default(0),
   lastRequest: bigint('last_request', { mode: 'number' }),
 });
+
+// ── Support tickets ──────────────────────────────────────────────────────────
+
+export const ticketCategoryEnum = pgEnum('ticket_category', [
+  'billing',
+  'technical',
+  'compliance',
+  'feature_request',
+  'other',
+]);
+export const ticketPriorityEnum = pgEnum('ticket_priority', ['low', 'normal', 'high', 'urgent']);
+export const ticketStatusEnum = pgEnum('ticket_status', [
+  'open',
+  'in_progress',
+  'resolved',
+  'closed',
+]);
+
+export const supportTickets = pgTable(
+  'support_tickets',
+  {
+    id: id(),
+    orgId: text('org_id')
+      .notNull()
+      .references(() => orgs.id, { onDelete: 'cascade' }),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    subject: text('subject').notNull(),
+    category: ticketCategoryEnum('category').notNull().default('other'),
+    priority: ticketPriorityEnum('priority').notNull().default('normal'),
+    message: text('message').notNull(),
+    status: ticketStatusEnum('status').notNull().default('open'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index('support_tickets_org_created_idx').on(t.orgId, t.createdAt)],
+);

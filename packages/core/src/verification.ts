@@ -15,6 +15,21 @@ export function txtRecordsContainToken(records: Array<string | string[]>, token:
   return records.some((r) => (Array.isArray(r) ? r.join('') : r).trim() === expected);
 }
 
+/**
+ * Token values of every `scriptproof-verify=<token>` TXT record found.
+ * Lets the UI distinguish "no record yet" from "stale token from an earlier
+ * add-site attempt" — the most common verification failure.
+ */
+export function extractScriptproofTokens(records: Array<string | string[]>): string[] {
+  const tokens: string[] = [];
+  for (const r of records) {
+    const flat = (Array.isArray(r) ? r.join('') : r).trim();
+    const match = /^scriptproof-verify=(.+)$/.exec(flat);
+    if (match?.[1]) tokens.push(match[1].trim());
+  }
+  return tokens;
+}
+
 const META_TAG_RE = /<meta\b[^>]*>/gi;
 const ATTR_RE = /([a-zA-Z-]+)\s*=\s*("([^"]*)"|'([^']*)'|([^\s"'>]+))/g;
 

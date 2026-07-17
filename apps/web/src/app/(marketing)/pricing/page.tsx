@@ -70,7 +70,7 @@ const cards: PlanCard[] = [
     features: [
       '20 sites, everything in Pro',
       'White-label Evidence Packs (your logo)',
-      'CSV export of inventory',
+      'Excel export of inventory & change log',
       'Priority support',
     ],
   },
@@ -89,7 +89,7 @@ const comparison: Array<{ label: string; value: (p: PlanId) => string | boolean 
   { label: 'Runtime agent snippet', value: (p) => PLANS[p].agentSnippet },
   { label: 'Slack alerts', value: (p) => PLANS[p].slackAlerts },
   { label: 'White-label', value: (p) => PLANS[p].whiteLabel },
-  { label: 'CSV export', value: (p) => PLANS[p].csvExport },
+  { label: 'Excel export', value: (p) => PLANS[p].csvExport },
 ];
 
 const planOrder: PlanId[] = ['starter', 'pro', 'agency'];

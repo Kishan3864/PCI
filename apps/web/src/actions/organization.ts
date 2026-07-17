@@ -11,6 +11,26 @@ import type { ActionState } from './types';
 
 const ORG_SETTINGS_PATH = '/app/settings/organization';
 
+/** Renames the organization (owner only) — shown in the header, emails and reports. */
+export async function renameOrganization(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const { org, role } = await requireOrg();
+  if (role !== 'owner') {
+    return { ok: false, message: 'Only the organization owner can rename it.' };
+  }
+
+  const name = String(formData.get('name') ?? '').trim();
+  if (name.length < 2 || name.length > 100) {
+    return { ok: false, message: 'Name must be between 2 and 100 characters.' };
+  }
+
+  await db.update(schema.orgs).set({ name }).where(eq(schema.orgs.id, org.id));
+  revalidatePath('/app', 'layout');
+  return { ok: true, message: 'Organization renamed.' };
+}
+
 /** Strict server-side check: only real Slack incoming-webhook URLs are accepted. */
 function isSlackWebhookUrl(raw: string): boolean {
   let url: URL;

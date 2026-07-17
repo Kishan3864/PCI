@@ -1,4 +1,4 @@
-import { Settings } from 'lucide-react';
+import { LifeBuoy, Settings } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { BrandMark } from '@/components/brand-mark';
@@ -38,6 +38,13 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             >
               <Settings className="h-3.5 w-3.5" />
               Settings
+            </Link>
+            <Link
+              href="/app/support"
+              className="flex items-center gap-1.5 rounded-[2px] px-2 py-1 text-xs font-medium text-slate-600 transition-colors hover:bg-blue-50 hover:text-blue-800"
+            >
+              <LifeBuoy className="h-3.5 w-3.5" />
+              Support
             </Link>
             <span className="hidden text-slate-500 sm:inline">{session.user.email}</span>
             <SignOutButton />

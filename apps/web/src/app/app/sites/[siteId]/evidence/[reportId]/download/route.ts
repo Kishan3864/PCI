@@ -22,15 +22,22 @@ export async function GET(
   });
   if (!report) return new NextResponse('Not found', { status: 404 });
 
+  const site = await db.query.sites.findFirst({ where: eq(schema.sites.id, siteId) });
+  const safeDomain = (site?.domain ?? siteId).replace(/[^a-z0-9.-]+/gi, '_');
+  const period = report.periodEnd.toISOString().slice(0, 7); // YYYY-MM
+
   try {
     const pdf = await readArtifact(report.pdfPath);
     return new NextResponse(pdf as unknown as BodyInit, {
       headers: {
         'content-type': 'application/pdf',
-        'content-disposition': `attachment; filename="evidence-${siteId}.pdf"`,
+        'content-disposition': `attachment; filename="scriptproof-evidence-${safeDomain}-${period}.pdf"`,
       },
     });
   } catch {
-    return new NextResponse('File not available', { status: 404 });
+    return new NextResponse(
+      'This Evidence Pack file is no longer available on the server. Generate a new pack and try again.',
+      { status: 404 },
+    );
   }
 }

@@ -74,19 +74,28 @@ export async function verifySite(_prev: ActionState, formData: FormData): Promis
   const { site } = await requireSite(parsed.data.siteId);
   if (site.verifiedAt) return { ok: true, message: 'Site is already verified.' };
 
-  const verified =
-    parsed.data.method === 'dns'
-      ? await checkDnsVerification(site.domain, site.verifyToken)
-      : await checkMetaVerification(site.domain, site.verifyToken);
-
-  if (!verified) {
-    return {
-      ok: false,
-      message:
-        parsed.data.method === 'dns'
-          ? 'TXT record not found yet. DNS changes can take a few minutes to propagate.'
-          : 'Meta tag not found on your homepage yet. Deploy it, then check again.',
-    };
+  let verified: boolean;
+  if (parsed.data.method === 'dns') {
+    const result = await checkDnsVerification(site.domain, site.verifyToken);
+    verified = result.verified;
+    if (!verified) {
+      const staleCount = result.foundTokens.length;
+      return {
+        ok: false,
+        message:
+          staleCount > 0
+            ? `We found ${staleCount} scriptproof-verify TXT record${staleCount === 1 ? '' : 's'} on ${site.domain}, but none match the token shown above. These are from an earlier attempt — delete the old record${staleCount === 1 ? '' : 's'} at your DNS provider, add the exact value above, then check again.`
+            : 'No scriptproof-verify TXT record found yet. DNS changes can take a few minutes to propagate — add the record, wait a moment, then check again.',
+      };
+    }
+  } else {
+    verified = await checkMetaVerification(site.domain, site.verifyToken);
+    if (!verified) {
+      return {
+        ok: false,
+        message: 'Meta tag not found on your homepage yet. Deploy it, then check again.',
+      };
+    }
   }
 
   await db

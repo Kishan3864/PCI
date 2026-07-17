@@ -2,11 +2,11 @@ import { planAllows } from '@scriptproof/core';
 import { schema } from '@scriptproof/db';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { type NextRequest, NextResponse } from 'next/server';
-import { csvFilename, toCsv } from '@/lib/csv';
 import { db } from '@/lib/db';
 import { requireOrg } from '@/lib/org';
+import { buildXlsx, xlsxFilename } from '@/lib/xlsx';
 
-/** Streams the full change timeline as CSV. Agency plan only; ownership checked server-side. */
+/** Streams the full change timeline as a styled XLSX. Agency plan only; ownership checked server-side. */
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ siteId: string }> },
@@ -20,7 +20,7 @@ export async function GET(
   if (!site) return new NextResponse('Not found', { status: 404 });
 
   if (!planAllows(org.plan, 'csvExport')) {
-    return new NextResponse('CSV export is available on the Agency plan.', { status: 403 });
+    return new NextResponse('Export is available on the Agency plan.', { status: 403 });
   }
 
   const sitePages = await db.query.pages.findMany({ where: eq(schema.pages.siteId, site.id) });
@@ -38,18 +38,23 @@ export async function GET(
 
   const str = (v: unknown): string | null => (typeof v === 'string' ? v : null);
 
-  const csv = toCsv(
-    [
-      'detected_at',
-      'page',
-      'severity',
-      'type',
-      'script_url',
-      'before_hash',
-      'after_hash',
-      'acknowledged_at',
+  const brand = planAllows(org.plan, 'whiteLabel') ? org.name : 'ScriptProof';
+  const xlsx = await buildXlsx({
+    brand,
+    title: 'Change Log — PCI DSS 11.6.1',
+    subtitle: `Site: ${site.domain} · ${changes.length} changes · Generated ${new Date().toISOString().replace('T', ' ').slice(0, 16)} UTC`,
+    sheetName: 'Change Log',
+    columns: [
+      { header: 'Detected At', width: 18, numFmt: 'yyyy-mm-dd hh:mm' },
+      { header: 'Page', width: 45, wrap: true },
+      { header: 'Severity', width: 12, statusColors: true },
+      { header: 'Change Type', width: 22 },
+      { header: 'Script URL', width: 55, wrap: true },
+      { header: 'Hash Before', width: 36 },
+      { header: 'Hash After', width: 36 },
+      { header: 'Acknowledged At', width: 18, numFmt: 'yyyy-mm-dd hh:mm' },
     ],
-    changes.map((c) => [
+    rows: changes.map((c) => [
       c.detectedAt,
       pagesById.get(c.pageId)?.url,
       c.severity,
@@ -59,12 +64,12 @@ export async function GET(
       str(c.detail.after) ?? (c.type === 'new_script' ? str(c.detail.sha256) : null),
       c.acknowledgedAt,
     ]),
-  );
+  });
 
-  return new NextResponse(csv, {
+  return new NextResponse(xlsx as unknown as BodyInit, {
     headers: {
-      'content-type': 'text/csv; charset=utf-8',
-      'content-disposition': `attachment; filename="${csvFilename(site.domain, 'changes')}"`,
+      'content-type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'content-disposition': `attachment; filename="${xlsxFilename(site.domain, 'changes')}"`,
       'cache-control': 'no-store',
     },
   });

@@ -2,7 +2,7 @@
 
 import { CheckCircle2, Save, Upload } from 'lucide-react';
 import { useActionState, useEffect, useRef } from 'react';
-import { saveSlackWebhook, uploadLogo } from '@/actions/organization';
+import { renameOrganization, saveSlackWebhook, uploadLogo } from '@/actions/organization';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +19,36 @@ function ResultLine({ state }: { state: ActionState }) {
       {state.ok ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : null}
       {state.message}
     </p>
+  );
+}
+
+export function OrgNameForm({ currentName, isOwner }: { currentName: string; isOwner: boolean }) {
+  const [state, formAction, pending] = useActionState(renameOrganization, null);
+
+  return (
+    <form action={formAction} className="space-y-4">
+      <div className="space-y-1.5">
+        <Label htmlFor="org-name">Organization name</Label>
+        <Input
+          id="org-name"
+          name="name"
+          defaultValue={currentName}
+          required
+          minLength={2}
+          maxLength={100}
+          disabled={!isOwner}
+        />
+        <p className="text-xs text-slate-500">
+          Shown in the dashboard header, alert emails and white-label reports.
+          {isOwner ? '' : ' Only the owner can change it.'}
+        </p>
+      </div>
+      <ResultLine state={state} />
+      <Button type="submit" size="sm" disabled={pending || !isOwner}>
+        <Save className="h-4 w-4" />
+        {pending ? 'Saving…' : 'Save name'}
+      </Button>
+    </form>
   );
 }
 
